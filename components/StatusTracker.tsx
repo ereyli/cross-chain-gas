@@ -235,9 +235,13 @@ export function StatusTracker({ orderId, sourceTxHash }: StatusTrackerProps) {
       {/* Manual Fulfillment Button */}
       {status.status === 'AWAITING_PAYMENT' && sourceTxHash && (
         <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <p className="text-sm text-yellow-800 mb-3">
-            ⚠️ Payment detected but not auto-processed. Click below to complete your order manually.
-          </p>
+          <h4 className="font-medium text-yellow-900 mb-2">⚠️ Manual Completion Required</h4>
+          <div className="text-sm text-yellow-800 mb-3 space-y-1">
+            <p>• Your payment was detected on the source chain</p>
+            <p>• Automatic processing failed (this is normal during beta)</p>
+            <p>• Click below to manually complete your transfer</p>
+            <p>• Your ETH will be sent to the target chain immediately</p>
+          </div>
           <button
             onClick={handleManualFulfillment}
             disabled={isFulfilling}
@@ -247,8 +251,45 @@ export function StatusTracker({ orderId, sourceTxHash }: StatusTrackerProps) {
                 : 'bg-blue-600 text-white hover:bg-blue-700'
             }`}
           >
-            {isFulfilling ? 'Processing...' : '🚀 Complete Order Now'}
+            {isFulfilling ? 'Processing Transfer...' : '🚀 Complete Transfer Now'}
           </button>
+        </div>
+      )}
+
+      {/* Status Explanations */}
+      {status.status === 'AWAITING_PAYMENT' && !sourceTxHash && (
+        <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <h4 className="font-medium text-blue-900 mb-2">💡 Waiting for Payment</h4>
+          <p className="text-sm text-blue-800">
+            Please send the payment on the source chain. Once confirmed, your transfer will be processed automatically.
+          </p>
+        </div>
+      )}
+
+      {status.status === 'PAID' && (
+        <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+          <h4 className="font-medium text-green-900 mb-2">✅ Payment Confirmed</h4>
+          <p className="text-sm text-green-800">
+            Your payment has been confirmed. Processing your transfer to the target chain...
+          </p>
+        </div>
+      )}
+
+      {status.status === 'FULFILLING' && (
+        <div className="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+          <h4 className="font-medium text-purple-900 mb-2">⚡ Processing Transfer</h4>
+          <p className="text-sm text-purple-800">
+            Sending ETH to your target address. This usually takes 1-2 minutes...
+          </p>
+        </div>
+      )}
+
+      {status.status === 'DONE' && (
+        <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+          <h4 className="font-medium text-green-900 mb-2">🎉 Transfer Complete!</h4>
+          <p className="text-sm text-green-800">
+            Your ETH has been successfully transferred to the target chain. Check your wallet!
+          </p>
         </div>
       )}
 

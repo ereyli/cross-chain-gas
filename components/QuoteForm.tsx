@@ -229,12 +229,26 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
         </div>
       </div>
 
+      {/* Transaction Summary */}
+      {connectedAccount && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+          <h4 className="font-medium text-yellow-900 mb-2">📋 Transaction Summary:</h4>
+          <div className="text-sm text-yellow-800 space-y-1">
+            <p>• <strong>From:</strong> {sourceChain.toUpperCase()} Chain → <strong>To:</strong> {targetChain.toUpperCase()} Chain</p>
+            <p>• <strong>Asset:</strong> {sourceAsset} → ETH</p>
+            <p>• <strong>Target Amount:</strong> ${targetAmountUsd} worth of ETH</p>
+            <p>• <strong>Your Wallet:</strong> {connectedAccount.slice(0, 6)}...{connectedAccount.slice(-4)}</p>
+            <p>• <strong>Target Recipient:</strong> {targetRecipient.slice(0, 6)}...{targetRecipient.slice(-4)}</p>
+          </div>
+        </div>
+      )}
+
       <button
         type="submit"
         disabled={isLoading || !connectedAccount}
         className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
-        {!connectedAccount ? 'Connect Wallet First' : isLoading ? 'Generating Quote...' : 'Get Quote'}
+        {!connectedAccount ? 'Connect Wallet First' : isLoading ? 'Generating Quote...' : 'Generate Quote & Continue'}
       </button>
     </form>
   );

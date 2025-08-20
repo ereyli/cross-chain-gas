@@ -171,6 +171,17 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
 
   return (
     <div className="space-y-4">
+      {/* Important Instructions */}
+      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+        <h4 className="font-medium text-green-900 mb-2">✅ Ready to Send Payment</h4>
+        <div className="text-sm text-green-800 space-y-1">
+          <p>• Make sure you're on <strong>{quote.sourceChain.toUpperCase()}</strong> network</p>
+          <p>• You'll send <strong>{quote.txTemplate.kind}</strong> to complete this transfer</p>
+          <p>• After payment, ETH will be sent to <strong>{quote.targetChain.toUpperCase()}</strong> network</p>
+          <p>• Keep this page open to monitor the transfer</p>
+        </div>
+      </div>
+
       <div className="text-center">
         <div className="text-sm text-gray-600">Quote expires in:</div>
         <div className="text-2xl font-bold text-red-600">{formatTime(timeLeft)}</div>
@@ -179,10 +190,14 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
       <button
         onClick={sendPayment}
         disabled={isPaying || timeLeft <= 0}
-        className="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-lg font-semibold"
       >
-        {isPaying ? 'Sending Payment...' : 'Pay Now'}
+        {isPaying ? 'Sending Payment...' : `💰 Send Payment (${quote.txTemplate.kind})`}
       </button>
+      
+      <p className="text-xs text-gray-500 text-center">
+        Click above to open your wallet and confirm the transaction
+      </p>
     </div>
   );
 }

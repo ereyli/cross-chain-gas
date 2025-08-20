@@ -45,10 +45,49 @@ export default function Home() {
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Cross-Chain Gas Top-Up
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
             Pay with ETH, USDC, or USDT on Base, Optimism, or Arbitrum and receive native gas on any target chain.
             Simple, fast, and secure.
           </p>
+          
+          {/* User Guidance */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-left max-w-3xl mx-auto">
+            <h3 className="text-lg font-semibold text-blue-900 mb-3 text-center">📖 How it works:</h3>
+            <div className="text-sm text-blue-800 space-y-2">
+              <div className="flex items-center">
+                <span className="bg-blue-200 text-blue-900 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3">1</span>
+                <span>Choose source chain (where you have funds) and target chain (where you want ETH)</span>
+              </div>
+              <div className="flex items-center">
+                <span className="bg-blue-200 text-blue-900 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3">2</span>
+                <span>Enter target amount and connect your wallet</span>
+              </div>
+              <div className="flex items-center">
+                <span className="bg-blue-200 text-blue-900 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3">3</span>
+                <span>Send payment on source chain when prompted</span>
+              </div>
+              <div className="flex items-center">
+                <span className="bg-blue-200 text-blue-900 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3">4</span>
+                <span>Receive ETH on target chain automatically (or use manual completion if needed)</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Chain Info */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+              <div className="font-semibold text-gray-900">Base</div>
+              <div className="text-sm text-gray-600">Average gas: ~$0.10</div>
+            </div>
+            <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+              <div className="font-semibold text-gray-900">Optimism</div>
+              <div className="text-sm text-gray-600">Average gas: ~$0.02</div>
+            </div>
+            <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+              <div className="font-semibold text-gray-900">Arbitrum</div>
+              <div className="text-sm text-gray-600">Average gas: ~$0.02</div>
+            </div>
+          </div>
         </div>
 
         {error && (
