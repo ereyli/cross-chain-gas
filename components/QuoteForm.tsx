@@ -16,6 +16,8 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
   const [targetChain, setTargetChain] = useState<ChainKey>('op');
   const [targetRecipient, setTargetRecipient] = useState('');
   const [targetAmountUsd, setTargetAmountUsd] = useState(5);
+  const [manualAmount, setManualAmount] = useState<string>('5');
+  const [useSlider, setUseSlider] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
 
@@ -27,6 +29,20 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
       setSourceAsset('ETH');
     }
   }, [sourceChain, sourceAsset, supportedAssets]);
+
+  // Sync manual input and slider
+  const handleAmountChange = (value: number) => {
+    setTargetAmountUsd(value);
+    setManualAmount(value.toString());
+  };
+
+  const handleManualAmountChange = (value: string) => {
+    setManualAmount(value);
+    const numValue = parseFloat(value);
+    if (!isNaN(numValue) && numValue >= 1 && numValue <= 10) {
+      setTargetAmountUsd(numValue);
+    }
+  };
 
   useEffect(() => {
     checkWalletConnection();
@@ -146,90 +162,178 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
         )}
       </div>
       
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+      <div className="space-y-2">
+        <label className="block text-sm font-semibold text-gray-700">
           Target Recipient Address
         </label>
-        <input
-          type="text"
-          value={targetRecipient}
-          onChange={(e) => setTargetRecipient(e.target.value)}
-          placeholder="0x... (defaults to your connected wallet)"
-          className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          required
-        />
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 7.89a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <input
+            type="text"
+            value={targetRecipient}
+            onChange={(e) => setTargetRecipient(e.target.value)}
+            placeholder="0x... (defaults to your connected wallet)"
+            className="w-full pl-10 pr-4 py-3 bg-white/70 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm font-mono text-sm"
+            required
+          />
+        </div>
+        <p className="text-xs text-gray-500">ETH will be sent to this address on the target chain</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-gray-700">
             Source Chain
           </label>
-          <select
-            value={sourceChain}
-            onChange={(e) => setSourceChain(e.target.value as ChainKey)}
-            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            {Object.entries(CHAINS).map(([key, chain]) => (
-              <option key={key} value={key}>
-                {key.toUpperCase()} ({chain.id})
-              </option>
-            ))}
-          </select>
+          <div className="relative">
+            <select
+              value={sourceChain}
+              onChange={(e) => setSourceChain(e.target.value as ChainKey)}
+              className="w-full p-3 bg-white/70 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm appearance-none cursor-pointer"
+            >
+              {Object.entries(CHAINS).map(([key, chain]) => (
+                <option key={key} value={key}>
+                  {key.toUpperCase()} ({chain.id})
+                </option>
+              ))}
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+          <p className="text-xs text-gray-500">Where you have funds</p>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-gray-700">
             Source Asset
           </label>
-          <select
-            value={sourceAsset}
-            onChange={(e) => setSourceAsset(e.target.value as Asset)}
-            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            {supportedAssets.map((asset) => (
-              <option key={asset} value={asset}>
-                {asset}
-              </option>
-            ))}
-          </select>
+          <div className="relative">
+            <select
+              value={sourceAsset}
+              onChange={(e) => setSourceAsset(e.target.value as Asset)}
+              className="w-full p-3 bg-white/70 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm appearance-none cursor-pointer"
+            >
+              {supportedAssets.map((asset) => (
+                <option key={asset} value={asset}>
+                  {asset}
+                </option>
+              ))}
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+          <p className="text-xs text-gray-500">What you want to pay with</p>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-gray-700">
             Target Chain
           </label>
-          <select
-            value={targetChain}
-            onChange={(e) => setTargetChain(e.target.value as ChainKey)}
-            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            {Object.entries(CHAINS).map(([key, chain]) => (
-              <option key={key} value={key}>
-                {key.toUpperCase()} ({chain.id})
-              </option>
-            ))}
-          </select>
+          <div className="relative">
+            <select
+              value={targetChain}
+              onChange={(e) => setTargetChain(e.target.value as ChainKey)}
+              className="w-full p-3 bg-white/70 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm appearance-none cursor-pointer"
+            >
+              {Object.entries(CHAINS).map(([key, chain]) => (
+                <option key={key} value={key} disabled={key === sourceChain}>
+                  {key.toUpperCase()} ({chain.id})
+                </option>
+              ))}
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+          <p className="text-xs text-gray-500">Where you want ETH</p>
         </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Target Amount: ${targetAmountUsd}
-        </label>
-        <input
-          type="range"
-          min="1"
-          max="10"
-          step="0.5"
-          value={targetAmountUsd}
-          onChange={(e) => setTargetAmountUsd(parseFloat(e.target.value))}
-          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-        />
-        <div className="flex justify-between text-sm text-gray-500 mt-1">
-          <span>$1</span>
-          <span>$10</span>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <label className="block text-sm font-semibold text-gray-700">
+            Target Amount
+          </label>
+          <div className="flex items-center space-x-2">
+            <button
+              type="button"
+              onClick={() => setUseSlider(true)}
+              className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                useSlider 
+                  ? 'bg-blue-100 text-blue-700 border border-blue-200' 
+                  : 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200'
+              }`}
+            >
+              Slider
+            </button>
+            <button
+              type="button"
+              onClick={() => setUseSlider(false)}
+              className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                !useSlider 
+                  ? 'bg-blue-100 text-blue-700 border border-blue-200' 
+                  : 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200'
+              }`}
+            >
+              Manual
+            </button>
+          </div>
         </div>
+
+        {useSlider ? (
+          <div className="space-y-3">
+            <div className="relative">
+              <input
+                type="range"
+                min="1"
+                max="10"
+                step="0.5"
+                value={targetAmountUsd}
+                onChange={(e) => handleAmountChange(parseFloat(e.target.value))}
+                className="w-full h-3 bg-gradient-to-r from-blue-200 to-purple-200 rounded-lg appearance-none cursor-pointer slider"
+                style={{
+                  background: `linear-gradient(to right, #3b82f6 0%, #8b5cf6 ${((targetAmountUsd - 1) / 9) * 100}%, #e5e7eb ${((targetAmountUsd - 1) / 9) * 100}%, #e5e7eb 100%)`
+                }}
+              />
+              <div className="flex justify-between text-sm text-gray-500 mt-2">
+                <span>$1</span>
+                <span className="font-semibold text-lg text-blue-600">${targetAmountUsd}</span>
+                <span>$10</span>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span className="text-gray-500 text-lg">$</span>
+              </div>
+              <input
+                type="number"
+                min="1"
+                max="10"
+                step="0.5"
+                value={manualAmount}
+                onChange={(e) => handleManualAmountChange(e.target.value)}
+                placeholder="5.0"
+                className="w-full pl-8 pr-4 py-3 bg-white/70 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm text-lg font-semibold text-center"
+              />
+            </div>
+            <p className="text-xs text-gray-500 text-center">Enter amount between $1 - $10</p>
+          </div>
+        )}
       </div>
 
       {/* Transaction Summary */}
