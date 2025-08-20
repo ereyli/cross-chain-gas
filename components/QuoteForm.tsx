@@ -197,7 +197,7 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
             >
               {Object.entries(CHAINS).map(([key, chain]) => (
                 <option key={key} value={key}>
-                  {key.toUpperCase()} ({chain.id})
+                  {key.toUpperCase()}
                 </option>
               ))}
             </select>
@@ -247,7 +247,7 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
             >
               {Object.entries(CHAINS).map(([key, chain]) => (
                 <option key={key} value={key} disabled={key === sourceChain}>
-                  {key.toUpperCase()} ({chain.id})
+                  {key.toUpperCase()}
                 </option>
               ))}
             </select>

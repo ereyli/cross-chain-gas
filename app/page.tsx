@@ -121,19 +121,28 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Chain Info */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-white/60 backdrop-blur-lg p-3 rounded-xl border border-white/30 shadow-lg hover:bg-white/70 transition-all">
-              <div className="font-semibold text-gray-900">Base</div>
-              <div className="text-sm text-gray-600">Average gas: ~$0.10</div>
-            </div>
-            <div className="bg-white/60 backdrop-blur-lg p-3 rounded-xl border border-white/30 shadow-lg hover:bg-white/70 transition-all">
-              <div className="font-semibold text-gray-900">Optimism</div>
-              <div className="text-sm text-gray-600">Average gas: ~$0.02</div>
-            </div>
-            <div className="bg-white/60 backdrop-blur-lg p-3 rounded-xl border border-white/30 shadow-lg hover:bg-white/70 transition-all">
-              <div className="font-semibold text-gray-900">Arbitrum</div>
-              <div className="text-sm text-gray-600">Average gas: ~$0.02</div>
+          {/* Supported Networks */}
+          <div className="bg-white/60 backdrop-blur-lg p-4 rounded-2xl border border-white/30 shadow-lg mb-8 max-w-2xl mx-auto">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3 text-center">🌐 Supported Networks</h3>
+            <div className="flex justify-center items-center space-x-8">
+              <div className="text-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-2">
+                  <span className="text-white font-bold text-sm">B</span>
+                </div>
+                <p className="text-sm font-medium text-gray-700">Base</p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-xl flex items-center justify-center mx-auto mb-2">
+                  <span className="text-white font-bold text-sm">O</span>
+                </div>
+                <p className="text-sm font-medium text-gray-700">Optimism</p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-2">
+                  <span className="text-white font-bold text-sm">A</span>
+                </div>
+                <p className="text-sm font-medium text-gray-700">Arbitrum</p>
+              </div>
             </div>
           </div>
         </div>
@@ -273,7 +282,7 @@ export default function Home() {
         {/* Footer */}
         <div className="mt-16 text-center text-sm text-gray-500 bg-white/40 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/20">
           <p className="mb-2">Minimum $1 - Maximum $10 per transaction • 3% service fee • 180s quote validity</p>
-          <p className="text-xs text-gray-400">Powered by Alchemy • Secured by Ethereum</p>
+          <p className="text-xs text-gray-400">Fast • Secure • Decentralized Cross-Chain Bridge</p>
         </div>
       </div>
     </div>
