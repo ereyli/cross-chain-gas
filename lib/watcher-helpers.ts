@@ -41,14 +41,31 @@ export interface NormalizedPayment {
   amount: string; // Raw amount as string
 }
 
-export function normalizeWebhookPayload(payload: AlchemyWebhookPayload): NormalizedPayment[] {
+export function normalizeWebhookPayload(payload: any): NormalizedPayment[] {
   const payments: NormalizedPayment[] = [];
   
-  for (const activity of payload.event.activity) {
-    const blockNumber = parseInt(activity.blockNum, 16);
+  // Handle both V1 and V2 webhook formats
+  let activities = [];
+  
+  if (payload.event && payload.event.activity) {
+    // V2 format
+    activities = payload.event.activity;
+  } else if (payload.activity) {
+    // V1 format or direct activity
+    activities = payload.activity;
+  } else {
+    console.warn('Unknown webhook payload format:', payload);
+    return payments;
+  }
+  
+  for (const activity of activities) {
+    // Parse block number (could be hex or decimal)
+    const blockNumber = typeof activity.blockNum === 'string' && activity.blockNum.startsWith('0x') 
+      ? parseInt(activity.blockNum, 16) 
+      : parseInt(activity.blockNum || '0');
     
     // Handle ETH transfers
-    if (activity.value && activity.value > 0) {
+    if (activity.value && parseFloat(activity.value) > 0) {
       payments.push({
         hash: activity.hash,
         from: activity.fromAddress.toLowerCase(),
@@ -60,20 +77,28 @@ export function normalizeWebhookPayload(payload: AlchemyWebhookPayload): Normali
     }
     
     // Handle ERC20 transfers
-    if (activity.erc20Transfers) {
+    if (activity.erc20Transfers && Array.isArray(activity.erc20Transfers)) {
       for (const transfer of activity.erc20Transfers) {
-        const decimals = parseInt(transfer.rawContract.decimal);
-        const amount = BigInt(Math.floor(transfer.value * Math.pow(10, decimals)));
-        
-        payments.push({
-          hash: activity.hash,
-          from: transfer.from.toLowerCase(),
-          to: transfer.to.toLowerCase(),
-          blockNumber,
-          isEth: false,
-          tokenAddress: transfer.rawContract.address.toLowerCase(),
-          amount: amount.toString()
-        });
+        try {
+          const decimals = parseInt(transfer.rawContract?.decimal || '18');
+          // Handle both numeric and string values
+          const transferValue = typeof transfer.value === 'string' 
+            ? parseFloat(transfer.value) 
+            : transfer.value;
+          const amount = BigInt(Math.floor(transferValue * Math.pow(10, decimals)));
+          
+          payments.push({
+            hash: activity.hash,
+            from: transfer.from.toLowerCase(),
+            to: transfer.to.toLowerCase(),
+            blockNumber,
+            isEth: false,
+            tokenAddress: transfer.rawContract?.address?.toLowerCase(),
+            amount: amount.toString()
+          });
+        } catch (error) {
+          console.error('Error parsing ERC20 transfer:', error, transfer);
+        }
       }
     }
   }
