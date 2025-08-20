@@ -189,6 +189,18 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
 
   return (
     <div className="space-y-6">
+      {/* Payment Ready Indicator - Without Instructions */}
+      <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-200 to-emerald-200 rounded-full opacity-30 -translate-y-10 translate-x-10"></div>
+        <div className="relative z-10">
+          <div className="flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mr-3">
+              <span className="text-white font-bold text-sm">✓</span>
+            </div>
+            <h4 className="text-lg font-bold text-green-900">Ready to Send Payment</h4>
+          </div>
+        </div>
+      </div>
 
       {/* Timer */}
       <div className="text-center bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl p-6 border border-red-200">
