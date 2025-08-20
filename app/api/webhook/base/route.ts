@@ -1,0 +1,88 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { normalizeWebhookPayload, verifyPayment, isExpectedPayment } from '../../../../lib/watcher-helpers';
+import { findOrderByPayment, updateOrder } from '../../../../lib/db';
+import { fulfillOrder } from '../../../../lib/fulfil';
+import { isQuoteExpired } from '../../../../lib/quote';
+
+export async function POST(request: NextRequest) {
+  try {
+    const payload = await request.json();
+    console.log('Base webhook received:', JSON.stringify(payload, null, 2));
+    
+    const payments = normalizeWebhookPayload(payload);
+    
+    for (const payment of payments) {
+      await processPayment(payment);
+    }
+    
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Base webhook error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+async function processPayment(payment: any): Promise<void> {
+  try {
+    // Find matching order
+    const order = await findOrderByPayment(
+      payment.from,
+      payment.to,
+      'AWAITING_PAYMENT'
+    );
+    
+    if (!order) {
+      console.log(`No matching order found for payment from ${payment.from} to ${payment.to}`);
+      return;
+    }
+    
+    // Check if quote has expired
+    if (isQuoteExpired(order.expires_at)) {
+      console.log(`Quote expired for order ${order.id}, ignoring payment`);
+      return;
+    }
+    
+    // Verify payment details
+    const isValid = isExpectedPayment(
+      payment,
+      order.expected_from,
+      order.pay_to,
+      order.exact_amount_raw,
+      order.exact_token_addr || undefined
+    );
+    
+    if (!isValid) {
+      console.log(`Payment validation failed for order ${order.id}`);
+      await updateOrder(order.id, { status: 'UNDERPAID' });
+      return;
+    }
+    
+    // Verify confirmations
+    const isConfirmed = await verifyPayment(payment, 'base');
+    
+    if (!isConfirmed) {
+      console.log(`Payment not yet confirmed for order ${order.id}`);
+      return;
+    }
+    
+    // Mark as paid and fulfill
+    await updateOrder(order.id, {
+      status: 'PAID',
+      source_tx: payment.hash,
+      paid_at: new Date().toISOString()
+    });
+    
+    console.log(`Order ${order.id} marked as paid, initiating fulfillment`);
+    
+    // Fulfill the order (async)
+    fulfillOrder(order).catch(error => {
+      console.error(`Failed to fulfill order ${order.id}:`, error);
+    });
+    
+  } catch (error) {
+    console.error('Error processing payment:', error);
+  }
+}
