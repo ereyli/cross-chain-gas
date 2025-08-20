@@ -123,12 +123,22 @@ export function validateWebhookSignature(
   signature: string,
   webhookSecret: string
 ): boolean {
-  // Implement webhook signature validation based on Alchemy's documentation
-  // For now, we'll skip signature validation in MVP
-  // In production, you should implement proper signature verification
+  if (!webhookSecret || webhookSecret === 'whsec_test') {
+    console.warn('Webhook signature validation skipped - no signing key configured');
+    return true; // Skip validation in development
+  }
   
-  console.warn('Webhook signature validation not implemented - implement for production');
-  return true;
+  try {
+    const crypto = require('crypto');
+    const hmac = crypto.createHmac('sha256', webhookSecret);
+    hmac.update(payload, 'utf8');
+    const computedSignature = hmac.digest('hex');
+    
+    return signature === computedSignature;
+  } catch (error) {
+    console.error('Webhook signature validation error:', error);
+    return false;
+  }
 }
 
 export function isExpectedPayment(

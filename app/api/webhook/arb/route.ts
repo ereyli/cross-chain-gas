@@ -1,12 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { normalizeWebhookPayload, verifyPayment, isExpectedPayment } from '../../../../lib/watcher-helpers';
+import { normalizeWebhookPayload, verifyPayment, isExpectedPayment, validateWebhookSignature } from '../../../../lib/watcher-helpers';
 import { findOrderByPayment, updateOrder } from '../../../../lib/db';
 import { fulfillOrder } from '../../../../lib/fulfil';
 import { isQuoteExpired } from '../../../../lib/quote';
 
 export async function POST(request: NextRequest) {
   try {
-    const payload = await request.json();
+    // Get raw body for signature validation
+    const body = await request.text();
+    let payload;
+    
+    try {
+      payload = JSON.parse(body);
+    } catch (e) {
+      console.error('Invalid JSON payload:', e);
+      return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    }
+    
+    // Validate webhook signature (optional for development)
+    const signature = request.headers.get('x-alchemy-signature') || '';
+    const webhookSecret = process.env.ALCHEMY_WEBHOOK_SIGNING_KEY || '';
+    
+    if (webhookSecret && !validateWebhookSignature(body, signature, webhookSecret)) {
+      console.error('Invalid webhook signature');
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+    }
+    
     console.log('Arbitrum webhook received:', JSON.stringify(payload, null, 2));
     
     const payments = normalizeWebhookPayload(payload);
