@@ -189,36 +189,6 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
 
   return (
     <div className="space-y-6">
-      {/* Important Instructions */}
-      <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-200 to-emerald-200 rounded-full opacity-30 -translate-y-10 translate-x-10"></div>
-        <div className="relative z-10">
-          <div className="flex items-center mb-4">
-            <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mr-3">
-              <span className="text-white font-bold text-sm">✓</span>
-            </div>
-            <h4 className="text-lg font-bold text-green-900">Ready to Send Payment</h4>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-green-800">
-            <div className="flex items-center">
-              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-              Make sure you&apos;re on <strong>{quote.sourceChain.toUpperCase()}</strong> network
-            </div>
-            <div className="flex items-center">
-              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-              You&apos;ll send <strong>{quote.txTemplate.kind}</strong> to complete this transfer
-            </div>
-            <div className="flex items-center">
-              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-              After payment, ETH will be sent to <strong>{quote.targetChain.toUpperCase()}</strong> network
-            </div>
-            <div className="flex items-center">
-              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-              Keep this page open to monitor the transfer
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Timer */}
       <div className="text-center bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl p-6 border border-red-200">
