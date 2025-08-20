@@ -17,7 +17,7 @@ export function TransactionHistory({ userAddress }: TransactionHistoryProps) {
     if (userAddress) {
       fetchUserHistory();
     }
-  }, [userAddress]);
+  }, [userAddress]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchUserHistory = async () => {
     if (!userAddress) return;
@@ -140,7 +140,7 @@ export function TransactionHistory({ userAddress }: TransactionHistoryProps) {
                   </span>
                 </div>
                 <span className="text-sm text-gray-500">
-                  {formatDate(order.created_at)}
+                  {order.created_at ? formatDate(order.created_at) : 'Unknown date'}
                 </span>
               </div>
 
