@@ -5,7 +5,7 @@ import type { ChainKey } from '../types';
 export const CHAINS = {
   base: { id: 8453, scan: "https://basescan.org" },
   op:   { id: 10,   scan: "https://optimistic.etherscan.io" },
-  // arb:  { id: 42161, scan: "https://arbiscan.io" } // Temporarily disabled - Defender quota limit
+  arb:  { id: 42161, scan: "https://arbiscan.io" }
 } as const;
 
 // Native USDC addresses
@@ -36,7 +36,7 @@ const wsProviderCache = new Map<string, ethers.WebSocketProvider>();
 export function getProviders() {
   const providers: Record<ChainKey, { http: ethers.JsonRpcProvider; ws: ethers.WebSocketProvider }> = {} as any;
   
-  const chains: ChainKey[] = ['base', 'op']; // 'arb' temporarily disabled
+  const chains: ChainKey[] = ['base', 'op', 'arb'];
   
   for (const chain of chains) {
     // Always use config as fallback, prioritize environment variables

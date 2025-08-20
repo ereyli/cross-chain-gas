@@ -25,7 +25,7 @@ export const CONFIG = {
   payToAddresses: {
     base: process.env.PAYTO_BASE || 'YOUR_BASE_WALLET_ADDRESS_HERE',
     op: process.env.PAYTO_OP || 'YOUR_OP_WALLET_ADDRESS_HERE',
-    // arb: process.env.PAYTO_ARB || 'YOUR_ARB_WALLET_ADDRESS_HERE' // Temporarily disabled
+    arb: process.env.PAYTO_ARB || 'YOUR_ARB_WALLET_ADDRESS_HERE'
   },
   
   // Supabase config - credentials must be provided via environment variables
