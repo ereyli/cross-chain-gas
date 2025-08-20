@@ -22,12 +22,15 @@ export function TransactionHistory({ userAddress }: TransactionHistoryProps) {
   const fetchUserHistory = async () => {
     if (!userAddress) return;
 
+    console.log('🔍 Fetching user history for:', userAddress);
     setIsLoading(true);
     setError(null);
 
     try {
       const response = await fetch(`/api/user-history?address=${userAddress}&limit=20`);
       const data = await response.json();
+      
+      console.log('📊 Transaction history response:', data);
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to fetch history');
