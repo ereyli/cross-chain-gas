@@ -85,9 +85,9 @@ async function sendTransactionViaWallet(
   } catch (error) {
     console.error(`❌ Wallet transaction failed:`, error);
     console.error(`❌ Error details:`, {
-      message: error.message,
-      code: error.code,
-      data: error.data
+      message: error instanceof Error ? error.message : 'Unknown error',
+      code: (error as any)?.code || 'No code',
+      data: (error as any)?.data || 'No data'
     });
     throw error;
   }
@@ -172,10 +172,11 @@ export async function estimateGasCost(chainKey: ChainKey): Promise<bigint> {
   // Return estimated gas cost for native transfer in wei
   // This is a simplified estimation - in production, you'd fetch actual gas prices
   
+  // Updated with realistic L2 gas prices (2024)
   const estimatedGasPrice = {
-    base: BigInt('1000000000'), // 1 gwei
-    op: BigInt('1000000000'),   // 1 gwei  
-    arb: BigInt('100000000'),   // 0.1 gwei
+    base: BigInt('2000000000'), // 2 gwei (Base: ~$0.10 average)
+    op: BigInt('500000000'),    // 0.5 gwei (Optimism: ~$0.02 average)  
+    arb: BigInt('100000000'),   // 0.1 gwei (Arbitrum: ~$0.02 average)
   };
   
   const gasLimit = BigInt(21000); // Standard transfer
