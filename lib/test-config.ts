@@ -2,8 +2,8 @@
 // Bu dosya test ve production ortamında kullanılır
 
 export const CONFIG = {
-  // Test mode flag
-  isTestMode: process.env.NODE_ENV === 'development' && process.env.LOCAL_TEST_MODE !== 'false',
+  // Test mode flag - temporarily enabled for debugging
+  isTestMode: true, // process.env.NODE_ENV === 'development' && process.env.LOCAL_TEST_MODE !== 'false',
   
   // Alchemy endpoints - API keys must be provided via environment variables
   alchemy: {
