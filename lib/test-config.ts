@@ -28,8 +28,8 @@ export const CONFIG = {
       wss: process.env.ALCHEMY_SONIC_WSS || 'wss://rpc.soniclabs.com/YOUR_API_KEY_HERE'
     },
     unichain: {
-      http: process.env.ALCHEMY_UNICHAIN_HTTP || 'https://sepolia.unichain.org/YOUR_API_KEY_HERE',
-      wss: process.env.ALCHEMY_UNICHAIN_WSS || 'wss://sepolia.unichain.org/YOUR_API_KEY_HERE'
+      http: process.env.ALCHEMY_UNICHAIN_HTTP || 'https://mainnet.unichain.org',
+      wss: process.env.ALCHEMY_UNICHAIN_WSS || 'wss://mainnet.unichain.org'
     },
     ink: {
       http: process.env.ALCHEMY_INK_HTTP || 'https://rpc-gel.inkonchain.com/YOUR_API_KEY_HERE',

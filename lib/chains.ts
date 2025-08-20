@@ -8,7 +8,7 @@ export const CHAINS = {
   arb:  { id: 42161, scan: "https://arbiscan.io" },
   eth:  { id: 1, scan: "https://etherscan.io" },
   sonic: { id: 146, scan: "https://explorer.soniclabs.com" },
-  unichain: { id: 1301, scan: "https://unichain-sepolia.blockscout.com" },
+  unichain: { id: 130, scan: "https://uniscan.xyz" },
   ink: { id: 57073, scan: "https://explorer.inkonchain.com" },
   hyperevm: { id: 998, scan: "https://explorer.hyperliquid.xyz" },
   linea: { id: 59144, scan: "https://lineascan.build" },
