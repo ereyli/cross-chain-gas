@@ -12,16 +12,31 @@ async function sendTransactionViaWallet(
 ): Promise<string> {
   const ethers = require('ethers');
   
+  console.log(`🔍 DEBUG: Starting transaction for ${chainKey}`);
+  console.log(`🔍 DEBUG: Target: ${to}, Amount: ${valueWei.toString()} wei`);
+  
   // Get provider for target chain
   const { getProviders } = require('./chains');
-  const providers = getProviders();
+  
+  let providers;
+  try {
+    providers = getProviders();
+    console.log(`🔍 DEBUG: Providers loaded successfully`);
+  } catch (error) {
+    console.error(`❌ DEBUG: Failed to get providers:`, error);
+    throw new Error(`Provider setup failed: ${error.message}`);
+  }
+  
   const provider = providers[chainKey].http;
+  console.log(`🔍 DEBUG: Using provider for ${chainKey}`);
   
   // Get fulfillment wallet private key from config
   const privateKey = CONFIG.fulfillmentWallet.privateKey;
+  console.log(`🔍 DEBUG: Private key available: ${!!privateKey}`);
+  console.log(`🔍 DEBUG: Private key starts with 0x: ${privateKey?.startsWith('0x')}`);
   
-  if (!privateKey || privateKey.includes('0000000000000')) {
-    throw new Error(`No valid fulfillment wallet private key. Please set FULFILLMENT_PRIVATE_KEY environment variable.`);
+  if (!privateKey || privateKey.includes('0000000000000') || privateKey.includes('YOUR_')) {
+    throw new Error(`No valid fulfillment wallet private key. Please set FULFILLMENT_PRIVATE_KEY environment variable. Current: ${privateKey?.substring(0, 10)}...`);
   }
   
   console.log(`🔑 Sending transaction via wallet for ${chainKey}`);
@@ -30,30 +45,50 @@ async function sendTransactionViaWallet(
   try {
     const wallet = new ethers.Wallet(privateKey, provider);
     console.log(`📍 Wallet address: ${wallet.address}`);
+    console.log(`📍 Expected wallet: 0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa`);
     
     // Check balance
     const balance = await provider.getBalance(wallet.address);
-    console.log(`💳 Wallet balance: ${balance.toString()} wei`);
+    console.log(`💳 Wallet balance: ${balance.toString()} wei (${ethers.formatEther(balance)} ETH)`);
+    console.log(`💳 Required amount: ${valueWei.toString()} wei (${ethers.formatEther(valueWei)} ETH)`);
     
     if (balance < valueWei) {
-      throw new Error(`Insufficient balance: ${balance.toString()} < ${valueWei.toString()}`);
+      throw new Error(`Insufficient balance: ${ethers.formatEther(balance)} ETH < ${ethers.formatEther(valueWei)} ETH`);
+    }
+    
+    // Estimate gas
+    let gasLimit;
+    try {
+      gasLimit = await provider.estimateGas({
+        to: to,
+        value: valueWei.toString(),
+      });
+      console.log(`⛽ Estimated gas: ${gasLimit.toString()}`);
+    } catch (gasError) {
+      console.warn(`⚠️ Gas estimation failed, using default:`, gasError.message);
+      gasLimit = 21000;
     }
     
     const tx = await wallet.sendTransaction({
       to: to,
       value: valueWei.toString(),
-      gasLimit: 21000,
+      gasLimit: gasLimit,
     });
     
     console.log(`✅ Transaction sent: ${tx.hash}`);
     
     // Wait for confirmation
-    await tx.wait(1);
-    console.log(`✅ Transaction confirmed: ${tx.hash}`);
+    const receipt = await tx.wait(1);
+    console.log(`✅ Transaction confirmed: ${tx.hash}, Status: ${receipt.status}`);
     
     return tx.hash;
   } catch (error) {
     console.error(`❌ Wallet transaction failed:`, error);
+    console.error(`❌ Error details:`, {
+      message: error.message,
+      code: error.code,
+      data: error.data
+    });
     throw error;
   }
 }
