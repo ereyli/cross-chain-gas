@@ -25,6 +25,9 @@ yarn-error.log*
 
 # Local env files
 .env*.local
+VERCEL_ENV_VARS.md
+*_ENV_VARS.md
+*.private.md
 .env
 
 # Vercel
