@@ -77,8 +77,14 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-100/80 py-8 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-purple-600/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-cyan-400/20 to-blue-600/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+        <div className="absolute top-1/3 left-1/4 w-60 h-60 bg-gradient-to-br from-indigo-400/15 to-purple-500/15 rounded-full blur-2xl animate-pulse" style={{animationDelay: '4s'}}></div>
+      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl mb-4">
             <span className="text-2xl">⚡</span>
@@ -93,7 +99,7 @@ export default function Home() {
           </p>
           
           {/* User Guidance */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-left max-w-3xl mx-auto">
+          <div className="bg-blue-50/80 backdrop-blur-lg border border-blue-200/50 rounded-2xl p-6 mb-8 text-left max-w-3xl mx-auto shadow-lg">
             <h3 className="text-lg font-semibold text-blue-900 mb-3 text-center">📖 How it works:</h3>
             <div className="text-sm text-blue-800 space-y-2">
               <div className="flex items-center">
@@ -117,15 +123,15 @@ export default function Home() {
 
           {/* Chain Info */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+            <div className="bg-white/60 backdrop-blur-lg p-3 rounded-xl border border-white/30 shadow-lg hover:bg-white/70 transition-all">
               <div className="font-semibold text-gray-900">Base</div>
               <div className="text-sm text-gray-600">Average gas: ~$0.10</div>
             </div>
-            <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+            <div className="bg-white/60 backdrop-blur-lg p-3 rounded-xl border border-white/30 shadow-lg hover:bg-white/70 transition-all">
               <div className="font-semibold text-gray-900">Optimism</div>
               <div className="text-sm text-gray-600">Average gas: ~$0.02</div>
             </div>
-            <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+            <div className="bg-white/60 backdrop-blur-lg p-3 rounded-xl border border-white/30 shadow-lg hover:bg-white/70 transition-all">
               <div className="font-semibold text-gray-900">Arbitrum</div>
               <div className="text-sm text-gray-600">Average gas: ~$0.02</div>
             </div>
@@ -149,7 +155,7 @@ export default function Home() {
             ) : (
             <div className="space-y-6">
               {/* Quote Details */}
-              <div className="p-6 bg-white rounded-lg shadow-lg">
+              <div className="p-8 bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20">
                 <div className="flex justify-between items-start mb-4">
                   <h3 className="text-xl font-semibold text-gray-900">Quote Details</h3>
                   <button
@@ -227,7 +233,7 @@ export default function Home() {
 
         {/* Features */}
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          <div className="text-center bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+          <div className="text-center bg-white/70 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:bg-white/80 transition-all transform hover:scale-105">
             <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -239,7 +245,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="text-center bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+          <div className="text-center bg-white/70 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:bg-white/80 transition-all transform hover:scale-105">
             <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -251,7 +257,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="text-center bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+          <div className="text-center bg-white/70 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:bg-white/80 transition-all transform hover:scale-105">
             <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a4 4 0 004-4V5z" />
@@ -265,7 +271,7 @@ export default function Home() {
         </div>
 
         {/* Footer */}
-        <div className="mt-16 text-center text-sm text-gray-500 bg-white/50 backdrop-blur-sm rounded-xl p-6 shadow-sm">
+        <div className="mt-16 text-center text-sm text-gray-500 bg-white/40 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/20">
           <p className="mb-2">Minimum $1 - Maximum $10 per transaction • 3% service fee • 180s quote validity</p>
           <p className="text-xs text-gray-400">Powered by Alchemy • Secured by Ethereum</p>
         </div>

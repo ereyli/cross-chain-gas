@@ -80,7 +80,7 @@ export function TransactionHistory({ userAddress }: TransactionHistoryProps) {
 
   if (!userAddress) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+      <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-3">📊 Transaction History</h3>
         <div className="text-center py-8">
           <div className="text-gray-400 mb-2">🔗</div>
@@ -91,7 +91,7 @@ export function TransactionHistory({ userAddress }: TransactionHistoryProps) {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+    <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 p-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-gray-900">📊 Transaction History</h3>
         <button
@@ -128,7 +128,7 @@ export function TransactionHistory({ userAddress }: TransactionHistoryProps) {
           {orders.map((order) => (
             <div
               key={order.id}
-              className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors"
+              className="border border-white/30 rounded-xl p-4 hover:bg-white/50 transition-all hover:shadow-md backdrop-blur-sm bg-white/20"
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">

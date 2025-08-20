@@ -116,7 +116,7 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
+    <form onSubmit={handleSubmit} className="space-y-6 p-8 bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20">
       <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Get Started</h2>
       
       {/* Wallet Connection */}
