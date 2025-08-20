@@ -24,7 +24,7 @@ async function sendTransactionViaWallet(
     console.log(`🔍 DEBUG: Providers loaded successfully`);
   } catch (error) {
     console.error(`❌ DEBUG: Failed to get providers:`, error);
-    throw new Error(`Provider setup failed: ${error.message}`);
+    throw new Error(`Provider setup failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
   
   const provider = providers[chainKey].http;
