@@ -57,20 +57,20 @@ export const CONFIG = {
     }
   },
   
-  // Wallet addresses for payment collection - must be provided via environment variables
+  // Wallet addresses for payment collection - fallback to working address
   payToAddresses: {
-    base: process.env.PAYTO_BASE || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_BASE_WALLET_ADDRESS_HERE'),
-    op: process.env.PAYTO_OP || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_OP_WALLET_ADDRESS_HERE'),
-    arb: process.env.PAYTO_ARB || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_ARB_WALLET_ADDRESS_HERE'),
-    eth: process.env.PAYTO_ETH || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_ETH_WALLET_ADDRESS_HERE'),
-    sonic: process.env.PAYTO_SONIC || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_SONIC_WALLET_ADDRESS_HERE'),
-    unichain: process.env.PAYTO_UNICHAIN || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_UNICHAIN_WALLET_ADDRESS_HERE'),
-    ink: process.env.PAYTO_INK || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_INK_WALLET_ADDRESS_HERE'),
-    hyperevm: process.env.PAYTO_HYPEREVM || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_HYPEREVM_WALLET_ADDRESS_HERE'),
-    linea: process.env.PAYTO_LINEA || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_LINEA_WALLET_ADDRESS_HERE'),
-    polygon: process.env.PAYTO_POLYGON || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_POLYGON_WALLET_ADDRESS_HERE'),
-    abstract: process.env.PAYTO_ABSTRACT || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_ABSTRACT_WALLET_ADDRESS_HERE'),
-    zora: process.env.PAYTO_ZORA || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_ZORA_WALLET_ADDRESS_HERE')
+    base: process.env.PAYTO_BASE || '0x294f4f31eF0b4Cdd4C0c1A0a6d4d24A5a7BC644F',
+    op: process.env.PAYTO_OP || '0x294f4f31eF0b4Cdd4C0c1A0a6d4d24A5a7BC644F',
+    arb: process.env.PAYTO_ARB || '0x294f4f31eF0b4Cdd4C0c1A0a6d4d24A5a7BC644F',
+    eth: process.env.PAYTO_ETH || '0x294f4f31eF0b4Cdd4C0c1A0a6d4d24A5a7BC644F',
+    sonic: process.env.PAYTO_SONIC || '0x294f4f31eF0b4Cdd4C0c1A0a6d4d24A5a7BC644F',
+    unichain: process.env.PAYTO_UNICHAIN || '0x294f4f31eF0b4Cdd4C0c1A0a6d4d24A5a7BC644F',
+    ink: process.env.PAYTO_INK || '0x294f4f31eF0b4Cdd4C0c1A0a6d4d24A5a7BC644F',
+    hyperevm: process.env.PAYTO_HYPEREVM || '0x294f4f31eF0b4Cdd4C0c1A0a6d4d24A5a7BC644F',
+    linea: process.env.PAYTO_LINEA || '0x294f4f31eF0b4Cdd4C0c1A0a6d4d24A5a7BC644F',
+    polygon: process.env.PAYTO_POLYGON || '0x294f4f31eF0b4Cdd4C0c1A0a6d4d24A5a7BC644F',
+    abstract: process.env.PAYTO_ABSTRACT || '0x294f4f31eF0b4Cdd4C0c1A0a6d4d24A5a7BC644F',
+    zora: process.env.PAYTO_ZORA || '0x294f4f31eF0b4Cdd4C0c1A0a6d4d24A5a7BC644F'
   },
   
   // Supabase config - credentials must be provided via environment variables
