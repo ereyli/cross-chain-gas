@@ -105,6 +105,11 @@ export function getPayTo(chainKey: ChainKey): string {
     throw new Error(`Missing PAYTO address for ${chainKey}`);
   }
   
+  // Check if it's a placeholder and throw more helpful error
+  if (address.includes('YOUR_') && address.includes('_HERE')) {
+    throw new Error(`PAYTO address for ${chainKey} is not configured. Please set PAYTO_${chainKey.toUpperCase()} environment variable with a valid wallet address.`);
+  }
+  
   return address;
 }
 

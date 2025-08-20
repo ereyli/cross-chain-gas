@@ -59,18 +59,18 @@ export const CONFIG = {
   
   // Wallet addresses for payment collection - must be provided via environment variables
   payToAddresses: {
-    base: process.env.PAYTO_BASE || 'YOUR_BASE_WALLET_ADDRESS_HERE',
-    op: process.env.PAYTO_OP || 'YOUR_OP_WALLET_ADDRESS_HERE',
-    arb: process.env.PAYTO_ARB || 'YOUR_ARB_WALLET_ADDRESS_HERE',
-    eth: process.env.PAYTO_ETH || 'YOUR_ETH_WALLET_ADDRESS_HERE',
-    sonic: process.env.PAYTO_SONIC || 'YOUR_SONIC_WALLET_ADDRESS_HERE',
-    unichain: process.env.PAYTO_UNICHAIN || 'YOUR_UNICHAIN_WALLET_ADDRESS_HERE',
-    ink: process.env.PAYTO_INK || 'YOUR_INK_WALLET_ADDRESS_HERE',
-    hyperevm: process.env.PAYTO_HYPEREVM || 'YOUR_HYPEREVM_WALLET_ADDRESS_HERE',
-    linea: process.env.PAYTO_LINEA || 'YOUR_LINEA_WALLET_ADDRESS_HERE',
-    polygon: process.env.PAYTO_POLYGON || 'YOUR_POLYGON_WALLET_ADDRESS_HERE',
-    abstract: process.env.PAYTO_ABSTRACT || 'YOUR_ABSTRACT_WALLET_ADDRESS_HERE',
-    zora: process.env.PAYTO_ZORA || 'YOUR_ZORA_WALLET_ADDRESS_HERE'
+    base: process.env.PAYTO_BASE || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_BASE_WALLET_ADDRESS_HERE'),
+    op: process.env.PAYTO_OP || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_OP_WALLET_ADDRESS_HERE'),
+    arb: process.env.PAYTO_ARB || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_ARB_WALLET_ADDRESS_HERE'),
+    eth: process.env.PAYTO_ETH || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_ETH_WALLET_ADDRESS_HERE'),
+    sonic: process.env.PAYTO_SONIC || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_SONIC_WALLET_ADDRESS_HERE'),
+    unichain: process.env.PAYTO_UNICHAIN || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_UNICHAIN_WALLET_ADDRESS_HERE'),
+    ink: process.env.PAYTO_INK || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_INK_WALLET_ADDRESS_HERE'),
+    hyperevm: process.env.PAYTO_HYPEREVM || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_HYPEREVM_WALLET_ADDRESS_HERE'),
+    linea: process.env.PAYTO_LINEA || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_LINEA_WALLET_ADDRESS_HERE'),
+    polygon: process.env.PAYTO_POLYGON || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_POLYGON_WALLET_ADDRESS_HERE'),
+    abstract: process.env.PAYTO_ABSTRACT || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_ABSTRACT_WALLET_ADDRESS_HERE'),
+    zora: process.env.PAYTO_ZORA || (process.env.NODE_ENV === 'development' ? '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa' : 'YOUR_ZORA_WALLET_ADDRESS_HERE')
   },
   
   // Supabase config - credentials must be provided via environment variables
