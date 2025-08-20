@@ -64,31 +64,27 @@ export function getProviders() {
     
     // Get or create HTTP provider
     if (!providerCache.has(httpUrl)) {
-      // Disable ENS for chains that don't support it
+      // For non-Ethereum chains, don't pass network config to avoid ENS issues
       const ensSupported = chain === 'eth'; // Only Ethereum mainnet supports ENS
-      const provider = new ethers.JsonRpcProvider(httpUrl, ensSupported ? {
-        chainId: CHAINS[chain].id,
-        name: chain
-      } : {
-        chainId: CHAINS[chain].id,
-        name: chain,
-        ensAddress: undefined // Disable ENS for non-Ethereum chains
-      });
+      const provider = ensSupported 
+        ? new ethers.JsonRpcProvider(httpUrl, {
+            chainId: CHAINS[chain].id,
+            name: chain
+          })
+        : new ethers.JsonRpcProvider(httpUrl); // No network config for non-ETH chains
       providerCache.set(httpUrl, provider);
     }
     
     // Get or create WebSocket provider  
     if (!wsProviderCache.has(wsUrl)) {
-      // Disable ENS for chains that don't support it
+      // For non-Ethereum chains, don't pass network config to avoid ENS issues
       const ensSupported = chain === 'eth'; // Only Ethereum mainnet supports ENS
-      const wsProvider = new ethers.WebSocketProvider(wsUrl, ensSupported ? {
-        chainId: CHAINS[chain].id,
-        name: chain
-      } : {
-        chainId: CHAINS[chain].id,
-        name: chain,
-        ensAddress: undefined // Disable ENS for non-Ethereum chains
-      });
+      const wsProvider = ensSupported 
+        ? new ethers.WebSocketProvider(wsUrl, {
+            chainId: CHAINS[chain].id,
+            name: chain
+          })
+        : new ethers.WebSocketProvider(wsUrl); // No network config for non-ETH chains
       wsProviderCache.set(wsUrl, wsProvider);
     }
     

@@ -105,14 +105,21 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
       const sourceChain = quote.sourceChain;
       const ensSupported = sourceChain === 'eth'; // Only Ethereum mainnet supports ENS
       
-      const provider = new ethers.BrowserProvider(window.ethereum, ensSupported ? {
-        chainId: CHAINS[sourceChain].id,
-        name: sourceChain
-      } : {
-        chainId: CHAINS[sourceChain].id,
-        name: sourceChain,
-        ensAddress: undefined // Disable ENS for non-Ethereum chains
-      });
+      // For non-Ethereum chains, don't pass network config to avoid ENS issues
+      let provider;
+      try {
+        provider = ensSupported 
+          ? new ethers.BrowserProvider(window.ethereum, {
+              chainId: CHAINS[sourceChain].id,
+              name: sourceChain
+            })
+          : new ethers.BrowserProvider(window.ethereum); // No network config for non-ETH chains
+      } catch (error) {
+        // Fallback: create provider without any network config
+        console.warn('Failed to create provider with network config, using fallback:', error);
+        provider = new ethers.BrowserProvider(window.ethereum);
+      }
+      
       const signer = await provider.getSigner();
 
       let tx;
