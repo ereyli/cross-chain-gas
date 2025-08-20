@@ -105,10 +105,13 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
       const sourceChain = quote.sourceChain;
       const ensSupported = sourceChain === 'eth'; // Only Ethereum mainnet supports ENS
       
-      const provider = new ethers.BrowserProvider(window.ethereum, {
+      const provider = new ethers.BrowserProvider(window.ethereum, ensSupported ? {
+        chainId: CHAINS[sourceChain].id,
+        name: sourceChain
+      } : {
         chainId: CHAINS[sourceChain].id,
         name: sourceChain,
-        ensAddress: ensSupported ? undefined : null // Disable ENS for non-Ethereum chains
+        ensAddress: undefined // Disable ENS for non-Ethereum chains
       });
       const signer = await provider.getSigner();
 
