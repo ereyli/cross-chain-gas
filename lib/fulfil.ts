@@ -172,11 +172,20 @@ export async function estimateGasCost(chainKey: ChainKey): Promise<bigint> {
   // Return estimated gas cost for native transfer in wei
   // This is a simplified estimation - in production, you'd fetch actual gas prices
   
-  // Updated with realistic L2 gas prices (2024)
-  const estimatedGasPrice = {
+  // Updated with realistic gas prices (2024)
+  const estimatedGasPrice: Record<ChainKey, bigint> = {
     base: BigInt('2000000000'), // 2 gwei (Base: ~$0.10 average)
     op: BigInt('500000000'),    // 0.5 gwei (Optimism: ~$0.02 average)  
     arb: BigInt('100000000'),   // 0.1 gwei (Arbitrum: ~$0.02 average)
+    eth: BigInt('20000000000'), // 20 gwei (Ethereum: ~$2.00 average)
+    sonic: BigInt('1000000000'), // 1 gwei (Sonic: ~$0.05 average)
+    unichain: BigInt('500000000'), // 0.5 gwei (Unichain: ~$0.02 average)
+    ink: BigInt('100000000'),   // 0.1 gwei (Ink: ~$0.02 average)
+    hyperevm: BigInt('50000000'), // 0.05 gwei (HyperEVM: ~$0.01 average)
+    linea: BigInt('1000000000'), // 1 gwei (Linea: ~$0.05 average)
+    polygon: BigInt('30000000000'), // 30 gwei (Polygon: ~$0.05 average)
+    abstract: BigInt('100000000'), // 0.1 gwei (Abstract: ~$0.02 average)
+    zora: BigInt('100000000'),  // 0.1 gwei (Zora: ~$0.02 average)
   };
   
   const gasLimit = BigInt(21000); // Standard transfer
