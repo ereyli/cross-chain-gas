@@ -178,29 +178,72 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Important Instructions */}
-      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-        <h4 className="font-medium text-green-900 mb-2">✅ Ready to Send Payment</h4>
-        <div className="text-sm text-green-800 space-y-1">
-          <p>• Make sure you&apos;re on <strong>{quote.sourceChain.toUpperCase()}</strong> network</p>
-          <p>• You&apos;ll send <strong>{quote.txTemplate.kind}</strong> to complete this transfer</p>
-          <p>• After payment, ETH will be sent to <strong>{quote.targetChain.toUpperCase()}</strong> network</p>
-          <p>• Keep this page open to monitor the transfer</p>
+      <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-200 to-emerald-200 rounded-full opacity-30 -translate-y-10 translate-x-10"></div>
+        <div className="relative z-10">
+          <div className="flex items-center mb-4">
+            <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mr-3">
+              <span className="text-white font-bold text-sm">✓</span>
+            </div>
+            <h4 className="text-lg font-bold text-green-900">Ready to Send Payment</h4>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-green-800">
+            <div className="flex items-center">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+              Make sure you&apos;re on <strong>{quote.sourceChain.toUpperCase()}</strong> network
+            </div>
+            <div className="flex items-center">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+              You&apos;ll send <strong>{quote.txTemplate.kind}</strong> to complete this transfer
+            </div>
+            <div className="flex items-center">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+              After payment, ETH will be sent to <strong>{quote.targetChain.toUpperCase()}</strong> network
+            </div>
+            <div className="flex items-center">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+              Keep this page open to monitor the transfer
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="text-center">
-        <div className="text-sm text-gray-600">Quote expires in:</div>
-        <div className="text-2xl font-bold text-red-600">{formatTime(timeLeft)}</div>
+      {/* Timer */}
+      <div className="text-center bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl p-6 border border-red-200">
+        <div className="text-sm font-medium text-gray-700 mb-2">Quote expires in:</div>
+        <div className="text-4xl font-bold text-transparent bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text">
+          {formatTime(timeLeft)}
+        </div>
+        <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
+          <div 
+            className="bg-gradient-to-r from-red-500 to-orange-500 h-2 rounded-full transition-all duration-1000"
+            style={{ width: `${Math.max(0, (timeLeft / 900) * 100)}%` }}
+          ></div>
+        </div>
       </div>
 
+      {/* Payment Button */}
       <button
         onClick={sendPayment}
         disabled={isPaying || timeLeft <= 0}
-        className="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-lg font-semibold"
+        className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-4 px-6 rounded-2xl text-xl font-bold transition-all transform hover:scale-[1.02] hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none relative overflow-hidden group"
       >
-        {isPaying ? 'Sending Payment...' : `💰 Send Payment (${quote.txTemplate.kind})`}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div className="relative z-10 flex items-center justify-center">
+          {isPaying ? (
+            <>
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-3"></div>
+              Sending Payment...
+            </>
+          ) : (
+            <>
+              <span className="mr-2">💰</span>
+              Send Payment ({quote.txTemplate.kind})
+            </>
+          )}
+        </div>
       </button>
       
       <p className="text-xs text-gray-500 text-center">

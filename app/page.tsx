@@ -217,56 +217,92 @@ export default function Home() {
             {!quote ? (
               <QuoteForm onQuoteGenerated={handleQuoteGenerated} onError={handleError} />
             ) : (
-            <div className="space-y-6">
+            <div className="space-y-8">
               {/* Quote Details */}
-              <div className="p-8 bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20">
-                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-xl font-semibold text-gray-900">Quote Details</h3>
-                  <button
-                    onClick={handleReset}
-                    className="text-sm text-blue-600 hover:text-blue-800 underline"
-                  >
-                    New Quote
-                  </button>
-                </div>
+              <div className="p-8 bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 relative overflow-hidden">
+                {/* Background decorative elements */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full opacity-50 -translate-y-16 translate-x-16"></div>
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-green-100 to-blue-100 rounded-full opacity-40 translate-y-12 -translate-x-12"></div>
+                
+                <div className="relative z-10">
+                  <div className="flex justify-between items-start mb-8">
+                    <h3 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Quote Details</h3>
+                    <button
+                      onClick={handleReset}
+                      className="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 rounded-xl transition-all transform hover:scale-105"
+                    >
+                      New Quote
+                    </button>
+                  </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <h4 className="font-medium text-gray-700 mb-2">You Pay</h4>
-                    <div className="text-lg">
-                      {formatTokenAmount(BigInt(quote.exact.amountRaw), quote.sourceAsset)} {quote.sourceAsset}
-                      <div className="text-sm text-gray-600">
-                        on {getChainName(quote.sourceChain)}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    {/* You Pay */}
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl"></div>
+                      <div className="relative p-6 rounded-2xl border border-red-100">
+                        <div className="flex items-center mb-4">
+                          <div className="w-10 h-10 bg-gradient-to-r from-red-500 to-orange-500 rounded-xl flex items-center justify-center mr-3">
+                            <span className="text-white font-bold">💰</span>
+                          </div>
+                          <h4 className="text-lg font-semibold text-gray-800">You Pay</h4>
+                        </div>
+                        <div className="text-2xl font-bold text-gray-900 mb-2">
+                          {formatTokenAmount(BigInt(quote.exact.amountRaw), quote.sourceAsset)} {quote.sourceAsset}
+                        </div>
+                        <div className="text-sm font-medium text-gray-600 bg-white/70 px-3 py-1 rounded-lg inline-block">
+                          on {getChainName(quote.sourceChain)}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* You Receive */}
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl"></div>
+                      <div className="relative p-6 rounded-2xl border border-green-100">
+                        <div className="flex items-center mb-4">
+                          <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mr-3">
+                            <span className="text-white font-bold">💎</span>
+                          </div>
+                          <h4 className="text-lg font-semibold text-gray-800">You Receive</h4>
+                        </div>
+                        <div className="text-2xl font-bold text-gray-900 mb-2">
+                          ≈{formatTokenAmount(BigInt(quote.target.expectedNative), 'ETH')} ETH
+                        </div>
+                        <div className="space-y-1">
+                          <div className="text-sm font-medium text-gray-600 bg-white/70 px-3 py-1 rounded-lg inline-block">
+                            on {getChainName(quote.targetChain)}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            (min: {formatTokenAmount(BigInt(quote.target.minGuarantee), 'ETH')} ETH)
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  <div>
-                    <h4 className="font-medium text-gray-700 mb-2">You Receive</h4>
-                    <div className="text-lg">
-                      ≈{formatTokenAmount(BigInt(quote.target.expectedNative), 'ETH')} ETH
-                      <div className="text-sm text-gray-600">
-                        on {getChainName(quote.targetChain)} 
-                        <br />
-                        (min: {formatTokenAmount(BigInt(quote.target.minGuarantee), 'ETH')} ETH)
+                  {/* Fees Breakdown */}
+                  <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-6 border border-gray-200">
+                    <h5 className="font-semibold text-gray-800 mb-4 flex items-center">
+                      <span className="w-6 h-6 bg-gradient-to-r from-gray-500 to-blue-500 rounded-lg flex items-center justify-center mr-2">
+                        <span className="text-white text-xs">📊</span>
+                      </span>
+                      Fee Breakdown
+                    </h5>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center text-gray-700">
+                        <span className="text-sm">Service Fee (3%):</span>
+                        <span className="font-semibold text-lg">${quote.fees.serviceFeeUsd}</span>
                       </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-4 pt-4 border-t border-gray-200">
-                  <div className="text-sm text-gray-600 space-y-1">
-                    <div className="flex justify-between">
-                      <span>Service Fee (3%):</span>
-                      <span>${quote.fees.serviceFeeUsd}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Execution Buffer:</span>
-                      <span>${quote.fees.execBufferUsd}</span>
-                    </div>
-                    <div className="flex justify-between font-medium">
-                      <span>Total Fees:</span>
-                      <span>${quote.fees.totalFeeUsd}</span>
+                      <div className="flex justify-between items-center text-gray-700">
+                        <span className="text-sm">Execution Buffer:</span>
+                        <span className="font-semibold text-lg">${quote.fees.execBufferUsd}</span>
+                      </div>
+                      <div className="border-t border-gray-300 pt-3">
+                        <div className="flex justify-between items-center text-gray-900">
+                          <span className="font-bold">Total Fees:</span>
+                          <span className="font-bold text-xl text-blue-600">${quote.fees.totalFeeUsd}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -274,13 +310,19 @@ export default function Home() {
 
               {/* Payment Section */}
               {!paymentTxHash ? (
-                <div className="p-6 bg-white rounded-lg shadow-lg">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Make Payment</h3>
-                  <PayButton 
-                    quote={quote}
-                    onPaymentSent={handlePaymentSent}
-                    onError={handleError}
-                  />
+                <div className="p-8 bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 relative overflow-hidden">
+                  {/* Background decorative elements */}
+                  <div className="absolute top-0 left-0 w-40 h-40 bg-gradient-to-br from-green-100 to-emerald-100 rounded-full opacity-30 -translate-y-20 -translate-x-20"></div>
+                  <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tr from-blue-100 to-purple-100 rounded-full opacity-40 translate-y-16 translate-x-16"></div>
+                  
+                  <div className="relative z-10">
+                    <h3 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-6">Make Payment</h3>
+                    <PayButton 
+                      quote={quote}
+                      onPaymentSent={handlePaymentSent}
+                      onError={handleError}
+                    />
+                  </div>
                 </div>
               ) : (
                 <StatusTracker orderId={quote.orderId} sourceTxHash={paymentTxHash} />
