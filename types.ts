@@ -1,4 +1,4 @@
-export type ChainKey = 'base' | 'op' | 'arb';
+export type ChainKey = 'base' | 'op' | 'arb' | 'eth' | 'sonic' | 'unichain' | 'ink' | 'hyperevm' | 'linea' | 'polygon' | 'abstract' | 'zora';
 export type Asset = 'ETH' | 'USDC' | 'USDT';
 export type OrderStatus = 
   | 'AWAITING_PAYMENT' 

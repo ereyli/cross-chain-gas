@@ -18,6 +18,42 @@ export const CONFIG = {
     arb: {
       http: process.env.ALCHEMY_ARB_HTTP || 'https://arb-mainnet.g.alchemy.com/v2/YOUR_API_KEY_HERE',
       wss: process.env.ALCHEMY_ARB_WSS || 'wss://arb-mainnet.g.alchemy.com/v2/YOUR_API_KEY_HERE'
+    },
+    eth: {
+      http: process.env.ALCHEMY_ETH_HTTP || 'https://eth-mainnet.g.alchemy.com/v2/YOUR_API_KEY_HERE',
+      wss: process.env.ALCHEMY_ETH_WSS || 'wss://eth-mainnet.g.alchemy.com/v2/YOUR_API_KEY_HERE'
+    },
+    sonic: {
+      http: process.env.ALCHEMY_SONIC_HTTP || 'https://rpc.soniclabs.com/YOUR_API_KEY_HERE',
+      wss: process.env.ALCHEMY_SONIC_WSS || 'wss://rpc.soniclabs.com/YOUR_API_KEY_HERE'
+    },
+    unichain: {
+      http: process.env.ALCHEMY_UNICHAIN_HTTP || 'https://sepolia.unichain.org/YOUR_API_KEY_HERE',
+      wss: process.env.ALCHEMY_UNICHAIN_WSS || 'wss://sepolia.unichain.org/YOUR_API_KEY_HERE'
+    },
+    ink: {
+      http: process.env.ALCHEMY_INK_HTTP || 'https://rpc-gel.inkonchain.com/YOUR_API_KEY_HERE',
+      wss: process.env.ALCHEMY_INK_WSS || 'wss://rpc-gel.inkonchain.com/YOUR_API_KEY_HERE'
+    },
+    hyperevm: {
+      http: process.env.ALCHEMY_HYPEREVM_HTTP || 'https://api.hyperliquid-testnet.xyz/evm/YOUR_API_KEY_HERE',
+      wss: process.env.ALCHEMY_HYPEREVM_WSS || 'wss://api.hyperliquid-testnet.xyz/evm/YOUR_API_KEY_HERE'
+    },
+    linea: {
+      http: process.env.ALCHEMY_LINEA_HTTP || 'https://rpc.linea.build/YOUR_API_KEY_HERE',
+      wss: process.env.ALCHEMY_LINEA_WSS || 'wss://rpc.linea.build/YOUR_API_KEY_HERE'
+    },
+    polygon: {
+      http: process.env.ALCHEMY_POLYGON_HTTP || 'https://polygon-mainnet.g.alchemy.com/v2/YOUR_API_KEY_HERE',
+      wss: process.env.ALCHEMY_POLYGON_WSS || 'wss://polygon-mainnet.g.alchemy.com/v2/YOUR_API_KEY_HERE'
+    },
+    abstract: {
+      http: process.env.ALCHEMY_ABSTRACT_HTTP || 'https://api.testnet.abs.xyz/YOUR_API_KEY_HERE',
+      wss: process.env.ALCHEMY_ABSTRACT_WSS || 'wss://api.testnet.abs.xyz/YOUR_API_KEY_HERE'
+    },
+    zora: {
+      http: process.env.ALCHEMY_ZORA_HTTP || 'https://rpc.zora.energy/YOUR_API_KEY_HERE',
+      wss: process.env.ALCHEMY_ZORA_WSS || 'wss://rpc.zora.energy/YOUR_API_KEY_HERE'
     }
   },
   
@@ -25,7 +61,16 @@ export const CONFIG = {
   payToAddresses: {
     base: process.env.PAYTO_BASE || 'YOUR_BASE_WALLET_ADDRESS_HERE',
     op: process.env.PAYTO_OP || 'YOUR_OP_WALLET_ADDRESS_HERE',
-    arb: process.env.PAYTO_ARB || 'YOUR_ARB_WALLET_ADDRESS_HERE'
+    arb: process.env.PAYTO_ARB || 'YOUR_ARB_WALLET_ADDRESS_HERE',
+    eth: process.env.PAYTO_ETH || 'YOUR_ETH_WALLET_ADDRESS_HERE',
+    sonic: process.env.PAYTO_SONIC || 'YOUR_SONIC_WALLET_ADDRESS_HERE',
+    unichain: process.env.PAYTO_UNICHAIN || 'YOUR_UNICHAIN_WALLET_ADDRESS_HERE',
+    ink: process.env.PAYTO_INK || 'YOUR_INK_WALLET_ADDRESS_HERE',
+    hyperevm: process.env.PAYTO_HYPEREVM || 'YOUR_HYPEREVM_WALLET_ADDRESS_HERE',
+    linea: process.env.PAYTO_LINEA || 'YOUR_LINEA_WALLET_ADDRESS_HERE',
+    polygon: process.env.PAYTO_POLYGON || 'YOUR_POLYGON_WALLET_ADDRESS_HERE',
+    abstract: process.env.PAYTO_ABSTRACT || 'YOUR_ABSTRACT_WALLET_ADDRESS_HERE',
+    zora: process.env.PAYTO_ZORA || 'YOUR_ZORA_WALLET_ADDRESS_HERE'
   },
   
   // Supabase config - credentials must be provided via environment variables
