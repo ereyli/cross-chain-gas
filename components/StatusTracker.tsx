@@ -13,6 +13,7 @@ export function StatusTracker({ orderId, sourceTxHash }: StatusTrackerProps) {
   const [status, setStatus] = useState<StatusResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isFulfilling, setIsFulfilling] = useState(false);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -98,6 +99,38 @@ export function StatusTracker({ orderId, sourceTxHash }: StatusTrackerProps) {
   const getExplorerUrl = (chain: string, txHash: string) => {
     const chainInfo = CHAINS[chain as keyof typeof CHAINS];
     return `${chainInfo.scan}/tx/${txHash}`;
+  };
+
+  const handleManualFulfillment = async () => {
+    if (!sourceTxHash || !status) return;
+    
+    setIsFulfilling(true);
+    try {
+      const response = await fetch('/api/test-fulfill', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderId: orderId,
+          txHash: sourceTxHash
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to initiate fulfillment');
+      }
+
+      // Refresh status
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to complete order');
+    } finally {
+      setIsFulfilling(false);
+    }
   };
 
   if (isLoading) {
@@ -196,6 +229,26 @@ export function StatusTracker({ orderId, sourceTxHash }: StatusTrackerProps) {
               </span>
             )}
           </div>
+        </div>
+      )}
+
+      {/* Manual Fulfillment Button */}
+      {status.status === 'AWAITING_PAYMENT' && sourceTxHash && (
+        <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <p className="text-sm text-yellow-800 mb-3">
+            ⚠️ Payment detected but not auto-processed. Click below to complete your order manually.
+          </p>
+          <button
+            onClick={handleManualFulfillment}
+            disabled={isFulfilling}
+            className={`w-full px-4 py-2 rounded-lg font-medium transition-colors ${
+              isFulfilling
+                ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                : 'bg-blue-600 text-white hover:bg-blue-700'
+            }`}
+          >
+            {isFulfilling ? 'Processing...' : '🚀 Complete Order Now'}
+          </button>
         </div>
       )}
 
