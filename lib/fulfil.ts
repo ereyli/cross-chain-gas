@@ -65,7 +65,7 @@ async function sendTransactionViaWallet(
       });
       console.log(`⛽ Estimated gas: ${gasLimit.toString()}`);
     } catch (gasError) {
-      console.warn(`⚠️ Gas estimation failed, using default:`, gasError.message);
+      console.warn(`⚠️ Gas estimation failed, using default:`, gasError instanceof Error ? gasError.message : 'Unknown gas error');
       gasLimit = 21000;
     }
     
