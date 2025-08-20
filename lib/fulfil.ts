@@ -65,6 +65,11 @@ export async function sendNative(
   to: string, 
   valueWei: bigint
 ): Promise<string> {
+  // Check if we're in test mode - if so, use mock
+  if (isLocalTestMode()) {
+    console.log('🧪 Using mock fulfillment in test mode');
+    return sendNativeMock(chainKey, to, valueWei);
+  }
   
   try {
     // Use direct wallet approach
