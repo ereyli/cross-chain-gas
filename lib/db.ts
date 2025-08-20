@@ -127,3 +127,44 @@ export async function markOrdersExpired(): Promise<void> {
     throw new Error(`Failed to mark orders expired: ${error.message}`);
   }
 }
+
+export async function getUserOrders(userAddress: string, limit: number = 10): Promise<Order[]> {
+  if (isMockEnabled()) {
+    // Mock implementation - return some fake history
+    return [
+      {
+        id: 'mock-1',
+        status: 'DONE' as OrderStatus,
+        payer_address: userAddress.toLowerCase(),
+        source_chain: 'base',
+        target_chain: 'op',
+        source_asset: 'ETH',
+        target_recipient: userAddress,
+        target_amount_usd: 50,
+        pay_to: '0x123...456',
+        expected_from: userAddress.toLowerCase(),
+        exact_token_addr: null,
+        exact_amount_raw: '1000000000000000000',
+        expires_at: new Date(Date.now() - 86400000 + 900000).toISOString(),
+        source_tx: '0xabc123...',
+        target_tx: '0xdef456...',
+        created_at: new Date(Date.now() - 86400000).toISOString(),
+        paid_at: new Date(Date.now() - 86400000 + 300000).toISOString(),
+        fulfilled_at: new Date(Date.now() - 86400000 + 600000).toISOString()
+      }
+    ];
+  }
+
+  const { data, error } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('expected_from', userAddress.toLowerCase())
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    throw new Error(`Failed to get user orders: ${error.message}`);
+  }
+
+  return data || [];
+}

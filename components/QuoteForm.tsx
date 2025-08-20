@@ -116,8 +116,8 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold text-gray-900">Cross-Chain Gas Top-Up</h2>
+    <form onSubmit={handleSubmit} className="space-y-6 p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
+      <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Get Started</h2>
       
       {/* Wallet Connection */}
       <div className="border-b pb-4">
@@ -126,14 +126,17 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
             type="button"
             onClick={connectWallet}
             disabled={isConnecting}
-            className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-xl hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] shadow-lg"
           >
-            {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+            <div className="flex items-center justify-center space-x-2">
+              <span className="text-lg">🔗</span>
+              <span className="font-semibold">{isConnecting ? 'Connecting...' : 'Connect Wallet'}</span>
+            </div>
           </button>
         ) : (
-          <div className="bg-green-50 border border-green-200 rounded-md p-3">
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-4">
             <div className="flex items-center">
-              <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+              <div className="w-4 h-4 bg-green-500 rounded-full mr-3 animate-pulse"></div>
               <div>
                 <p className="text-sm font-medium text-green-800">Wallet Connected</p>
                 <p className="text-sm text-green-600 break-all">{connectedAccount}</p>
@@ -246,9 +249,9 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
       <button
         type="submit"
         disabled={isLoading || !connectedAccount}
-        className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-xl hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] shadow-lg font-semibold text-lg"
       >
-        {!connectedAccount ? 'Connect Wallet First' : isLoading ? 'Generating Quote...' : 'Generate Quote & Continue'}
+        {!connectedAccount ? '🔗 Connect Wallet First' : isLoading ? '⏳ Generating Quote...' : '✨ Generate Quote & Continue'}
       </button>
     </form>
   );

@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { QuoteForm } from '../components/QuoteForm';
 import { PayButton } from '../components/PayButton';
 import { StatusTracker } from '../components/StatusTracker';
+import { TransactionHistory } from '../components/TransactionHistory';
 import { formatTokenAmount } from '../lib/prices';
 import { CHAINS } from '../lib/chains';
 import type { QuoteResponse } from '../types';
@@ -12,6 +13,43 @@ export default function Home() {
   const [quote, setQuote] = useState<QuoteResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [paymentTxHash, setPaymentTxHash] = useState<string | null>(null);
+  const [connectedAccount, setConnectedAccount] = useState<string | null>(null);
+
+  // Check for connected wallet on page load
+  useEffect(() => {
+    const checkWalletConnection = async () => {
+      if (typeof window.ethereum !== 'undefined') {
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+          if (accounts.length > 0) {
+            setConnectedAccount(accounts[0]);
+          }
+        } catch (error) {
+          console.error('Error checking wallet connection:', error);
+        }
+      }
+    };
+
+    checkWalletConnection();
+
+    // Listen for account changes
+    if (typeof window.ethereum !== 'undefined') {
+      const handleAccountsChanged = (accounts: string[]) => {
+        setConnectedAccount(accounts.length > 0 ? accounts[0] : null);
+      };
+
+      const ethereum = window.ethereum as any;
+      if (ethereum.on) {
+        ethereum.on('accountsChanged', handleAccountsChanged);
+
+        return () => {
+          if (ethereum.removeListener) {
+            ethereum.removeListener('accountsChanged', handleAccountsChanged);
+          }
+        };
+      }
+    }
+  }, []);
 
   const handleQuoteGenerated = (newQuote: QuoteResponse) => {
     setQuote(newQuote);
@@ -39,15 +77,19 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl mb-4">
+            <span className="text-2xl">⚡</span>
+          </div>
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
             Cross-Chain Gas Top-Up
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
             Pay with ETH, USDC, or USDT on Base, Optimism, or Arbitrum and receive native gas on any target chain.
-            Simple, fast, and secure.
+            <br />
+            <span className="text-blue-600 font-medium">Simple, fast, and secure.</span>
           </p>
           
           {/* User Guidance */}
@@ -91,15 +133,20 @@ export default function Home() {
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
-            {error}
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-800 rounded-xl shadow-sm">
+            <div className="flex items-center">
+              <span className="text-red-500 mr-2">⚠️</span>
+              {error}
+            </div>
           </div>
         )}
 
-        <div className="space-y-8">
-          {!quote ? (
-            <QuoteForm onQuoteGenerated={handleQuoteGenerated} onError={handleError} />
-          ) : (
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+          {/* Main Content */}
+          <div className="xl:col-span-2">
+            {!quote ? (
+              <QuoteForm onQuoteGenerated={handleQuoteGenerated} onError={handleError} />
+            ) : (
             <div className="space-y-6">
               {/* Quote Details */}
               <div className="p-6 bg-white rounded-lg shadow-lg">
@@ -170,50 +217,57 @@ export default function Home() {
               )}
             </div>
           )}
+          </div>
+
+          {/* Transaction History Sidebar */}
+          <div className="xl:col-span-1">
+            <TransactionHistory userAddress={connectedAccount} />
+          </div>
         </div>
 
         {/* Features */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="text-center">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="text-center bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+            <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </div>
-            <h3 className="font-semibold text-gray-900 mb-2">Fast Delivery</h3>
-            <p className="text-gray-600 text-sm">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">Fast Delivery</h3>
+            <p className="text-gray-600">
               Get native gas tokens in minutes across Base, Optimism, and Arbitrum
             </p>
           </div>
 
-          <div className="text-center">
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="text-center bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+            <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="font-semibold text-gray-900 mb-2">Secure</h3>
-            <p className="text-gray-600 text-sm">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">Secure</h3>
+            <p className="text-gray-600">
               Exact amount matching and multi-confirmation verification for safety
             </p>
           </div>
 
-          <div className="text-center">
-            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="text-center bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+            <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a4 4 0 004-4V5z" />
               </svg>
             </div>
-            <h3 className="font-semibold text-gray-900 mb-2">Multi-Asset</h3>
-            <p className="text-gray-600 text-sm">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">Multi-Asset</h3>
+            <p className="text-gray-600">
               Pay with ETH, USDC, or USDT - whatever you have available
             </p>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="mt-16 text-center text-sm text-gray-500">
-          <p>Minimum $1 - Maximum $10 per transaction • 3% service fee • 180s quote validity</p>
+        <div className="mt-16 text-center text-sm text-gray-500 bg-white/50 backdrop-blur-sm rounded-xl p-6 shadow-sm">
+          <p className="mb-2">Minimum $1 - Maximum $10 per transaction • 3% service fee • 180s quote validity</p>
+          <p className="text-xs text-gray-400">Powered by Alchemy • Secured by Ethereum</p>
         </div>
       </div>
     </div>
