@@ -11,7 +11,7 @@ const PRICE_TTL = parseInt(process.env.PRICE_TTL || '90') * 1000; // Convert to 
 
 export async function getUsdPrice(asset: Asset, chainKey: ChainKey): Promise<number> {
   // USDC and USDT are always $1
-  if (asset === 'USDC' || asset === 'USDT') {
+  if (asset === 'USDC' || asset === 'USDT' || asset === 'DAI') {
     return 1.0;
   }
   
@@ -19,7 +19,11 @@ export async function getUsdPrice(asset: Asset, chainKey: ChainKey): Promise<num
     return getEthPrice();
   }
   
-  throw new Error(`Unsupported asset: ${asset}`);
+  
+  // For MATIC, ARB, OP - use ETH price as temporary fallback
+  if (asset === 'MATIC') return 0.85;
+  if (asset === 'ARB') return 0.90;
+  if (asset === 'OP') return 1.60;  throw new Error(`Unsupported asset: ${asset}`);
 }
 
 async function getEthPrice(): Promise<number> {
@@ -88,7 +92,11 @@ export function getTokenDecimals(asset: Asset): number {
     case 'USDC':
       return 6;
     case 'USDT':
-      return 6;
+    case 'DAI':
+    case 'MATIC':
+    case 'ARB':
+    case 'OP':
+      return 18;      return 6;
     default:
       throw new Error(`Unknown asset: ${asset}`);
   }
