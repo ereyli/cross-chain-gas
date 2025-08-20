@@ -64,12 +64,26 @@ export function getProviders() {
     
     // Get or create HTTP provider
     if (!providerCache.has(httpUrl)) {
-      providerCache.set(httpUrl, new ethers.JsonRpcProvider(httpUrl));
+      // Disable ENS for chains that don't support it
+      const ensSupported = chain === 'eth'; // Only Ethereum mainnet supports ENS
+      const provider = new ethers.JsonRpcProvider(httpUrl, {
+        chainId: CHAINS[chain].id,
+        name: chain,
+        ensAddress: ensSupported ? undefined : null // Disable ENS for non-Ethereum chains
+      });
+      providerCache.set(httpUrl, provider);
     }
     
     // Get or create WebSocket provider  
     if (!wsProviderCache.has(wsUrl)) {
-      wsProviderCache.set(wsUrl, new ethers.WebSocketProvider(wsUrl));
+      // Disable ENS for chains that don't support it
+      const ensSupported = chain === 'eth'; // Only Ethereum mainnet supports ENS
+      const wsProvider = new ethers.WebSocketProvider(wsUrl, {
+        chainId: CHAINS[chain].id,
+        name: chain,
+        ensAddress: ensSupported ? undefined : null // Disable ENS for non-Ethereum chains
+      });
+      wsProviderCache.set(wsUrl, wsProvider);
     }
     
     providers[chain] = {

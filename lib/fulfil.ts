@@ -43,6 +43,7 @@ async function sendTransactionViaWallet(
   console.log(`💰 Amount: ${valueWei.toString()} wei to ${to}`);
   
   try {
+    const ethers = require('ethers');
     const wallet = new ethers.Wallet(privateKey, provider);
     console.log(`📍 Wallet address: ${wallet.address}`);
     console.log(`📍 Expected wallet: 0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa`);
