@@ -175,8 +175,8 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
       <div className="bg-green-50 border border-green-200 rounded-lg p-4">
         <h4 className="font-medium text-green-900 mb-2">✅ Ready to Send Payment</h4>
         <div className="text-sm text-green-800 space-y-1">
-          <p>• Make sure you're on <strong>{quote.sourceChain.toUpperCase()}</strong> network</p>
-          <p>• You'll send <strong>{quote.txTemplate.kind}</strong> to complete this transfer</p>
+          <p>• Make sure you&apos;re on <strong>{quote.sourceChain.toUpperCase()}</strong> network</p>
+          <p>• You&apos;ll send <strong>{quote.txTemplate.kind}</strong> to complete this transfer</p>
           <p>• After payment, ETH will be sent to <strong>{quote.targetChain.toUpperCase()}</strong> network</p>
           <p>• Keep this page open to monitor the transfer</p>
         </div>
