@@ -24,24 +24,24 @@ export const CONFIG = {
       wss: process.env.ALCHEMY_ETH_WSS || 'wss://eth-mainnet.g.alchemy.com/v2/YOUR_API_KEY_HERE'
     },
     sonic: {
-      http: process.env.ALCHEMY_SONIC_HTTP || 'https://rpc.soniclabs.com/YOUR_API_KEY_HERE',
-      wss: process.env.ALCHEMY_SONIC_WSS || 'wss://rpc.soniclabs.com/YOUR_API_KEY_HERE'
+      http: process.env.ALCHEMY_SONIC_HTTP || 'https://rpc.soniclabs.com',
+      wss: process.env.ALCHEMY_SONIC_WSS || 'wss://rpc.soniclabs.com'
     },
     unichain: {
-      http: process.env.ALCHEMY_UNICHAIN_HTTP || 'https://mainnet.unichain.org',
-      wss: process.env.ALCHEMY_UNICHAIN_WSS || 'wss://mainnet.unichain.org'
+      http: process.env.ALCHEMY_UNICHAIN_HTTP || 'https://unichain-rpc.publicnode.com',
+      wss: process.env.ALCHEMY_UNICHAIN_WSS || 'wss://unichain-rpc.publicnode.com'
     },
     ink: {
-      http: process.env.ALCHEMY_INK_HTTP || 'https://rpc-gel.inkonchain.com/YOUR_API_KEY_HERE',
-      wss: process.env.ALCHEMY_INK_WSS || 'wss://rpc-gel.inkonchain.com/YOUR_API_KEY_HERE'
+      http: process.env.ALCHEMY_INK_HTTP || 'https://rpc-gel.inkonchain.com',
+      wss: process.env.ALCHEMY_INK_WSS || 'wss://rpc-gel.inkonchain.com'
     },
     hyperevm: {
-      http: process.env.ALCHEMY_HYPEREVM_HTTP || 'https://api.hyperliquid-testnet.xyz/evm/YOUR_API_KEY_HERE',
-      wss: process.env.ALCHEMY_HYPEREVM_WSS || 'wss://api.hyperliquid-testnet.xyz/evm/YOUR_API_KEY_HERE'
+      http: process.env.ALCHEMY_HYPEREVM_HTTP || 'https://api.hyperliquid.xyz/evm',
+      wss: process.env.ALCHEMY_HYPEREVM_WSS || 'wss://api.hyperliquid.xyz/evm'
     },
     linea: {
-      http: process.env.ALCHEMY_LINEA_HTTP || 'https://rpc.linea.build/YOUR_API_KEY_HERE',
-      wss: process.env.ALCHEMY_LINEA_WSS || 'wss://rpc.linea.build/YOUR_API_KEY_HERE'
+      http: process.env.ALCHEMY_LINEA_HTTP || 'https://rpc.linea.build',
+      wss: process.env.ALCHEMY_LINEA_WSS || 'wss://rpc.linea.build'
     },
     polygon: {
       http: process.env.ALCHEMY_POLYGON_HTTP || 'https://polygon-mainnet.g.alchemy.com/v2/YOUR_API_KEY_HERE',
