@@ -8,9 +8,9 @@ import type { ChainKey, Asset, QuoteResponse, TxTemplate } from '../types';
 
 const QuoteRequestSchema = z.object({
   payer: z.string().regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid Ethereum address'),
-  sourceChain: z.enum(['base', 'op']), // ARB temporarily disabled
+  sourceChain: z.enum(['base', 'op', 'arb', 'eth', 'sonic', 'unichain', 'ink', 'hyperevm', 'linea', 'polygon', 'abstract', 'zora']),
   sourceAsset: z.enum(['ETH', 'USDC', 'USDT']),
-  targetChain: z.enum(['base', 'op']), // ARB temporarily disabled
+  targetChain: z.enum(['base', 'op', 'arb', 'eth', 'sonic', 'unichain', 'ink', 'hyperevm', 'linea', 'polygon', 'abstract', 'zora']),
   targetRecipient: z.string().regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid Ethereum address'),
   targetAmountUsd: z.number().min(1).max(10).multipleOf(0.01),
 });

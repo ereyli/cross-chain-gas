@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import { CHAINS, getSupportedAssets } from '../lib/chains';
 import type { ChainKey, Asset, QuoteResponse } from '../types';
 
+// All chains are now supported with webhook endpoints
+const SUPPORTED_CHAINS: ChainKey[] = ['base', 'op', 'arb', 'eth', 'sonic', 'unichain', 'ink', 'hyperevm', 'linea', 'polygon', 'abstract', 'zora'];
+
 interface QuoteFormProps {
   onQuoteGenerated: (quote: QuoteResponse) => void;
   onError: (error: string) => void;
@@ -30,6 +33,16 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
     }
   }, [sourceChain, sourceAsset, supportedAssets]);
 
+  useEffect(() => {
+    // Ensure only supported chains are selected
+    if (!SUPPORTED_CHAINS.includes(sourceChain)) {
+      setSourceChain('base');
+    }
+    if (!SUPPORTED_CHAINS.includes(targetChain)) {
+      setTargetChain('op');
+    }
+  }, [sourceChain, targetChain]);
+
   // Sync manual input and slider
   const handleAmountChange = (value: number) => {
     setTargetAmountUsd(value);
@@ -41,6 +54,20 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
     const numValue = parseFloat(value);
     if (!isNaN(numValue) && numValue >= 1 && numValue <= 10) {
       setTargetAmountUsd(numValue);
+    }
+  };
+
+  const handleSourceChainChange = (value: string) => {
+    const chainKey = value as ChainKey;
+    if (SUPPORTED_CHAINS.includes(chainKey)) {
+      setSourceChain(chainKey);
+    }
+  };
+
+  const handleTargetChainChange = (value: string) => {
+    const chainKey = value as ChainKey;
+    if (SUPPORTED_CHAINS.includes(chainKey)) {
+      setTargetChain(chainKey);
     }
   };
 
@@ -192,10 +219,10 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
           <div className="relative">
             <select
               value={sourceChain}
-              onChange={(e) => setSourceChain(e.target.value as ChainKey)}
+              onChange={(e) => handleSourceChainChange(e.target.value)}
               className="w-full p-3 bg-white/70 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm appearance-none cursor-pointer"
             >
-              {Object.entries(CHAINS).map(([key, chain]) => (
+              {SUPPORTED_CHAINS.map((key) => (
                 <option key={key} value={key}>
                   {key.toUpperCase()}
                 </option>
@@ -242,10 +269,10 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
           <div className="relative">
             <select
               value={targetChain}
-              onChange={(e) => setTargetChain(e.target.value as ChainKey)}
+              onChange={(e) => handleTargetChainChange(e.target.value)}
               className="w-full p-3 bg-white/70 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm appearance-none cursor-pointer"
             >
-              {Object.entries(CHAINS).map(([key, chain]) => (
+              {SUPPORTED_CHAINS.map((key) => (
                 <option key={key} value={key} disabled={key === sourceChain}>
                   {key.toUpperCase()}
                 </option>
