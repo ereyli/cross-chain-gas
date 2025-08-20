@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     
     // Validate webhook signature (optional for development)
     const signature = request.headers.get('x-alchemy-signature') || '';
-    const webhookSecret = process.env.ALCHEMY_WEBHOOK_SIGNING_KEY || '';
+    const webhookSecret = process.env.ALCHEMY_OP_SIGNING_KEY || process.env.ALCHEMY_WEBHOOK_SIGNING_KEY || '';
     
     if (webhookSecret && !validateWebhookSignature(body, signature, webhookSecret)) {
       console.error('Invalid webhook signature');
