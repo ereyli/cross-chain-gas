@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Cross-Chain Gas Top-Up',
-  description: 'Simple, safe, automatic gas top-up across Base, Optimism, and Arbitrum',
+  title: 'GasUp - Cross-Chain Gas Top-Up',
+  description: 'Simple, safe, automatic gas top-up across multiple blockchain networks',
 };
 
 export default function RootLayout({

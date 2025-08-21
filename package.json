@@ -1,5 +1,5 @@
 {
-  "name": "cross-chain-gas-topup",
+  "name": "gasup",
   "version": "0.1.0",
   "private": true,
   "scripts": {

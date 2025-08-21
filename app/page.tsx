@@ -91,10 +91,10 @@ export default function Home() {
             <span className="text-2xl">⚡</span>
           </div>
           <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
-            Cross-Chain Gas Top-Up
+            GasUp
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
-            Pay with ETH, USDC, or USDT on Base, Optimism, or Arbitrum and receive native gas on any target chain.
+            Cross-chain gas top-up service. Pay with ETH, USDC, or USDT and receive native gas on any target chain.
             <br />
             <span className="text-blue-600 font-medium">Simple, fast, and secure.</span>
           </p>
@@ -387,7 +387,7 @@ export default function Home() {
         {/* Footer */}
         <div className="mt-16 text-center text-sm text-gray-500 bg-white/40 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/20">
           <p className="mb-2">Minimum $1 - Maximum $10 per transaction • 3% service fee • 180s quote validity</p>
-          <p className="text-xs text-gray-400">Fast • Secure • Decentralized Cross-Chain Bridge</p>
+          <p className="text-xs text-gray-400">Powered by GasUp • Fast • Secure • Decentralized</p>
         </div>
       </div>
     </div>

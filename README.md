@@ -1,6 +1,6 @@
-# Cross-Chain Gas Top-Up Service
+# GasUp - Cross-Chain Gas Top-Up Service
 
-A production-ready MVP that enables users to pay on one EVM chain (Base, Optimism, Arbitrum) with ETH/USDC/USDT and receive native gas ($1-$10) on a target chain. Features include exact amount matching, 3-confirmation verification, and automated fulfillment via OpenZeppelin Defender Relayers.
+A production-ready MVP that enables users to pay on one EVM chain with ETH/USDC/USDT and receive native gas ($1-$10) on any target chain. Features include exact amount matching, 3-confirmation verification, and automated fulfillment via OpenZeppelin Defender Relayers.
 
 ## Features
 
