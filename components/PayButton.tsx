@@ -195,8 +195,9 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
   if (timeLeft <= 0) {
     return (
       <div className="text-center">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <div className="text-red-600 font-semibold mb-2">Quote Expired</div>
+        <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4">
+          <div className="text-red-300 font-semibold mb-2">Quote Expired</div>
+          <div className="text-gray-400 text-sm mb-3">Please generate a new quote to continue</div>
           <button
             onClick={() => window.location.reload()}
             className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm"
@@ -212,14 +213,14 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
     <div className="space-y-4">
       {/* Timer */}
       <div className="text-center">
-        <div className="text-sm text-gray-600 mb-1">Quote expires in</div>
-        <div className="text-2xl font-bold text-red-600">
+        <div className="text-sm text-gray-400 mb-1">Quote expires in</div>
+        <div className="text-2xl font-bold text-red-400">
           {formatTime(timeLeft)}
         </div>
-        <div className="mt-1 w-full bg-gray-200 rounded-full h-1.5">
+        <div className="mt-1 w-full bg-gray-700 rounded-full h-1.5">
           <div 
             className="bg-gradient-to-r from-red-500 to-orange-500 h-1.5 rounded-full transition-all duration-1000"
-            style={{ width: `${Math.max(0, ((900 - timeLeft) / 900) * 100)}%` }}
+            style={{ width: `${Math.max(0, (timeLeft / 900) * 100)}%` }}
           ></div>
         </div>
       </div>
