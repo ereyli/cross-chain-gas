@@ -163,11 +163,11 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
         <button
           onClick={connectWallet}
           disabled={isConnecting}
-          className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-8 rounded-xl text-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg text-base font-semibold hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isConnecting ? (
             <>
-              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-3 inline"></div>
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2 inline"></div>
               Connecting...
             </>
           ) : (
@@ -183,9 +183,9 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
       <div className="text-center">
         <button
           onClick={() => switchNetwork(sourceChainId!)}
-          className="bg-gradient-to-r from-yellow-600 to-orange-600 text-white py-4 px-8 rounded-xl text-lg font-semibold hover:from-yellow-700 hover:to-orange-700 transition-all flex items-center mx-auto"
+          className="bg-gradient-to-r from-yellow-600 to-orange-600 text-white py-3 px-6 rounded-lg text-base font-semibold hover:from-yellow-700 hover:to-orange-700 transition-all flex items-center mx-auto"
         >
-          <ChainLogo chain={quote.sourceChain} size={20} className="mr-2" />
+          <ChainLogo chain={quote.sourceChain} size={16} className="mr-2" />
           Switch to {quote.sourceChain.toUpperCase()}
         </button>
       </div>
@@ -195,11 +195,11 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
   if (timeLeft <= 0) {
     return (
       <div className="text-center">
-        <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <div className="text-red-600 font-semibold mb-2">Quote Expired</div>
           <button
             onClick={() => window.location.reload()}
-            className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
+            className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm"
           >
             New Quote
           </button>
@@ -209,16 +209,16 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Timer */}
       <div className="text-center">
-        <div className="text-sm text-gray-600 mb-2">Quote expires in</div>
-        <div className="text-3xl font-bold text-red-600">
+        <div className="text-sm text-gray-600 mb-1">Quote expires in</div>
+        <div className="text-2xl font-bold text-red-600">
           {formatTime(timeLeft)}
         </div>
-        <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
+        <div className="mt-1 w-full bg-gray-200 rounded-full h-1.5">
           <div 
-            className="bg-gradient-to-r from-red-500 to-orange-500 h-2 rounded-full transition-all duration-1000"
+            className="bg-gradient-to-r from-red-500 to-orange-500 h-1.5 rounded-full transition-all duration-1000"
             style={{ width: `${Math.max(0, (timeLeft / 900) * 100)}%` }}
           ></div>
         </div>
@@ -229,11 +229,11 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
         <button
           onClick={sendPayment}
           disabled={isPaying || timeLeft <= 0}
-          className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-4 px-8 rounded-xl text-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-3 px-6 rounded-lg text-base font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isPaying ? (
             <>
-              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-3 inline"></div>
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2 inline"></div>
               Sending...
             </>
           ) : (

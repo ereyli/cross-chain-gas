@@ -164,10 +164,10 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* Status */}
       <div className="text-center">
-        <span className={`px-4 py-2 rounded-full text-sm font-medium ${getStatusColor(status.status)}`}>
+        <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(status.status)}`}>
           {getStatusText(status.status)}
         </span>
       </div>
@@ -175,14 +175,14 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
       {/* Manual Fulfillment Button */}
       {status.status === 'AWAITING_PAYMENT' && sourceTxHash && (
         <div className="text-center">
-          <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-4">
-            <div className="text-sm text-yellow-800 mb-3">
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-3">
+            <div className="text-sm text-yellow-800 mb-2">
               Payment detected. Click below to complete transfer.
             </div>
             <button
               onClick={handleManualFulfillment}
               disabled={isFulfilling}
-              className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+              className={`px-4 py-1 rounded-md font-medium transition-colors text-sm ${
                 isFulfilling
                   ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
                   : 'bg-blue-600 text-white hover:bg-blue-700'
@@ -195,14 +195,14 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
       )}
 
       {/* Transaction Links */}
-      <div className="text-center space-y-2">
+      <div className="text-center space-y-1">
         {sourceTxHash && (
           <div>
             <a
               href={getExplorerUrl('base', sourceTxHash)}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 text-sm underline"
+              className="text-blue-600 hover:text-blue-800 text-xs underline"
             >
               View Payment Transaction
             </a>
@@ -215,7 +215,7 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
               href={getExplorerUrl('arb', status.targetTx)}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-green-600 hover:text-green-800 text-sm underline"
+              className="text-green-600 hover:text-green-800 text-xs underline"
             >
               View Delivery Transaction
             </a>
@@ -223,7 +223,7 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
         )}
 
         {status.deliveredNative && (
-          <div className="text-sm text-gray-600">
+          <div className="text-xs text-gray-600">
             Delivered: {(Number(status.deliveredNative) / 1e18).toFixed(6)} ETH
             {status.deliveredUSD && (
               <span className="ml-2">(≈${status.deliveredUSD.toFixed(2)})</span>
