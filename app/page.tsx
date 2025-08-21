@@ -15,6 +15,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [paymentTxHash, setPaymentTxHash] = useState<string | null>(null);
   const [connectedAccount, setConnectedAccount] = useState<string | null>(null);
+  const [currentStep, setCurrentStep] = useState<'quote' | 'payment' | 'tracking' | 'completed'>('quote');
 
   // Check for connected wallet on page load
   useEffect(() => {
@@ -56,6 +57,7 @@ export default function Home() {
     setQuote(newQuote);
     setError(null);
     setPaymentTxHash(null);
+    setCurrentStep('payment');
   };
 
   const handleError = (errorMessage: string) => {
@@ -65,16 +67,66 @@ export default function Home() {
   const handlePaymentSent = (txHash: string) => {
     setPaymentTxHash(txHash);
     setError(null);
+    setCurrentStep('tracking');
   };
 
   const handleReset = () => {
     setQuote(null);
     setError(null);
     setPaymentTxHash(null);
+    setCurrentStep('quote');
+  };
+
+  const handleTransactionCompleted = () => {
+    setCurrentStep('completed');
   };
 
   const getChainName = (chainKey: string) => {
     return chainKey.toUpperCase();
+  };
+
+  const getStepIndicator = () => {
+    const steps = [
+      { key: 'quote', label: '1. Get Quote', icon: '📋' },
+      { key: 'payment', label: '2. Send Payment', icon: '💰' },
+      { key: 'tracking', label: '3. Wait for Confirmation', icon: '⏳' },
+      { key: 'completed', label: '4. Complete', icon: '✅' }
+    ];
+
+    return (
+      <div className="mb-8">
+        <div className="flex items-center justify-center space-x-4">
+          {steps.map((step, index) => {
+            const isActive = currentStep === step.key;
+            const isCompleted = steps.findIndex(s => s.key === currentStep) > index;
+            
+            return (
+              <div key={step.key} className="flex items-center">
+                <div className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all ${
+                  isActive 
+                    ? 'bg-blue-600 border-blue-600 text-white' 
+                    : isCompleted 
+                    ? 'bg-green-600 border-green-600 text-white'
+                    : 'bg-gray-100 border-gray-300 text-gray-500'
+                }`}>
+                  {isCompleted ? '✓' : step.icon}
+                </div>
+                <span className={`ml-2 text-sm font-medium ${
+                  isActive ? 'text-blue-600' : isCompleted ? 'text-green-600' : 'text-gray-500'
+                }`}>
+                  {step.label}
+                </span>
+                {index < steps.length - 1 && (
+                  <div className={`w-8 h-0.5 mx-4 ${
+                    isCompleted ? 'bg-green-600' : 'bg-gray-300'
+                  }`} />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -98,10 +150,6 @@ export default function Home() {
             <br />
             <span className="text-blue-600 font-medium">Simple, fast, and secure.</span>
           </p>
-          
-
-
-
 
           {/* Supported Networks */}
           <div className="bg-white/60 backdrop-blur-lg p-6 rounded-2xl border border-white/30 shadow-lg mb-8 max-w-5xl mx-auto">
@@ -168,6 +216,9 @@ export default function Home() {
             </div>
           </div>
         )}
+
+        {/* Step Indicator */}
+        {quote && getStepIndicator()}
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
           {/* Main Content */}
@@ -267,14 +318,41 @@ export default function Home() {
               </div>
 
               {/* Payment Section */}
-              {!paymentTxHash ? (
+              {currentStep === 'payment' && (
                 <div className="p-8 bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 relative overflow-hidden">
                   {/* Background decorative elements */}
                   <div className="absolute top-0 left-0 w-40 h-40 bg-gradient-to-br from-green-100 to-emerald-100 rounded-full opacity-30 -translate-y-20 -translate-x-20"></div>
                   <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tr from-blue-100 to-purple-100 rounded-full opacity-40 translate-y-16 translate-x-16"></div>
                   
                   <div className="relative z-10">
-                    <h3 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-6">Make Payment</h3>
+                    <h3 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-6">Step 2: Send Payment</h3>
+                    
+                    {/* Step Instructions */}
+                    <div className="mb-6 p-6 bg-blue-50 border border-blue-200 rounded-2xl">
+                      <h4 className="font-semibold text-blue-900 mb-3 flex items-center">
+                        <span className="mr-2">📋</span>
+                        What happens next:
+                      </h4>
+                      <div className="space-y-2 text-sm text-blue-800">
+                        <div className="flex items-center">
+                          <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                          <span>Click "Send Payment" to open your wallet</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                          <span>Confirm the transaction in your wallet</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                          <span>Wait for payment confirmation (1-2 minutes)</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                          <span>ETH will be automatically sent to your target address</span>
+                        </div>
+                      </div>
+                    </div>
+
                     <PayButton 
                       quote={quote}
                       onPaymentSent={handlePaymentSent}
@@ -282,8 +360,78 @@ export default function Home() {
                     />
                   </div>
                 </div>
-              ) : (
-                <StatusTracker orderId={quote.orderId} sourceTxHash={paymentTxHash} />
+              )}
+
+              {/* Status Tracking Section */}
+              {currentStep === 'tracking' && paymentTxHash && (
+                <div className="p-8 bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 relative overflow-hidden">
+                  <div className="relative z-10">
+                    <h3 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent mb-6">Step 3: Processing Your Transfer</h3>
+                    
+                    {/* Processing Instructions */}
+                    <div className="mb-6 p-6 bg-purple-50 border border-purple-200 rounded-2xl">
+                      <h4 className="font-semibold text-purple-900 mb-3 flex items-center">
+                        <span className="mr-2">⏳</span>
+                        Current Status:
+                      </h4>
+                      <div className="space-y-2 text-sm text-purple-800">
+                        <div className="flex items-center">
+                          <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                          <span>Payment transaction submitted</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                          <span>Waiting for payment confirmation on {getChainName(quote.sourceChain)}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                          <span>Once confirmed, ETH will be sent to {getChainName(quote.targetChain)}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                          <span>Total process takes 2-5 minutes</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <StatusTracker 
+                      orderId={quote.orderId} 
+                      sourceTxHash={paymentTxHash}
+                      onCompleted={handleTransactionCompleted}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Completed Section */}
+              {currentStep === 'completed' && (
+                <div className="p-8 bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 relative overflow-hidden">
+                  <div className="relative z-10 text-center">
+                    <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <span className="text-3xl">🎉</span>
+                    </div>
+                    <h3 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-4">
+                      Transfer Complete!
+                    </h3>
+                    <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
+                      Your ETH has been successfully transferred to the target chain. 
+                      Check your wallet on {getChainName(quote.targetChain)} to see the funds.
+                    </p>
+                    
+                    <div className="space-y-4">
+                      <button
+                        onClick={handleReset}
+                        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-2xl text-xl font-bold transition-all transform hover:scale-[1.02] hover:shadow-xl"
+                      >
+                        ✨ Start New Transaction
+                      </button>
+                      
+                      <p className="text-sm text-gray-500">
+                        Transaction details are saved in your history for reference
+                      </p>
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
           )}
@@ -291,7 +439,10 @@ export default function Home() {
 
           {/* Transaction History Sidebar */}
           <div className="xl:col-span-1">
-            <TransactionHistory userAddress={connectedAccount} />
+            <TransactionHistory 
+              key={`${connectedAccount}-${currentStep}`} 
+              userAddress={connectedAccount} 
+            />
           </div>
         </div>
 

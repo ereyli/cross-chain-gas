@@ -17,23 +17,9 @@ export function TransactionHistory({ userAddress }: TransactionHistoryProps) {
   useEffect(() => {
     if (userAddress) {
       fetchUserHistory();
+    } else {
+      setOrders([]);
     }
-  }, [userAddress]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Listen for transaction completion to refresh history
-  useEffect(() => {
-    const handleTransactionCompleted = () => {
-      console.log('🔄 Received transaction completion event, refreshing history');
-      if (userAddress) {
-        fetchUserHistory();
-      }
-    };
-
-    window.addEventListener('transaction-completed', handleTransactionCompleted);
-    
-    return () => {
-      window.removeEventListener('transaction-completed', handleTransactionCompleted);
-    };
   }, [userAddress]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchUserHistory = async () => {

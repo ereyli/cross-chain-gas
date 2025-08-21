@@ -7,9 +7,10 @@ import type { StatusResponse } from '../types';
 interface StatusTrackerProps {
   orderId: string;
   sourceTxHash?: string;
+  onCompleted?: () => void;
 }
 
-export function StatusTracker({ orderId, sourceTxHash }: StatusTrackerProps) {
+export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrackerProps) {
   const [status, setStatus] = useState<StatusResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -36,11 +37,10 @@ export function StatusTracker({ orderId, sourceTxHash }: StatusTrackerProps) {
             clearInterval(intervalId);
           }
           
-          // Trigger transaction history refresh on completion
-          if (data.status === 'DONE') {
-            console.log('🔄 Transaction completed, triggering history refresh');
-            // Dispatch a custom event to refresh transaction history
-            window.dispatchEvent(new CustomEvent('transaction-completed'));
+          // Call onCompleted callback when transaction is done
+          if (data.status === 'DONE' && onCompleted) {
+            console.log('🔄 Transaction completed, calling onCompleted callback');
+            onCompleted();
           }
         }
       } catch (err) {
@@ -61,7 +61,7 @@ export function StatusTracker({ orderId, sourceTxHash }: StatusTrackerProps) {
         clearInterval(intervalId);
       }
     };
-  }, [orderId]);
+  }, [orderId, onCompleted]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -128,7 +128,7 @@ export function StatusTracker({ orderId, sourceTxHash }: StatusTrackerProps) {
         throw new Error('Failed to initiate fulfillment');
       }
 
-      // Refresh status
+      // Refresh status after a short delay
       setTimeout(() => {
         window.location.reload();
       }, 2000);
@@ -288,24 +288,6 @@ export function StatusTracker({ orderId, sourceTxHash }: StatusTrackerProps) {
           <p className="text-sm text-purple-800">
             Sending ETH to your target address. This usually takes 1-2 minutes...
           </p>
-        </div>
-      )}
-
-      {status.status === 'DONE' && (
-        <div className="mt-4 p-4 bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl">
-          <h4 className="font-medium text-green-900 mb-3 flex items-center">
-            <span className="mr-2">🎉</span>
-            Transfer Complete!
-          </h4>
-          <p className="text-sm text-green-800 mb-4">
-            Your ETH has been successfully transferred to the target chain. Check your wallet!
-          </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 px-4 rounded-xl hover:from-green-700 hover:to-blue-700 transition-all transform hover:scale-[1.02] shadow-lg font-semibold"
-          >
-            ✨ Start New Transaction
-          </button>
         </div>
       )}
 
