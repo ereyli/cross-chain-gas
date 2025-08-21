@@ -121,12 +121,29 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      if (!tx.value || tx.value === BigInt(0)) {
-        console.log('❌ Invalid transaction: zero or missing value');
-        return NextResponse.json(
-          { error: 'Invalid transaction: zero value' },
-          { status: 400 }
-        );
+      // Check if this is an ERC-20 token transaction (like USDC)
+      const isERC20Transaction = tx.data && tx.data.length > 10 && tx.data.startsWith('0xa9059cbb');
+      
+      if (isERC20Transaction) {
+        console.log('💰 ERC-20 token transaction detected (USDC/USDT)');
+        
+        // For ERC-20 transactions, tx.value is 0 (which is normal)
+        // The actual transfer amount is encoded in tx.data
+        console.log('📊 ERC-20 transaction details:', {
+          to: tx.to,
+          data: tx.data,
+          note: 'Value is 0 for ERC-20 tokens (normal behavior)'
+        });
+      } else {
+        // Native token transaction (ETH, MATIC, etc.)
+        if (!tx.value || tx.value === BigInt(0)) {
+          console.log('❌ Invalid native token transaction: zero or missing value');
+          return NextResponse.json(
+            { error: 'Invalid native token transaction: zero value' },
+            { status: 400 }
+          );
+        }
+        console.log('💰 Native token transaction detected');
       }
 
       // Check if transaction has been confirmed (optional)
@@ -147,6 +164,7 @@ export async function POST(request: NextRequest) {
         hash: tx.hash,
         to: tx.to,
         value: tx.value?.toString(),
+        isERC20: isERC20Transaction,
         status: 'verified'
       });
 
