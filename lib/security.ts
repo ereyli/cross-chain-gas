@@ -78,7 +78,7 @@ export async function verifyTransaction(
       return { 
         isValid: false, 
         error: 'Transaction recipient does not match expected address',
-        actualTo: tx.to
+        actualTo: tx.to || undefined
       };
     }
     
