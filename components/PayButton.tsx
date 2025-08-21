@@ -219,7 +219,7 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
         <div className="mt-1 w-full bg-gray-200 rounded-full h-1.5">
           <div 
             className="bg-gradient-to-r from-red-500 to-orange-500 h-1.5 rounded-full transition-all duration-1000"
-            style={{ width: `${Math.max(0, (timeLeft / 900) * 100)}%` }}
+            style={{ width: `${Math.max(0, ((900 - timeLeft) / 900) * 100)}%` }}
           ></div>
         </div>
       </div>

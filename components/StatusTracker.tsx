@@ -128,10 +128,7 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
         throw new Error('Failed to initiate fulfillment');
       }
 
-      // Refresh status after a short delay
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+      // Status will be updated automatically via polling
 
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to complete order');
