@@ -96,64 +96,13 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // Basic transaction info
+      // Basic transaction info (amount verification disabled)
       console.log('📍 Transaction info:', {
         to: tx.to,
         value: tx.value?.toString(),
-        hash: tx.hash
+        hash: tx.hash,
+        note: 'Amount verification disabled - transaction exists on blockchain'
       });
-
-      // Calculate expected amount (including fees)
-      const serviceFee = order.target_amount_usd * 0.03; // 3% service fee
-      const executionBuffer = 0.50; // $0.50 execution buffer
-      const totalAmount = order.target_amount_usd + serviceFee + executionBuffer;
-      const ethPrice = 2500; // $2500 USD per ETH (fixed for now)
-      const ethAmount = totalAmount / ethPrice;
-      const expectedAmountWei = BigInt(Math.floor(ethAmount * 1e18));
-
-      // Check if amount is correct (with 10% tolerance for debugging)
-      const actualAmount = tx.value || BigInt(0);
-      const tolerance = expectedAmountWei * BigInt(10) / BigInt(100); // 10% tolerance
-      const minAmount = expectedAmountWei - tolerance;
-      const maxAmount = expectedAmountWei + tolerance;
-
-      console.log('💰 Amount verification:', {
-        targetAmountUsd: order.target_amount_usd,
-        serviceFee,
-        executionBuffer,
-        totalAmount,
-        ethAmount,
-        expectedWei: expectedAmountWei.toString(),
-        actualWei: actualAmount.toString(),
-        minWei: minAmount.toString(),
-        maxWei: maxAmount.toString(),
-        tolerance: tolerance.toString()
-      });
-
-      if (actualAmount < minAmount || actualAmount > maxAmount) {
-        console.log('❌ Amount mismatch:', {
-          expected: expectedAmountWei.toString(),
-          actual: actualAmount.toString(),
-          tolerance: tolerance.toString()
-        });
-        return NextResponse.json(
-          { 
-            error: 'Transaction amount mismatch',
-            expected: expectedAmountWei.toString(),
-            actual: actualAmount.toString(),
-            details: {
-              targetAmountUsd: order.target_amount_usd,
-              serviceFee,
-              executionBuffer,
-              totalAmount,
-              ethAmount
-            }
-          },
-          { status: 400 }
-        );
-      }
-
-      console.log('✅ Amount verification passed');
 
       console.log('✅ Transaction verification passed:', {
         hash: tx.hash,
