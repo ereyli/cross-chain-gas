@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { CHAINS } from '../lib/chains';
+import { ChainLogo } from './ChainLogo';
 import type { Order } from '../types';
 
 interface TransactionHistoryProps {
@@ -151,9 +152,17 @@ export function TransactionHistory({ userAddress }: TransactionHistoryProps) {
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-gray-700">
-                    {order.source_chain.toUpperCase()} → {order.target_chain.toUpperCase()}
-                  </span>
+                  <div className="flex items-center gap-1">
+                    <ChainLogo chain={order.source_chain} size={16} />
+                    <span className="text-sm font-medium text-gray-700">
+                      {order.source_chain.toUpperCase()}
+                    </span>
+                    <span className="text-gray-400">→</span>
+                    <ChainLogo chain={order.target_chain} size={16} />
+                    <span className="text-sm font-medium text-gray-700">
+                      {order.target_chain.toUpperCase()}
+                    </span>
+                  </div>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
                     {getStatusText(order.status)}
                   </span>
