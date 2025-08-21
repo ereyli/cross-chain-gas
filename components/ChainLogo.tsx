@@ -86,7 +86,7 @@ export function ChainLogo({ chain, size = 48, className = '' }: ChainLogoProps) 
         alt={`${chain} logo`}
         width={size}
         height={size}
-        className="rounded-xl object-contain"
+        className="rounded-xl object-cover"
         onError={() => {
           console.log('Image error for:', logoPath);
           // Try next fallback path if available
