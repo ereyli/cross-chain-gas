@@ -161,30 +161,30 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 p-8 bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20">
-      <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Get Started</h2>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">Get Started</h2>
       
       {/* Wallet Connection */}
-      <div className="border-b pb-4">
+      <div className="border-b pb-3">
         {!connectedAccount ? (
           <button
             type="button"
             onClick={connectWallet}
             disabled={isConnecting}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-xl hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] shadow-lg"
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] shadow-lg"
           >
             <div className="flex items-center justify-center space-x-2">
-              <span className="text-lg">🔗</span>
-              <span className="font-semibold">{isConnecting ? 'Connecting...' : 'Connect Wallet'}</span>
+              <span className="text-base">🔗</span>
+              <span className="font-semibold text-sm">{isConnecting ? 'Connecting...' : 'Connect Wallet'}</span>
             </div>
           </button>
         ) : (
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-4">
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-3">
             <div className="flex items-center">
-              <div className="w-4 h-4 bg-green-500 rounded-full mr-3 animate-pulse"></div>
+              <div className="w-3 h-3 bg-green-500 rounded-full mr-2 animate-pulse"></div>
               <div>
-                <p className="text-sm font-medium text-green-800">Wallet Connected</p>
-                <p className="text-sm text-green-600 break-all">{connectedAccount}</p>
+                <p className="text-xs font-medium text-green-800">Wallet Connected</p>
+                <p className="text-xs text-green-600 break-all">{connectedAccount}</p>
               </div>
             </div>
           </div>
@@ -197,7 +197,7 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 7.89a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
@@ -205,17 +205,17 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
             type="text"
             value={targetRecipient}
             onChange={(e) => setTargetRecipient(e.target.value)}
-            placeholder="0x... (defaults to your connected wallet)"
-            className="w-full pl-10 pr-4 py-3 bg-white/70 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm font-mono text-sm"
+            placeholder="Enter the wallet address you want to send to"
+            className="w-full pl-9 pr-3 py-2 bg-white/70 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm font-mono text-sm"
             required
           />
         </div>
         <p className="text-xs text-gray-500">ETH will be sent to this address on the target chain</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="space-y-2">
-          <label className="block text-sm font-semibold text-gray-700">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="space-y-1">
+          <label className="block text-xs font-semibold text-gray-700">
             Source Chain
           </label>
           <CustomSelect
@@ -230,15 +230,15 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
           <p className="text-xs text-gray-500">Where you have funds</p>
         </div>
 
-        <div className="space-y-2">
-          <label className="block text-sm font-semibold text-gray-700">
+        <div className="space-y-1">
+          <label className="block text-xs font-semibold text-gray-700">
             Source Asset
           </label>
           <div className="relative">
             <select
               value={sourceAsset}
               onChange={(e) => setSourceAsset(e.target.value as Asset)}
-              className="w-full p-3 bg-white/70 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm appearance-none cursor-pointer"
+              className="w-full p-2 bg-white/70 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm appearance-none cursor-pointer text-sm"
             >
               {supportedAssets.map((asset) => (
                 <option key={asset} value={asset}>
@@ -246,8 +246,8 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
                 </option>
               ))}
             </select>
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </div>
@@ -255,8 +255,8 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
           <p className="text-xs text-gray-500">What you want to pay with</p>
         </div>
 
-        <div className="space-y-2">
-          <label className="block text-sm font-semibold text-gray-700">
+        <div className="space-y-1">
+          <label className="block text-xs font-semibold text-gray-700">
             Target Chain
           </label>
           <CustomSelect
@@ -273,16 +273,16 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <label className="block text-sm font-semibold text-gray-700">
+          <label className="block text-xs font-semibold text-gray-700">
             Target Amount
           </label>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1">
             <button
               type="button"
               onClick={() => setUseSlider(true)}
-              className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+              className={`px-2 py-1 rounded text-xs font-medium transition-all ${
                 useSlider 
                   ? 'bg-blue-100 text-blue-700 border border-blue-200' 
                   : 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200'
@@ -293,7 +293,7 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
             <button
               type="button"
               onClick={() => setUseSlider(false)}
-              className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+              className={`px-2 py-1 rounded text-xs font-medium transition-all ${
                 !useSlider 
                   ? 'bg-blue-100 text-blue-700 border border-blue-200' 
                   : 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200'
@@ -350,82 +350,45 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
 
       {/* Transaction Summary */}
       {connectedAccount && (
-        <div className="bg-gradient-to-r from-blue-50/80 to-purple-50/80 backdrop-blur-lg border border-blue-200/50 rounded-2xl p-6 mb-6">
-          <div className="flex items-center mb-4">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-3">
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="bg-gradient-to-r from-blue-50/80 to-purple-50/80 backdrop-blur-lg border border-blue-200/50 rounded-lg p-4 mb-4">
+          <div className="flex items-center mb-3">
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-2">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <h4 className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h4 className="text-base font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Transaction Preview
             </h4>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {/* Route Info */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-white/60 rounded-xl border border-white/30">
-                <span className="text-sm font-medium text-gray-600">Route</span>
-                <div className="flex items-center space-x-2">
-                  <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-medium">
-                    {sourceChain.toUpperCase()}
-                  </span>
-                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                  <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-lg text-xs font-medium">
-                    {targetChain.toUpperCase()}
-                  </span>
-                </div>
-              </div>
-              
-              <div className="flex items-center justify-between p-3 bg-white/60 rounded-xl border border-white/30">
-                <span className="text-sm font-medium text-gray-600">Asset</span>
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm font-semibold text-gray-800">{sourceAsset}</span>
-                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                  <span className="text-sm font-semibold text-gray-800">ETH</span>
-                </div>
-              </div>
-              
-              <div className="flex items-center justify-between p-3 bg-white/60 rounded-xl border border-white/30">
-                <span className="text-sm font-medium text-gray-600">Amount</span>
-                <span className="text-sm font-bold text-green-600">${targetAmountUsd} worth</span>
+            <div className="flex items-center justify-between p-2 bg-white/60 rounded-lg border border-white/30">
+              <span className="text-xs font-medium text-gray-600">Route</span>
+              <div className="flex items-center space-x-1">
+                <span className="px-1 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-medium">
+                  {sourceChain.toUpperCase()}
+                </span>
+                <svg className="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+                <span className="px-1 py-0.5 bg-purple-100 text-purple-700 rounded text-xs font-medium">
+                  {targetChain.toUpperCase()}
+                </span>
               </div>
             </div>
             
-            {/* Wallet Info */}
-            <div className="space-y-3">
-              <div className="p-3 bg-white/60 rounded-xl border border-white/30">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">Your Wallet</span>
-                  <div className="flex items-center space-x-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-xs text-green-600 font-medium">Connected</span>
-                  </div>
-                </div>
-                <div className="font-mono text-xs text-gray-700 bg-gray-100 rounded-lg p-2">
-                  {connectedAccount.slice(0, 8)}...{connectedAccount.slice(-6)}
-                </div>
-              </div>
-              
-              <div className="p-3 bg-white/60 rounded-xl border border-white/30">
-                <span className="text-sm font-medium text-gray-600 block mb-2">Target Recipient</span>
-                <div className="font-mono text-xs text-gray-700 bg-gray-100 rounded-lg p-2">
-                  {targetRecipient.slice(0, 8)}...{targetRecipient.slice(-6)}
-                </div>
-              </div>
-              
-              <div className="p-3 bg-gradient-to-r from-green-50 to-blue-50 rounded-xl border border-green-200">
-                <div className="flex items-center justify-center space-x-2">
-                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-sm font-medium text-green-700">Ready to proceed</span>
-                </div>
+            <div className="flex items-center justify-between p-2 bg-white/60 rounded-lg border border-white/30">
+              <span className="text-xs font-medium text-gray-600">Amount</span>
+              <span className="text-xs font-bold text-green-600">${targetAmountUsd}</span>
+            </div>
+            
+            <div className="flex items-center justify-between p-2 bg-white/60 rounded-lg border border-white/30">
+              <span className="text-xs font-medium text-gray-600">Status</span>
+              <div className="flex items-center space-x-1">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-xs text-green-600 font-medium">Ready</span>
               </div>
             </div>
           </div>
@@ -435,7 +398,7 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
       <button
         type="submit"
         disabled={isLoading || !connectedAccount}
-        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-xl hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] shadow-lg font-semibold text-lg"
+        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] shadow-lg font-semibold text-sm"
       >
         {!connectedAccount ? '🔗 Connect Wallet First' : isLoading ? '⏳ Generating Quote...' : '✨ Generate Quote & Continue'}
       </button>

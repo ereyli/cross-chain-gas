@@ -241,11 +241,13 @@ export default function Home() {
         {/* Step Indicator */}
         {quote && getStepIndicator()}
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           {/* Main Content */}
-          <div className="xl:col-span-2">
+          <div>
             {!quote ? (
-              <QuoteForm onQuoteGenerated={handleQuoteGenerated} onError={handleError} />
+              <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-6">
+                <QuoteForm onQuoteGenerated={handleQuoteGenerated} onError={handleError} />
+              </div>
             ) : (
             <div className="space-y-6">
               {/* Quote Details */}
@@ -404,13 +406,6 @@ export default function Home() {
               )}
             </div>
           )}
-          </div>
-
-          {/* Transaction History Sidebar */}
-          <div className="xl:col-span-1">
-            <TransactionHistory 
-              userAddress={connectedAccount} 
-            />
           </div>
         </div>
 
