@@ -226,7 +226,7 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
             <div className="flex items-center justify-center space-x-2 mb-2">
               <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-              <span className="text-sm text-blue-800 font-medium">Transfer tamamlanıyor...</span>
+                              <span className="text-sm text-blue-800 font-medium">Transfer completing...</span>
             </div>
             <p className="text-xs text-blue-600">Please wait while we process your transfer automatically.</p>
           </div>
