@@ -9,6 +9,7 @@ import {
   validateTransactionHash 
 } from '../../../lib/security';
 import { getUsdPrice, usdToWeiOnSource } from '../../../lib/prices';
+import { getProviders } from '../../../lib/chains';
 
 export async function POST(request: NextRequest) {
   try {
@@ -73,8 +74,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Basic transaction verification (simplified for debugging)
-    console.log('🔍 Starting basic transaction verification...');
+    // Smart transaction verification
+    console.log('🔍 Starting smart transaction verification...');
     console.log('📋 Order details:', {
       orderId: sanitizedOrderId,
       sourceChain: order.source_chain,
@@ -82,7 +83,6 @@ export async function POST(request: NextRequest) {
       txHash: sanitizedTxHash
     });
 
-    // Only check if transaction exists on blockchain (skip amount/address checks for now)
     try {
       const providers = getProviders();
       const provider = providers[order.source_chain].http;
@@ -96,22 +96,73 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      console.log('✅ Transaction found on blockchain:', {
+      // Check if transaction is to our fulfillment wallet
+      const expectedTo = '0x422EAa58Cb7450e4573Ca778BEce0f0787b62ffa';
+      if (tx.to?.toLowerCase() !== expectedTo.toLowerCase()) {
+        console.log('❌ Transaction sent to wrong address:', {
+          expected: expectedTo,
+          actual: tx.to
+        });
+        return NextResponse.json(
+          { error: 'Transaction sent to wrong address' },
+          { status: 400 }
+        );
+      }
+
+      // Calculate expected amount (including fees)
+      const serviceFee = order.target_amount_usd * 0.03; // 3% service fee
+      const executionBuffer = 0.50; // $0.50 execution buffer
+      const totalAmount = order.target_amount_usd + serviceFee + executionBuffer;
+      const ethPrice = 2500; // $2500 USD per ETH (fixed for now)
+      const ethAmount = totalAmount / ethPrice;
+      const expectedAmountWei = BigInt(Math.floor(ethAmount * 1e18));
+
+      // Check if amount is correct (with 5% tolerance for gas price fluctuations)
+      const actualAmount = tx.value || BigInt(0);
+      const tolerance = expectedAmountWei * BigInt(5) / BigInt(100); // 5% tolerance
+      const minAmount = expectedAmountWei - tolerance;
+      const maxAmount = expectedAmountWei + tolerance;
+
+      console.log('💰 Amount verification:', {
+        expected: expectedAmountWei.toString(),
+        actual: actualAmount.toString(),
+        min: minAmount.toString(),
+        max: maxAmount.toString(),
+        tolerance: tolerance.toString()
+      });
+
+      if (actualAmount < minAmount || actualAmount > maxAmount) {
+        console.log('❌ Amount mismatch:', {
+          expected: expectedAmountWei.toString(),
+          actual: actualAmount.toString(),
+          tolerance: tolerance.toString()
+        });
+        return NextResponse.json(
+          { 
+            error: 'Transaction amount mismatch',
+            expected: expectedAmountWei.toString(),
+            actual: actualAmount.toString()
+          },
+          { status: 400 }
+        );
+      }
+
+      console.log('✅ Transaction verification passed:', {
         hash: tx.hash,
         to: tx.to,
         value: tx.value?.toString(),
-        status: 'exists'
+        status: 'verified'
       });
 
     } catch (error) {
-      console.log('❌ Basic verification failed:', error);
+      console.log('❌ Transaction verification failed:', error);
       return NextResponse.json(
-        { error: 'Basic transaction verification failed' },
+        { error: 'Transaction verification failed' },
         { status: 400 }
       );
     }
 
-    console.log('✅ Basic transaction verification passed');
+    console.log('✅ Smart transaction verification passed');
     
     // Mark as paid
     await updateOrder(sanitizedOrderId, {
