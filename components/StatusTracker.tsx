@@ -42,6 +42,9 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
           setTimeout(async () => {
             try {
               console.log('🚀 Auto-fulfilling order...');
+              console.log('📋 Order ID:', orderId);
+              console.log('🔗 Source TX Hash:', sourceTxHash);
+              
               const response = await fetch('/api/test-fulfill', {
                 method: 'POST',
                 headers: {
@@ -53,8 +56,12 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
                 })
               });
 
+              console.log('📡 Response status:', response.status);
+              const responseData = await response.json();
+              console.log('📄 Response data:', responseData);
+
               if (!response.ok) {
-                throw new Error('Auto-fulfill failed');
+                throw new Error(`Auto-fulfill failed: ${responseData.error || response.statusText}`);
               }
 
               console.log('✅ Auto-fulfill initiated successfully');
@@ -147,6 +154,10 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
     
     setIsFulfilling(true);
     try {
+      console.log('🔧 Manual fulfillment starting...');
+      console.log('📋 Order ID:', orderId);
+      console.log('🔗 Source TX Hash:', sourceTxHash);
+      
       const response = await fetch('/api/test-fulfill', {
         method: 'POST',
         headers: {
@@ -158,13 +169,19 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
         })
       });
 
+      console.log('📡 Manual response status:', response.status);
+      const responseData = await response.json();
+      console.log('📄 Manual response data:', responseData);
+
       if (!response.ok) {
-        throw new Error('Failed to initiate fulfillment');
+        throw new Error(`Failed to initiate fulfillment: ${responseData.error || response.statusText}`);
       }
 
+      console.log('✅ Manual fulfillment initiated successfully');
       // Status will be updated automatically via polling
 
     } catch (err) {
+      console.error('❌ Manual fulfillment failed:', err);
       setError(err instanceof Error ? err.message : 'Failed to complete order');
     } finally {
       setIsFulfilling(false);
