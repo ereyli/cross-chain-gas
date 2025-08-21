@@ -98,28 +98,7 @@ export default function Home() {
             <span className="text-blue-600 font-medium">Simple, fast, and secure.</span>
           </p>
           
-          {/* User Guidance */}
-          <div className="bg-blue-50/80 backdrop-blur-lg border border-blue-200/50 rounded-2xl p-6 mb-8 text-left max-w-3xl mx-auto shadow-lg">
-            <h3 className="text-lg font-semibold text-blue-900 mb-3 text-center">📖 How it works:</h3>
-            <div className="text-sm text-blue-800 space-y-2">
-              <div className="flex items-center">
-                <span className="bg-blue-200 text-blue-900 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3">1</span>
-                <span>Choose source chain (where you have funds) and target chain (where you want ETH)</span>
-              </div>
-              <div className="flex items-center">
-                <span className="bg-blue-200 text-blue-900 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3">2</span>
-                <span>Enter target amount and connect your wallet</span>
-              </div>
-              <div className="flex items-center">
-                <span className="bg-blue-200 text-blue-900 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3">3</span>
-                <span>Send payment on source chain when prompted</span>
-              </div>
-              <div className="flex items-center">
-                <span className="bg-blue-200 text-blue-900 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3">4</span>
-                <span>Receive ETH on target chain automatically (or use manual completion if needed)</span>
-              </div>
-            </div>
-          </div>
+
 
 
 
@@ -375,6 +354,29 @@ export default function Home() {
             <p className="text-gray-600">
               Pay with ETH, USDC, or USDT - whatever you have available
             </p>
+          </div>
+        </div>
+
+        {/* How it Works */}
+        <div className="mt-16 bg-blue-50/80 backdrop-blur-lg border border-blue-200/50 rounded-2xl p-6 mb-8 text-left max-w-3xl mx-auto shadow-lg">
+          <h3 className="text-lg font-semibold text-blue-900 mb-3 text-center">📖 How it works:</h3>
+          <div className="text-sm text-blue-800 space-y-2">
+            <div className="flex items-center">
+              <span className="bg-blue-200 text-blue-900 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3">1</span>
+              <span>Choose source chain (where you have funds) and target chain (where you want ETH)</span>
+            </div>
+            <div className="flex items-center">
+              <span className="bg-blue-200 text-blue-900 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3">2</span>
+              <span>Enter target amount and connect your wallet</span>
+            </div>
+            <div className="flex items-center">
+              <span className="bg-blue-200 text-blue-900 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3">3</span>
+              <span>Send payment on source chain when prompted</span>
+            </div>
+            <div className="flex items-center">
+              <span className="bg-blue-200 text-blue-900 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3">4</span>
+              <span>Receive ETH on target chain automatically (or use manual completion if needed)</span>
+            </div>
           </div>
         </div>
 
