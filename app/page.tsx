@@ -130,7 +130,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-100/80 py-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-gray-900 py-4">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-6">
@@ -140,61 +140,61 @@ export default function Home() {
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-1">
             GasUp
           </h1>
-          <p className="text-base text-gray-600 mb-4">
+          <p className="text-base text-gray-300 mb-4">
             Cross-chain gas top-up service
           </p>
 
           {/* Supported Networks - Compact */}
-          <div className="bg-white/60 backdrop-blur-lg p-4 rounded-xl border border-white/30 shadow-lg mb-4 max-w-4xl mx-auto">
-            <h3 className="text-sm font-semibold text-gray-900 mb-3 text-center">🌐 Supported Networks</h3>
+          <div className="bg-gray-800/80 backdrop-blur-lg p-4 rounded-xl border border-gray-700/50 shadow-lg mb-4 max-w-4xl mx-auto">
+            <h3 className="text-sm font-semibold text-gray-100 mb-3 text-center">🌐 Supported Networks</h3>
             <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
               <div className="text-center">
                 <ChainLogo chain="ethereum" size={32} className="mx-auto mb-1" />
-                <p className="text-xs font-medium text-gray-700">Ethereum</p>
+                <p className="text-xs font-medium text-gray-300">Ethereum</p>
               </div>
               <div className="text-center">
                 <ChainLogo chain="base" size={32} className="mx-auto mb-1" />
-                <p className="text-xs font-medium text-gray-700">Base</p>
+                <p className="text-xs font-medium text-gray-300">Base</p>
               </div>
               <div className="text-center">
                 <ChainLogo chain="op" size={32} className="mx-auto mb-1" />
-                <p className="text-xs font-medium text-gray-700">Optimism</p>
+                <p className="text-xs font-medium text-gray-300">Optimism</p>
               </div>
               <div className="text-center">
                 <ChainLogo chain="arbitrum" size={32} className="mx-auto mb-1" />
-                <p className="text-xs font-medium text-gray-700">Arbitrum</p>
+                <p className="text-xs font-medium text-gray-300">Arbitrum</p>
               </div>
               <div className="text-center">
                 <ChainLogo chain="sonic" size={32} className="mx-auto mb-1" />
-                <p className="text-xs font-medium text-gray-700">Sonic</p>
+                <p className="text-xs font-medium text-gray-300">Sonic</p>
               </div>
               <div className="text-center">
                 <ChainLogo chain="unichain" size={32} className="mx-auto mb-1" />
-                <p className="text-xs font-medium text-gray-700">Unichain</p>
+                <p className="text-xs font-medium text-gray-300">Unichain</p>
               </div>
               <div className="text-center">
                 <ChainLogo chain="ink" size={32} className="mx-auto mb-1" />
-                <p className="text-xs font-medium text-gray-700">Ink</p>
+                <p className="text-xs font-medium text-gray-300">Ink</p>
               </div>
               <div className="text-center">
                 <ChainLogo chain="hyperevm" size={32} className="mx-auto mb-1" />
-                <p className="text-xs font-medium text-gray-700">HyperEVM</p>
+                <p className="text-xs font-medium text-gray-300">HyperEVM</p>
               </div>
               <div className="text-center">
                 <ChainLogo chain="linea" size={32} className="mx-auto mb-1" />
-                <p className="text-xs font-medium text-gray-700">Linea</p>
+                <p className="text-xs font-medium text-gray-300">Linea</p>
               </div>
               <div className="text-center">
                 <ChainLogo chain="polygon" size={32} className="mx-auto mb-1" />
-                <p className="text-xs font-medium text-gray-700">Polygon</p>
+                <p className="text-xs font-medium text-gray-300">Polygon</p>
               </div>
               <div className="text-center">
                 <ChainLogo chain="abstract" size={32} className="mx-auto mb-1" />
-                <p className="text-xs font-medium text-gray-700">Abstract</p>
+                <p className="text-xs font-medium text-gray-300">Abstract</p>
               </div>
               <div className="text-center">
                 <ChainLogo chain="zora" size={32} className="mx-auto mb-1" />
-                <p className="text-xs font-medium text-gray-700">Zora</p>
+                <p className="text-xs font-medium text-gray-300">Zora</p>
               </div>
             </div>
             <p className="text-center text-xs text-gray-500 mt-2">Multi-chain bridge supporting 12+ networks</p>
@@ -210,7 +210,7 @@ export default function Home() {
                 Need Batch Transfers?
               </h3>
             </div>
-            <p className="text-gray-700 mb-3 text-sm leading-relaxed">
+            <p className="text-gray-300 mb-3 text-sm leading-relaxed">
               Send ETH and ERC20 tokens to multiple addresses at once with our partner platform
             </p>
             <a 
@@ -245,13 +245,13 @@ export default function Home() {
           {/* Main Content */}
           <div>
             {!quote ? (
-              <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-6">
+              <div className="bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-700/30 p-6">
                 <QuoteForm onQuoteGenerated={handleQuoteGenerated} onError={handleError} />
               </div>
             ) : (
             <div className="space-y-6">
               {/* Quote Details */}
-              <div className="p-6 bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 relative overflow-hidden">
+                              <div className="p-6 bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-700/30 relative overflow-hidden">
                 {/* Background decorative elements */}
                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full opacity-50 -translate-y-12 translate-x-12"></div>
                 <div className="absolute bottom-0 left-0 w-20 h-20 bg-gradient-to-tr from-green-100 to-blue-100 rounded-full opacity-40 translate-y-8 -translate-x-8"></div>
@@ -321,11 +321,11 @@ export default function Home() {
                       Fee Breakdown
                     </h5>
                     <div className="space-y-2">
-                      <div className="flex justify-between items-center text-gray-700">
+                      <div className="flex justify-between items-center text-gray-300">
                         <span className="text-sm">Service Fee (3%):</span>
                         <span className="font-semibold text-base">${quote.fees.serviceFeeUsd}</span>
                       </div>
-                      <div className="flex justify-between items-center text-gray-700">
+                      <div className="flex justify-between items-center text-gray-300">
                         <span className="text-sm">Execution Buffer:</span>
                         <span className="font-semibold text-base">${quote.fees.execBufferUsd}</span>
                       </div>
@@ -342,9 +342,9 @@ export default function Home() {
 
               {/* Payment Section */}
               {currentStep === 'payment' && (
-                <div className="p-6 bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30">
+                <div className="p-6 bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-700/30">
                   <div className="text-center">
-                    <h3 className="text-xl font-bold text-gray-900 mb-4">Send Payment</h3>
+                    <h3 className="text-xl font-bold text-gray-100 mb-4">Send Payment</h3>
                     
                     {/* Simple Instructions */}
                     <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
@@ -364,9 +364,9 @@ export default function Home() {
 
               {/* Status Tracking Section */}
               {currentStep === 'tracking' && paymentTxHash && (
-                <div className="p-6 bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30">
+                <div className="p-6 bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-700/30">
                   <div className="text-center">
-                    <h3 className="text-xl font-bold text-gray-900 mb-4">Processing Transfer</h3>
+                    <h3 className="text-xl font-bold text-gray-100 mb-4">Processing Transfer</h3>
                     
                     {/* Simple Status */}
                     <div className="mb-4 p-3 bg-purple-50 border border-purple-200 rounded-lg">
@@ -386,13 +386,13 @@ export default function Home() {
 
               {/* Completed Section */}
               {currentStep === 'completed' && (
-                <div className="p-6 bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30">
+                <div className="p-6 bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-700/30">
                   <div className="text-center">
                     <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
                       <span className="text-2xl">🎉</span>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">Transfer Complete!</h3>
-                    <p className="text-gray-600 mb-6">
+                    <h3 className="text-xl font-bold text-gray-100 mb-3">Transfer Complete!</h3>
+                    <p className="text-gray-300 mb-6">
                       Your ETH has been successfully transferred to {getChainName(quote.targetChain)}.
                     </p>
                     <button
@@ -417,7 +417,7 @@ export default function Home() {
         </div>
 
         {/* Footer */}
-        <div className="mt-8 text-center text-sm text-gray-500">
+        <div className="mt-8 text-center text-sm text-gray-400">
           <p>Powered by GasUp • Fast • Secure • Decentralized</p>
         </div>
       </div>
