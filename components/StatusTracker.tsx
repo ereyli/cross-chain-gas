@@ -164,135 +164,72 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
   }
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900">Order Status</h3>
-      
-      <div className="flex items-center space-x-3">
-        <span
-          className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(status.status)}`}
-        >
+    <div className="space-y-4">
+      {/* Status */}
+      <div className="text-center">
+        <span className={`px-4 py-2 rounded-full text-sm font-medium ${getStatusColor(status.status)}`}>
           {getStatusText(status.status)}
         </span>
       </div>
 
-      {sourceTxHash && (
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Payment Transaction
-          </label>
-          <a
-            href={getExplorerUrl('base', sourceTxHash)} // You'd need to determine the correct chain
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:text-blue-800 underline break-all"
-          >
-            {sourceTxHash}
-          </a>
-        </div>
-      )}
-
-      {status.sourceTx && status.sourceTx !== sourceTxHash && (
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Confirmed Payment
-          </label>
-          <a
-            href={getExplorerUrl('base', status.sourceTx)} // You'd need to determine the correct chain
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:text-blue-800 underline break-all"
-          >
-            {status.sourceTx}
-          </a>
-        </div>
-      )}
-
-      {status.targetTx && (
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Delivery Transaction
-          </label>
-          <a
-            href={getExplorerUrl('arb', status.targetTx)} // You'd need to determine the correct chain
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-green-600 hover:text-green-800 underline break-all"
-          >
-            {status.targetTx}
-          </a>
-        </div>
-      )}
-
-      {status.deliveredNative && (
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Delivered Amount
-          </label>
-          <div className="text-lg font-semibold text-green-600">
-            {(Number(status.deliveredNative) / 1e18).toFixed(6)} ETH
-            {status.deliveredUSD && (
-              <span className="text-sm text-gray-600 ml-2">
-                (≈${status.deliveredUSD.toFixed(2)})
-              </span>
-            )}
-          </div>
-        </div>
-      )}
-
       {/* Manual Fulfillment Button */}
       {status.status === 'AWAITING_PAYMENT' && sourceTxHash && (
-        <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <h4 className="font-medium text-yellow-900 mb-2">⚠️ Manual Completion Required</h4>
-          <div className="text-sm text-yellow-800 mb-3 space-y-1">
-            <p>• Your payment was detected on the source chain</p>
-            <p>• Automatic processing failed (this is normal during beta)</p>
-            <p>• Click below to manually complete your transfer</p>
-            <p>• Your ETH will be sent to the target chain immediately</p>
+        <div className="text-center">
+          <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-4">
+            <div className="text-sm text-yellow-800 mb-3">
+              Payment detected. Click below to complete transfer.
+            </div>
+            <button
+              onClick={handleManualFulfillment}
+              disabled={isFulfilling}
+              className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+                isFulfilling
+                  ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
+              }`}
+            >
+              {isFulfilling ? 'Processing...' : 'Complete Transfer'}
+            </button>
           </div>
-          <button
-            onClick={handleManualFulfillment}
-            disabled={isFulfilling}
-            className={`w-full px-4 py-2 rounded-lg font-medium transition-colors ${
-              isFulfilling
-                ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                : 'bg-blue-600 text-white hover:bg-blue-700'
-            }`}
-          >
-            {isFulfilling ? 'Processing Transfer...' : '🚀 Complete Transfer Now'}
-          </button>
         </div>
       )}
 
-      {/* Status Explanations */}
-      {status.status === 'AWAITING_PAYMENT' && !sourceTxHash && (
-        <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <h4 className="font-medium text-blue-900 mb-2">💡 Waiting for Payment</h4>
-          <p className="text-sm text-blue-800">
-            Please send the payment on the source chain. Once confirmed, your transfer will be processed automatically.
-          </p>
-        </div>
-      )}
+      {/* Transaction Links */}
+      <div className="text-center space-y-2">
+        {sourceTxHash && (
+          <div>
+            <a
+              href={getExplorerUrl('base', sourceTxHash)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 text-sm underline"
+            >
+              View Payment Transaction
+            </a>
+          </div>
+        )}
 
-      {status.status === 'PAID' && (
-        <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-          <h4 className="font-medium text-green-900 mb-2">✅ Payment Confirmed</h4>
-          <p className="text-sm text-green-800">
-            Your payment has been confirmed. Processing your transfer to the target chain...
-          </p>
-        </div>
-      )}
+        {status.targetTx && (
+          <div>
+            <a
+              href={getExplorerUrl('arb', status.targetTx)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-green-600 hover:text-green-800 text-sm underline"
+            >
+              View Delivery Transaction
+            </a>
+          </div>
+        )}
 
-      {status.status === 'FULFILLING' && (
-        <div className="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-lg">
-          <h4 className="font-medium text-purple-900 mb-2">⚡ Processing Transfer</h4>
-          <p className="text-sm text-purple-800">
-            Sending ETH to your target address. This usually takes 1-2 minutes...
-          </p>
-        </div>
-      )}
-
-      <div className="text-xs text-gray-500">
-        Order ID: {orderId}
+        {status.deliveredNative && (
+          <div className="text-sm text-gray-600">
+            Delivered: {(Number(status.deliveredNative) / 1e18).toFixed(6)} ETH
+            {status.deliveredUSD && (
+              <span className="ml-2">(≈${status.deliveredUSD.toFixed(2)})</span>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

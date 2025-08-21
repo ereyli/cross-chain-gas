@@ -319,37 +319,14 @@ export default function Home() {
 
               {/* Payment Section */}
               {currentStep === 'payment' && (
-                <div className="p-8 bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 relative overflow-hidden">
-                  {/* Background decorative elements */}
-                  <div className="absolute top-0 left-0 w-40 h-40 bg-gradient-to-br from-green-100 to-emerald-100 rounded-full opacity-30 -translate-y-20 -translate-x-20"></div>
-                  <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tr from-blue-100 to-purple-100 rounded-full opacity-40 translate-y-16 translate-x-16"></div>
-                  
-                  <div className="relative z-10">
-                    <h3 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-6">Step 2: Send Payment</h3>
+                <div className="p-8 bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30">
+                  <div className="text-center">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-6">Send Payment</h3>
                     
-                    {/* Step Instructions */}
-                    <div className="mb-6 p-6 bg-blue-50 border border-blue-200 rounded-2xl">
-                      <h4 className="font-semibold text-blue-900 mb-3 flex items-center">
-                        <span className="mr-2">📋</span>
-                        What happens next:
-                      </h4>
-                      <div className="space-y-2 text-sm text-blue-800">
-                        <div className="flex items-center">
-                          <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
-                          <span>Click "Send Payment" to open your wallet</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
-                          <span>Confirm the transaction in your wallet</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
-                          <span>Wait for payment confirmation (1-2 minutes)</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
-                          <span>ETH will be automatically sent to your target address</span>
-                        </div>
+                    {/* Simple Instructions */}
+                    <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                      <div className="text-sm text-blue-800">
+                        Click the button below to send your payment. Your wallet will open for confirmation.
                       </div>
                     </div>
 
@@ -364,33 +341,14 @@ export default function Home() {
 
               {/* Status Tracking Section */}
               {currentStep === 'tracking' && paymentTxHash && (
-                <div className="p-8 bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 relative overflow-hidden">
-                  <div className="relative z-10">
-                    <h3 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent mb-6">Step 3: Processing Your Transfer</h3>
+                <div className="p-8 bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30">
+                  <div className="text-center">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-6">Processing Transfer</h3>
                     
-                    {/* Processing Instructions */}
-                    <div className="mb-6 p-6 bg-purple-50 border border-purple-200 rounded-2xl">
-                      <h4 className="font-semibold text-purple-900 mb-3 flex items-center">
-                        <span className="mr-2">⏳</span>
-                        Current Status:
-                      </h4>
-                      <div className="space-y-2 text-sm text-purple-800">
-                        <div className="flex items-center">
-                          <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-                          <span>Payment transaction submitted</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-                          <span>Waiting for payment confirmation on {getChainName(quote.sourceChain)}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-                          <span>Once confirmed, ETH will be sent to {getChainName(quote.targetChain)}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-                          <span>Total process takes 2-5 minutes</span>
-                        </div>
+                    {/* Simple Status */}
+                    <div className="mb-6 p-4 bg-purple-50 border border-purple-200 rounded-xl">
+                      <div className="text-sm text-purple-800">
+                        Your payment is being processed. This usually takes 2-5 minutes.
                       </div>
                     </div>
 
