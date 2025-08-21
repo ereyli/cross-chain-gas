@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { formatTokenAmount } from '../lib/prices';
 import { CHAINS } from '../lib/chains';
+import { ChainLogo } from './ChainLogo';
 import type { QuoteResponse, StatusResponse } from '../types';
 
 interface PayButtonProps {
@@ -172,8 +173,9 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
     return (
       <button
         onClick={() => switchNetwork(sourceChainId!)}
-        className="w-full bg-yellow-600 text-white py-3 px-4 rounded-md hover:bg-yellow-700 transition-colors"
+        className="w-full bg-yellow-600 text-white py-3 px-4 rounded-md hover:bg-yellow-700 transition-colors flex items-center justify-center"
       >
+        <ChainLogo chain={quote.sourceChain} size={20} className="mr-2" />
         Switch to {quote.sourceChain.toUpperCase()}
       </button>
     );

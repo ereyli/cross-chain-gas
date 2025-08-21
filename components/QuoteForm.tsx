@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { CHAINS, getSupportedAssets } from '../lib/chains';
+import { ChainLogo } from './ChainLogo';
 import type { ChainKey, Asset, QuoteResponse } from '../types';
  
 // All chains are now supported with webhook endpoints
@@ -217,10 +218,13 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
             Source Chain
           </label>
           <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <ChainLogo chain={sourceChain} size={24} />
+            </div>
             <select
               value={sourceChain}
               onChange={(e) => handleSourceChainChange(e.target.value)}
-              className="w-full p-3 bg-white/70 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm appearance-none cursor-pointer"
+              className="w-full pl-12 pr-10 py-3 bg-white/70 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm appearance-none cursor-pointer"
             >
               {SUPPORTED_CHAINS.map((key) => (
                 <option key={key} value={key}>
@@ -267,10 +271,13 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
             Target Chain
           </label>
           <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <ChainLogo chain={targetChain} size={24} />
+            </div>
             <select
               value={targetChain}
               onChange={(e) => handleTargetChainChange(e.target.value)}
-              className="w-full p-3 bg-white/70 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm appearance-none cursor-pointer"
+              className="w-full pl-12 pr-10 py-3 bg-white/70 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm appearance-none cursor-pointer"
             >
               {SUPPORTED_CHAINS.map((key) => (
                 <option key={key} value={key} disabled={key === sourceChain}>

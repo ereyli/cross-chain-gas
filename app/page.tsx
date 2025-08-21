@@ -5,6 +5,7 @@ import { QuoteForm } from '../components/QuoteForm';
 import { PayButton } from '../components/PayButton';
 import { StatusTracker } from '../components/StatusTracker';
 import { TransactionHistory } from '../components/TransactionHistory';
+import { ChainLogo } from '../components/ChainLogo';
 import { formatTokenAmount } from '../lib/prices';
 import { CHAINS } from '../lib/chains';
 import type { QuoteResponse } from '../types';
@@ -107,75 +108,51 @@ export default function Home() {
             <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">🌐 Supported Networks</h3>
             <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-6">
               <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-gray-700 to-gray-800 rounded-xl flex items-center justify-center mx-auto mb-2">
-                  <span className="text-white font-bold text-sm">Ξ</span>
-                </div>
+                <ChainLogo chain="ethereum" size={48} className="mx-auto mb-2" />
                 <p className="text-xs font-medium text-gray-700">Ethereum</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-2">
-                  <span className="text-white font-bold text-sm">B</span>
-                </div>
+                <ChainLogo chain="base" size={48} className="mx-auto mb-2" />
                 <p className="text-xs font-medium text-gray-700">Base</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-xl flex items-center justify-center mx-auto mb-2">
-                  <span className="text-white font-bold text-sm">O</span>
-                </div>
+                <ChainLogo chain="op" size={48} className="mx-auto mb-2" />
                 <p className="text-xs font-medium text-gray-700">Optimism</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-2">
-                  <span className="text-white font-bold text-sm">A</span>
-                </div>
+                <ChainLogo chain="arbitrum" size={48} className="mx-auto mb-2" />
                 <p className="text-xs font-medium text-gray-700">Arbitrum</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-xl flex items-center justify-center mx-auto mb-2">
-                  <span className="text-white font-bold text-sm">S</span>
-                </div>
+                <ChainLogo chain="sonic" size={48} className="mx-auto mb-2" />
                 <p className="text-xs font-medium text-gray-700">Sonic</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-2">
-                  <span className="text-white font-bold text-sm">U</span>
-                </div>
+                <ChainLogo chain="unichain" size={48} className="mx-auto mb-2" />
                 <p className="text-xs font-medium text-gray-700">Unichain</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-2">
-                  <span className="text-white font-bold text-sm">I</span>
-                </div>
+                <ChainLogo chain="ink" size={48} className="mx-auto mb-2" />
                 <p className="text-xs font-medium text-gray-700">Ink</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-600 rounded-xl flex items-center justify-center mx-auto mb-2">
-                  <span className="text-white font-bold text-sm">H</span>
-                </div>
+                <ChainLogo chain="hyperevm" size={48} className="mx-auto mb-2" />
                 <p className="text-xs font-medium text-gray-700">HyperEVM</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-green-600 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-2">
-                  <span className="text-white font-bold text-sm">L</span>
-                </div>
+                <ChainLogo chain="linea" size={48} className="mx-auto mb-2" />
                 <p className="text-xs font-medium text-gray-700">Linea</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-700 rounded-xl flex items-center justify-center mx-auto mb-2">
-                  <span className="text-white font-bold text-sm">P</span>
-                </div>
+                <ChainLogo chain="polygon" size={48} className="mx-auto mb-2" />
                 <p className="text-xs font-medium text-gray-700">Polygon</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-gray-600 to-gray-700 rounded-xl flex items-center justify-center mx-auto mb-2">
-                  <span className="text-white font-bold text-sm">Ab</span>
-                </div>
+                <ChainLogo chain="abstract" size={48} className="mx-auto mb-2" />
                 <p className="text-xs font-medium text-gray-700">Abstract</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-xl flex items-center justify-center mx-auto mb-2">
-                  <span className="text-white font-bold text-sm">Z</span>
-                </div>
+                <ChainLogo chain="zora" size={48} className="mx-auto mb-2" />
                 <p className="text-xs font-medium text-gray-700">Zora</p>
               </div>
             </div>
