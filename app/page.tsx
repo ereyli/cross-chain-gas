@@ -200,32 +200,7 @@ export default function Home() {
             <p className="text-center text-xs text-gray-500 mt-2">Multi-chain bridge supporting 12+ networks</p>
           </div>
 
-          {/* Sendwise Integration - Compact */}
-          <div className="bg-gradient-to-r from-purple-50/90 to-pink-50/90 backdrop-blur-lg border border-purple-200/50 rounded-xl p-4 text-center max-w-2xl mx-auto shadow-lg">
-            <div className="flex items-center justify-center mb-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mr-2">
-                <span className="text-white text-sm">🚀</span>
-              </div>
-              <h3 className="text-base font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                Need Batch Transfers?
-              </h3>
-            </div>
-            <p className="text-gray-300 mb-3 text-sm leading-relaxed">
-              Send ETH and ERC20 tokens to multiple addresses at once with our partner platform
-            </p>
-            <a 
-              href="https://www.sendwise.xyz/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-pink-600 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl text-sm"
-            >
-              <span className="mr-1">🚀</span>
-              Try Sendwise
-              <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </a>
-          </div>
+
         </div>
 
         {/* Error Display */}
@@ -261,7 +236,7 @@ export default function Home() {
                     <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Quote Details</h3>
                     <button
                       onClick={handleReset}
-                      className="px-3 py-1 text-sm font-medium text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 rounded-lg transition-all transform hover:scale-105"
+                      className="px-3 py-1 text-sm font-medium text-blue-300 hover:text-blue-200 bg-blue-900/30 hover:bg-blue-800/40 rounded-lg transition-all transform hover:scale-105"
                     >
                       New Quote
                     </button>
@@ -270,18 +245,18 @@ export default function Home() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     {/* You Pay */}
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-red-50 to-orange-50 rounded-xl"></div>
-                      <div className="relative p-4 rounded-xl border border-red-100">
+                      <div className="absolute inset-0 bg-gradient-to-br from-red-900/20 to-orange-900/20 rounded-xl"></div>
+                      <div className="relative p-4 rounded-xl border border-red-500/30 bg-gray-800/50">
                         <div className="flex items-center mb-3">
                           <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg flex items-center justify-center mr-2">
                             <span className="text-white font-bold text-sm">💰</span>
                           </div>
-                          <h4 className="text-base font-semibold text-gray-800">You Pay</h4>
+                          <h4 className="text-base font-semibold text-gray-100">You Pay</h4>
                         </div>
-                        <div className="text-xl font-bold text-gray-900 mb-1">
+                        <div className="text-xl font-bold text-gray-100 mb-1">
                           {formatTokenAmount(BigInt(quote.exact.amountRaw), quote.sourceAsset)} {quote.sourceAsset}
                         </div>
-                        <div className="text-xs font-medium text-gray-600 bg-white/70 px-2 py-1 rounded-md inline-block">
+                        <div className="text-xs font-medium text-gray-300 bg-gray-700/70 px-2 py-1 rounded-md inline-block">
                           on {getChainName(quote.sourceChain)}
                         </div>
                       </div>
@@ -289,22 +264,22 @@ export default function Home() {
 
                     {/* You Receive */}
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl"></div>
-                      <div className="relative p-4 rounded-xl border border-green-100">
+                      <div className="absolute inset-0 bg-gradient-to-br from-green-900/20 to-emerald-900/20 rounded-xl"></div>
+                      <div className="relative p-4 rounded-xl border border-green-500/30 bg-gray-800/50">
                         <div className="flex items-center mb-3">
                           <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center mr-2">
                             <span className="text-white font-bold text-sm">💎</span>
                           </div>
-                          <h4 className="text-base font-semibold text-gray-800">You Receive</h4>
+                          <h4 className="text-base font-semibold text-gray-100">You Receive</h4>
                         </div>
-                        <div className="text-xl font-bold text-gray-900 mb-1">
+                        <div className="text-xl font-bold text-gray-100 mb-1">
                           ≈{formatTokenAmount(BigInt(quote.target.expectedNative), 'ETH')} ETH
                         </div>
                         <div className="space-y-1">
-                          <div className="text-xs font-medium text-gray-600 bg-white/70 px-2 py-1 rounded-md inline-block">
+                          <div className="text-xs font-medium text-gray-300 bg-gray-700/70 px-2 py-1 rounded-md inline-block">
                             on {getChainName(quote.targetChain)}
                           </div>
-                          <div className="text-xs text-gray-500">
+                          <div className="text-xs text-gray-400">
                             (min: {formatTokenAmount(BigInt(quote.target.minGuarantee), 'ETH')} ETH)
                           </div>
                         </div>
@@ -313,8 +288,8 @@ export default function Home() {
                   </div>
 
                   {/* Fees Breakdown */}
-                  <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-4 border border-gray-200">
-                    <h5 className="font-semibold text-gray-800 mb-3 flex items-center">
+                  <div className="bg-gradient-to-r from-gray-800/50 to-blue-900/20 rounded-xl p-4 border border-gray-600/50">
+                    <h5 className="font-semibold text-gray-100 mb-3 flex items-center">
                       <span className="w-5 h-5 bg-gradient-to-r from-gray-500 to-blue-500 rounded-md flex items-center justify-center mr-2">
                         <span className="text-white text-xs">📊</span>
                       </span>
@@ -329,10 +304,10 @@ export default function Home() {
                         <span className="text-sm">Execution Buffer:</span>
                         <span className="font-semibold text-base">${quote.fees.execBufferUsd}</span>
                       </div>
-                      <div className="border-t border-gray-300 pt-2">
-                        <div className="flex justify-between items-center text-gray-900">
+                      <div className="border-t border-gray-600 pt-2">
+                        <div className="flex justify-between items-center text-gray-100">
                           <span className="font-bold">Total Fees:</span>
-                          <span className="font-bold text-lg text-blue-600">${quote.fees.totalFeeUsd}</span>
+                          <span className="font-bold text-lg text-blue-400">${quote.fees.totalFeeUsd}</span>
                         </div>
                       </div>
                     </div>
@@ -347,8 +322,8 @@ export default function Home() {
                     <h3 className="text-xl font-bold text-gray-100 mb-4">Send Payment</h3>
                     
                     {/* Simple Instructions */}
-                    <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                      <div className="text-sm text-blue-800">
+                    <div className="mb-4 p-3 bg-blue-900/20 border border-blue-500/30 rounded-lg">
+                      <div className="text-sm text-blue-200">
                         Click the button below to send your payment. Your wallet will open for confirmation.
                       </div>
                     </div>
@@ -369,8 +344,8 @@ export default function Home() {
                     <h3 className="text-xl font-bold text-gray-100 mb-4">Processing Transfer</h3>
                     
                     {/* Simple Status */}
-                    <div className="mb-4 p-3 bg-purple-50 border border-purple-200 rounded-lg">
-                      <div className="text-sm text-purple-800">
+                    <div className="mb-4 p-3 bg-purple-900/20 border border-purple-500/30 rounded-lg">
+                      <div className="text-sm text-purple-200">
                         Your payment is being processed. This usually takes 2-5 minutes.
                       </div>
                     </div>
@@ -414,6 +389,35 @@ export default function Home() {
           <TransactionHistory 
             userAddress={connectedAccount} 
           />
+        </div>
+
+        {/* Sendwise Integration - Footer */}
+        <div className="mt-8 mb-6">
+          <div className="bg-gradient-to-r from-gray-800/90 to-gray-700/90 backdrop-blur-lg border border-gray-600/50 rounded-xl p-4 text-center max-w-2xl mx-auto shadow-lg">
+            <div className="flex items-center justify-center mb-2">
+              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mr-2">
+                <span className="text-white text-sm">🚀</span>
+              </div>
+              <h3 className="text-base font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Need Batch Transfers?
+              </h3>
+            </div>
+            <p className="text-gray-300 mb-3 text-sm leading-relaxed">
+              Send ETH and ERC20 tokens to multiple addresses at once with our partner platform
+            </p>
+            <a 
+              href="https://www.sendwise.xyz/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-pink-600 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl text-sm"
+            >
+              <span className="mr-1">🚀</span>
+              Try Sendwise
+              <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
+          </div>
         </div>
 
         {/* Footer */}

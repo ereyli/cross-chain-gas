@@ -223,12 +223,12 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
       {/* Auto-fulfill Status */}
       {(status.status === 'PAID' || status.status === 'AWAITING_PAYMENT') && sourceTxHash && autoFulfillAttempted && !autoFulfillFailed && (
         <div className="text-center">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
+          <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-3 mb-3">
             <div className="flex items-center justify-center space-x-2 mb-2">
-              <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                              <span className="text-sm text-blue-800 font-medium">Transfer completing...</span>
+              <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+                              <span className="text-sm text-blue-200 font-medium">Transfer completing...</span>
             </div>
-            <p className="text-xs text-blue-600">Please wait while we process your transfer automatically.</p>
+            <p className="text-xs text-blue-300">Please wait while we process your transfer automatically.</p>
           </div>
         </div>
       )}
@@ -236,8 +236,8 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
       {/* Manual Fulfillment Button - Only show if auto-fulfill failed */}
       {status.status === 'AWAITING_PAYMENT' && sourceTxHash && autoFulfillFailed && (
         <div className="text-center">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-3">
-            <div className="text-sm text-red-800 mb-2">
+          <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-3 mb-3">
+            <div className="text-sm text-red-200 mb-2">
               Automatic transfer failed. Please try manually.
             </div>
             <button
@@ -258,12 +258,12 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
       {/* Auto-fulfill Status - Show when payment is detected but auto-fulfill not started yet */}
       {status.status === 'AWAITING_PAYMENT' && sourceTxHash && !autoFulfillAttempted && (
         <div className="text-center">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
+          <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-3 mb-3">
             <div className="flex items-center justify-center space-x-2 mb-2">
-              <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-              <span className="text-sm text-blue-800 font-medium">Payment detected, preparing transfer...</span>
+              <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+              <span className="text-sm text-blue-200 font-medium">Payment detected, preparing transfer...</span>
             </div>
-            <p className="text-xs text-blue-600">We will automatically complete your transfer in a few seconds.</p>
+            <p className="text-xs text-blue-300">We will automatically complete your transfer in a few seconds.</p>
           </div>
         </div>
       )}
