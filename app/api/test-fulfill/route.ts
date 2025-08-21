@@ -96,13 +96,52 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // Basic transaction info (amount verification disabled)
-      console.log('📍 Transaction info:', {
+      // Transaction content verification
+      console.log('🔍 Transaction content verification...');
+      
+      const txInfo = {
+        hash: tx.hash,
+        from: tx.from,
         to: tx.to,
         value: tx.value?.toString(),
-        hash: tx.hash,
-        note: 'Amount verification disabled - transaction exists on blockchain'
-      });
+        data: tx.data,
+        nonce: tx.nonce,
+        gasLimit: tx.gasLimit?.toString(),
+        gasPrice: tx.gasPrice?.toString()
+      };
+
+      console.log('📋 Transaction details:', txInfo);
+
+      // Basic sanity checks
+      if (!tx.from || !tx.to) {
+        console.log('❌ Invalid transaction: missing from or to address');
+        return NextResponse.json(
+          { error: 'Invalid transaction: missing addresses' },
+          { status: 400 }
+        );
+      }
+
+      if (!tx.value || tx.value === BigInt(0)) {
+        console.log('❌ Invalid transaction: zero or missing value');
+        return NextResponse.json(
+          { error: 'Invalid transaction: zero value' },
+          { status: 400 }
+        );
+      }
+
+      // Check if transaction has been confirmed (optional)
+      try {
+        const receipt = await provider.getTransactionReceipt(sanitizedTxHash);
+        if (receipt) {
+          console.log('✅ Transaction receipt found - transaction is confirmed');
+        } else {
+          console.log('⚠️ Transaction receipt not found - may still be pending');
+        }
+      } catch (error) {
+        console.log('⚠️ Could not check confirmation status:', error);
+      }
+
+      console.log('✅ Transaction content verification passed');
 
       console.log('✅ Transaction verification passed:', {
         hash: tx.hash,
