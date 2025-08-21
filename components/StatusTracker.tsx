@@ -95,7 +95,7 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
         clearInterval(intervalId);
       }
     };
-  }, [orderId, onCompleted]);
+  }, [orderId, onCompleted, sourceTxHash, autoFulfillAttempted]);
 
   const getStatusColor = (status: string) => {
     switch (status) {

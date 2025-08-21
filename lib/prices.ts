@@ -80,6 +80,21 @@ export function usdToWeiOnTarget(usdAmount: number, ethUsdPrice: number): bigint
   return BigInt(Math.floor(ethAmount * 1e18));
 }
 
+export function usdToWeiOnSource(usdAmount: number, sourceChain: ChainKey): bigint {
+  // For source chain, we need to calculate how much the user should pay
+  // This includes the service fee and execution buffer
+  const serviceFee = usdAmount * 0.03; // 3% service fee
+  const executionBuffer = 0.50; // $0.50 execution buffer
+  const totalAmount = usdAmount + serviceFee + executionBuffer;
+  
+  // Get ETH price for the source chain
+  // For now, we'll use a fixed price, but in production you'd fetch the actual price
+  const ethPrice = 2500; // $2500 USD per ETH
+  
+  const ethAmount = totalAmount / ethPrice;
+  return BigInt(Math.floor(ethAmount * 1e18));
+}
+
 export function weiToUsd(weiAmount: bigint, ethUsdPrice: number): number {
   const ethAmount = Number(weiAmount) / 1e18;
   return ethAmount * ethUsdPrice;
