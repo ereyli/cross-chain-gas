@@ -121,35 +121,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Sendwise Integration */}
-          <div className="bg-gradient-to-r from-purple-50/90 to-pink-50/90 backdrop-blur-lg border border-purple-200/50 rounded-2xl p-6 mb-8 text-center max-w-3xl mx-auto shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-            <div className="flex items-center justify-center mb-4">
-              <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mr-3">
-                <span className="text-white text-xl">🚀</span>
-              </div>
-              <h3 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                Need Batch Transfers?
-              </h3>
-            </div>
-            <p className="text-gray-700 mb-4 leading-relaxed">
-              Send ETH and ERC20 tokens to multiple addresses at once with our partner platform
-            </p>
-            <a 
-              href="https://www.sendwise.xyz/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl hover:from-purple-600 hover:to-pink-600 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
-            >
-              <span className="mr-2">🚀</span>
-              Try Sendwise
-              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </a>
-            <p className="text-xs text-gray-500 mt-3">
-              Opens in new tab • Powered by Sendwise
-            </p>
-          </div>
+
 
           {/* Supported Networks */}
           <div className="bg-white/60 backdrop-blur-lg p-6 rounded-2xl border border-white/30 shadow-lg mb-8 max-w-5xl mx-auto">
@@ -404,6 +376,33 @@ export default function Home() {
               Pay with ETH, USDC, or USDT - whatever you have available
             </p>
           </div>
+        </div>
+
+        {/* Sendwise Integration */}
+        <div className="mt-16 bg-gradient-to-r from-purple-50/90 to-pink-50/90 backdrop-blur-lg border border-purple-200/50 rounded-2xl p-6 text-center max-w-3xl mx-auto shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+          <div className="flex items-center justify-center mb-4">
+            <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mr-3">
+              <span className="text-white text-xl">🚀</span>
+            </div>
+            <h3 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              Need Batch Transfers?
+            </h3>
+          </div>
+          <p className="text-gray-700 mb-4 leading-relaxed">
+            Send ETH and ERC20 tokens to multiple addresses at once with our partner platform
+          </p>
+          <a 
+            href="https://www.sendwise.xyz/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl hover:from-purple-600 hover:to-pink-600 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
+          >
+            <span className="mr-2">🚀</span>
+            Try Sendwise
+            <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
         </div>
 
         {/* Footer */}
