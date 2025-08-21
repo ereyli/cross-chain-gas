@@ -33,8 +33,8 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
         setStatus(data);
         setError(null);
 
-        // Auto-fulfill when status becomes PAID
-        if (data.status === 'PAID' && sourceTxHash && !autoFulfillAttempted) {
+        // Auto-fulfill when status becomes PAID or when we have sourceTxHash
+        if ((data.status === 'PAID' || data.status === 'AWAITING_PAYMENT') && sourceTxHash && !autoFulfillAttempted) {
           console.log('💰 Payment detected, starting auto-fulfill in 3 seconds...');
           setAutoFulfillAttempted(true);
           
@@ -204,7 +204,7 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
       </div>
 
       {/* Auto-fulfill Status */}
-      {status.status === 'PAID' && sourceTxHash && autoFulfillAttempted && !autoFulfillFailed && (
+      {(status.status === 'PAID' || status.status === 'AWAITING_PAYMENT') && sourceTxHash && autoFulfillAttempted && !autoFulfillFailed && (
         <div className="text-center">
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
             <div className="flex items-center justify-center space-x-2 mb-2">
@@ -238,24 +238,15 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
         </div>
       )}
 
-      {/* Legacy Manual Button - Only show if no auto-fulfill attempted yet */}
+      {/* Auto-fulfill Status - Show when payment is detected but auto-fulfill not started yet */}
       {status.status === 'AWAITING_PAYMENT' && sourceTxHash && !autoFulfillAttempted && (
         <div className="text-center">
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-3">
-            <div className="text-sm text-yellow-800 mb-2">
-              Payment detected. Click below to complete transfer.
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
+            <div className="flex items-center justify-center space-x-2 mb-2">
+              <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+              <span className="text-sm text-blue-800 font-medium">Payment detected, preparing transfer...</span>
             </div>
-            <button
-              onClick={handleManualFulfillment}
-              disabled={isFulfilling}
-              className={`px-4 py-1 rounded-md font-medium transition-colors text-sm ${
-                isFulfilling
-                  ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
-              }`}
-            >
-              {isFulfilling ? 'Processing...' : 'Complete Transfer'}
-            </button>
+            <p className="text-xs text-blue-600">We will automatically complete your transfer in a few seconds.</p>
           </div>
         </div>
       )}
