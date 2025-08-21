@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { CHAINS, getSupportedAssets } from '../lib/chains';
 import { ChainLogo } from './ChainLogo';
+import { CustomSelect } from './CustomSelect';
 import type { ChainKey, Asset, QuoteResponse } from '../types';
  
 // All chains are now supported with webhook endpoints
@@ -217,27 +218,15 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
           <label className="block text-sm font-semibold text-gray-700">
             Source Chain
           </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <ChainLogo chain={sourceChain} size={32} />
-            </div>
-            <select
-              value={sourceChain}
-              onChange={(e) => handleSourceChainChange(e.target.value)}
-              className="w-full pl-12 pr-10 py-3 bg-white/70 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all appearance-none cursor-pointer"
-            >
-              {SUPPORTED_CHAINS.map((key) => (
-                <option key={key} value={key}>
-                  {key.toUpperCase()}
-                </option>
-              ))}
-            </select>
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
-          </div>
+          <CustomSelect
+            value={sourceChain}
+            onChange={handleSourceChainChange}
+            options={SUPPORTED_CHAINS.map((key) => ({
+              value: key,
+              label: key.toUpperCase()
+            }))}
+            placeholder="Select source chain"
+          />
           <p className="text-xs text-gray-500">Where you have funds</p>
         </div>
 
@@ -270,27 +259,16 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
           <label className="block text-sm font-semibold text-gray-700">
             Target Chain
           </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <ChainLogo chain={targetChain} size={32} />
-            </div>
-            <select
-              value={targetChain}
-              onChange={(e) => handleTargetChainChange(e.target.value)}
-              className="w-full pl-12 pr-10 py-3 bg-white/70 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all appearance-none cursor-pointer"
-            >
-              {SUPPORTED_CHAINS.map((key) => (
-                <option key={key} value={key} disabled={key === sourceChain}>
-                  {key.toUpperCase()}
-                </option>
-              ))}
-            </select>
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
-          </div>
+          <CustomSelect
+            value={targetChain}
+            onChange={handleTargetChainChange}
+            options={SUPPORTED_CHAINS.map((key) => ({
+              value: key,
+              label: key.toUpperCase(),
+              disabled: key === sourceChain
+            }))}
+            placeholder="Select target chain"
+          />
           <p className="text-xs text-gray-500">Where you want ETH</p>
         </div>
       </div>
