@@ -14,9 +14,11 @@ export function ChainLogo({ chain, size = 48, className = '' }: ChainLogoProps) 
   
   // Chain logo mappings - try multiple paths
   const chainLogos: Record<string, string[]> = {
+    eth: ['/logos/ethereum-eth-logo.png', '/ethereum-eth-logo.png', '/images/chains/logo/ethereum-eth-logo.png'],
     ethereum: ['/logos/ethereum-eth-logo.png', '/ethereum-eth-logo.png', '/images/chains/logo/ethereum-eth-logo.png'],
     base: ['/logos/base-logo.jpg', '/base-logo.jpg', '/images/chains/logo/base-logo.jpg'],
     op: ['/logos/optimism-ethereum-op-logo.png', '/optimism-ethereum-op-logo.png', '/images/chains/logo/optimism-ethereum-op-logo.png'],
+    arb: ['/logos/arbitrum-arb-logo.png', '/arbitrum-arb-logo.png', '/images/chains/logo/arbitrum-arb-logo.png'],
     arbitrum: ['/logos/arbitrum-arb-logo.png', '/arbitrum-arb-logo.png', '/images/chains/logo/arbitrum-arb-logo.png'],
     sonic: ['/logos/sonic-logo.jpg', '/sonic-logo.jpg', '/images/chains/logo/sonic-logo.jpg'],
     unichain: ['/logos/unichain-logo.jpg', '/unichain-logo.jpg', '/images/chains/logo/unichain-logo.jpg'],
@@ -33,9 +35,11 @@ export function ChainLogo({ chain, size = 48, className = '' }: ChainLogoProps) 
 
   // Fallback colors for each chain
   const fallbackColors: Record<string, string> = {
+    eth: 'from-gray-700 to-gray-800',
     ethereum: 'from-gray-700 to-gray-800',
     base: 'from-blue-500 to-blue-600',
     op: 'from-red-500 to-red-600',
+    arb: 'from-blue-600 to-indigo-600',
     arbitrum: 'from-blue-600 to-indigo-600',
     sonic: 'from-blue-400 to-cyan-500',
     unichain: 'from-pink-500 to-purple-600',
@@ -49,9 +53,11 @@ export function ChainLogo({ chain, size = 48, className = '' }: ChainLogoProps) 
 
   // Fallback letters for each chain
   const fallbackLetters: Record<string, string> = {
+    eth: 'Ξ',
     ethereum: 'Ξ',
     base: 'B',
     op: 'O',
+    arb: 'A',
     arbitrum: 'A',
     sonic: 'S',
     unichain: 'U',
