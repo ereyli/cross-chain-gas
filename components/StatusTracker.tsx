@@ -15,6 +15,8 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isFulfilling, setIsFulfilling] = useState(false);
+  const [autoFulfillAttempted, setAutoFulfillAttempted] = useState(false);
+  const [autoFulfillFailed, setAutoFulfillFailed] = useState(false);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -30,6 +32,38 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
 
         setStatus(data);
         setError(null);
+
+        // Auto-fulfill when status becomes PAID
+        if (data.status === 'PAID' && sourceTxHash && !autoFulfillAttempted) {
+          console.log('💰 Payment detected, starting auto-fulfill in 3 seconds...');
+          setAutoFulfillAttempted(true);
+          
+          // Wait 3 seconds then auto-fulfill
+          setTimeout(async () => {
+            try {
+              console.log('🚀 Auto-fulfilling order...');
+              const response = await fetch('/api/test-fulfill', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  orderId: orderId,
+                  txHash: sourceTxHash
+                })
+              });
+
+              if (!response.ok) {
+                throw new Error('Auto-fulfill failed');
+              }
+
+              console.log('✅ Auto-fulfill initiated successfully');
+            } catch (err) {
+              console.error('❌ Auto-fulfill failed:', err);
+              setAutoFulfillFailed(true);
+            }
+          }, 3000);
+        }
 
         // Stop polling if order is completed or failed
         if (data.status === 'DONE' || data.status === 'REFUNDED' || data.status === 'EXPIRED') {
@@ -169,8 +203,43 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
         </span>
       </div>
 
-      {/* Manual Fulfillment Button */}
-      {status.status === 'AWAITING_PAYMENT' && sourceTxHash && (
+      {/* Auto-fulfill Status */}
+      {status.status === 'PAID' && sourceTxHash && autoFulfillAttempted && !autoFulfillFailed && (
+        <div className="text-center">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
+            <div className="flex items-center justify-center space-x-2 mb-2">
+              <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+              <span className="text-sm text-blue-800 font-medium">Transfer tamamlanıyor...</span>
+            </div>
+            <p className="text-xs text-blue-600">Please wait while we process your transfer automatically.</p>
+          </div>
+        </div>
+      )}
+
+      {/* Manual Fulfillment Button - Only show if auto-fulfill failed */}
+      {status.status === 'AWAITING_PAYMENT' && sourceTxHash && autoFulfillFailed && (
+        <div className="text-center">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-3">
+            <div className="text-sm text-red-800 mb-2">
+              Automatic transfer failed. Please try manually.
+            </div>
+            <button
+              onClick={handleManualFulfillment}
+              disabled={isFulfilling}
+              className={`px-4 py-1 rounded-md font-medium transition-colors text-sm ${
+                isFulfilling
+                  ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                  : 'bg-red-600 text-white hover:bg-red-700'
+              }`}
+            >
+              {isFulfilling ? 'Processing...' : 'Try Again'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Legacy Manual Button - Only show if no auto-fulfill attempted yet */}
+      {status.status === 'AWAITING_PAYMENT' && sourceTxHash && !autoFulfillAttempted && (
         <div className="text-center">
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-3">
             <div className="text-sm text-yellow-800 mb-2">
