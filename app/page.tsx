@@ -140,9 +140,92 @@ export default function Home() {
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-1">
             GasUp
           </h1>
-          <p className="text-base text-gray-600">
+          <p className="text-base text-gray-600 mb-4">
             Cross-chain gas top-up service
           </p>
+
+          {/* Supported Networks - Compact */}
+          <div className="bg-white/60 backdrop-blur-lg p-4 rounded-xl border border-white/30 shadow-lg mb-4 max-w-4xl mx-auto">
+            <h3 className="text-sm font-semibold text-gray-900 mb-3 text-center">🌐 Supported Networks</h3>
+            <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
+              <div className="text-center">
+                <ChainLogo chain="ethereum" size={32} className="mx-auto mb-1" />
+                <p className="text-xs font-medium text-gray-700">Ethereum</p>
+              </div>
+              <div className="text-center">
+                <ChainLogo chain="base" size={32} className="mx-auto mb-1" />
+                <p className="text-xs font-medium text-gray-700">Base</p>
+              </div>
+              <div className="text-center">
+                <ChainLogo chain="op" size={32} className="mx-auto mb-1" />
+                <p className="text-xs font-medium text-gray-700">Optimism</p>
+              </div>
+              <div className="text-center">
+                <ChainLogo chain="arbitrum" size={32} className="mx-auto mb-1" />
+                <p className="text-xs font-medium text-gray-700">Arbitrum</p>
+              </div>
+              <div className="text-center">
+                <ChainLogo chain="sonic" size={32} className="mx-auto mb-1" />
+                <p className="text-xs font-medium text-gray-700">Sonic</p>
+              </div>
+              <div className="text-center">
+                <ChainLogo chain="unichain" size={32} className="mx-auto mb-1" />
+                <p className="text-xs font-medium text-gray-700">Unichain</p>
+              </div>
+              <div className="text-center">
+                <ChainLogo chain="ink" size={32} className="mx-auto mb-1" />
+                <p className="text-xs font-medium text-gray-700">Ink</p>
+              </div>
+              <div className="text-center">
+                <ChainLogo chain="hyperevm" size={32} className="mx-auto mb-1" />
+                <p className="text-xs font-medium text-gray-700">HyperEVM</p>
+              </div>
+              <div className="text-center">
+                <ChainLogo chain="linea" size={32} className="mx-auto mb-1" />
+                <p className="text-xs font-medium text-gray-700">Linea</p>
+              </div>
+              <div className="text-center">
+                <ChainLogo chain="polygon" size={32} className="mx-auto mb-1" />
+                <p className="text-xs font-medium text-gray-700">Polygon</p>
+              </div>
+              <div className="text-center">
+                <ChainLogo chain="abstract" size={32} className="mx-auto mb-1" />
+                <p className="text-xs font-medium text-gray-700">Abstract</p>
+              </div>
+              <div className="text-center">
+                <ChainLogo chain="zora" size={32} className="mx-auto mb-1" />
+                <p className="text-xs font-medium text-gray-700">Zora</p>
+              </div>
+            </div>
+            <p className="text-center text-xs text-gray-500 mt-2">Multi-chain bridge supporting 12+ networks</p>
+          </div>
+
+          {/* Sendwise Integration - Compact */}
+          <div className="bg-gradient-to-r from-purple-50/90 to-pink-50/90 backdrop-blur-lg border border-purple-200/50 rounded-xl p-4 text-center max-w-2xl mx-auto shadow-lg">
+            <div className="flex items-center justify-center mb-2">
+              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mr-2">
+                <span className="text-white text-sm">🚀</span>
+              </div>
+              <h3 className="text-base font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                Need Batch Transfers?
+              </h3>
+            </div>
+            <p className="text-gray-700 mb-3 text-sm leading-relaxed">
+              Send ETH and ERC20 tokens to multiple addresses at once with our partner platform
+            </p>
+            <a 
+              href="https://www.sendwise.xyz/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-pink-600 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl text-sm"
+            >
+              <span className="mr-1">🚀</span>
+              Try Sendwise
+              <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
+          </div>
         </div>
 
         {/* Error Display */}
