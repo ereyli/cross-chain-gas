@@ -19,21 +19,21 @@ export const CHAINS = {
 
 // Native USDC addresses
 export const USDC = {
-  base: "0x833589fCD6EDb6E08f4c7C32D4f71b54bdA02913",
-  op:   "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85",
-  arb:  "0xAf88d065e77c8cC2239327C5EDb3A432268e5831",
-  eth:  "0xA0b86a33E6417b8e93Fa4A138Ed7Bf6B9c1d7f2C",
-  polygon: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
-  linea: "0x176211869cA2b568f2A7D4EE941E073a821EE1ff",
+  base: "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+  op:   "0x0b2c639c533813f4aa9d7837caf62653d097ff85",
+  arb:  "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+  eth:  "0xa0b86a33e6417b8e93fa4a138ed7bf6b9c1d7f2c",
+  polygon: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+  linea: "0x176211869ca2b568f2a7d4ee941e073a821ee1ff",
   // Other chains will be added as they support USDC natively
 } as const;
 
 // USDT addresses
 export const USDT = {
-  op:  "0x94b008aa00579c1307B0EF2c499aD98a8ce58e58",
-  arb: "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
-  eth: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
-  polygon: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+  op:  "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58",
+  arb: "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+  eth: "0xdac17f958d2ee523a2206206994597c13d831ec7",
+  polygon: "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
   // Base USDT and other chains: keep disabled for now
 } as const;
 
