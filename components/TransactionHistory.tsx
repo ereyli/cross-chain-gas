@@ -86,20 +86,20 @@ export function TransactionHistory({ userAddress }: TransactionHistoryProps) {
 
   if (!userAddress) {
     return (
-      <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-3">📊 Transaction History</h3>
+      <div className="bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-700/50 p-6">
+        <h3 className="text-lg font-semibold text-gray-100 mb-3">📊 Transaction History</h3>
         <div className="text-center py-8">
           <div className="text-gray-400 mb-2">🔗</div>
-          <p className="text-gray-500">Connect your wallet to see transaction history</p>
+          <p className="text-gray-400">Connect your wallet to see transaction history</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 p-6">
+    <div className="bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-700/50 p-6">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">📊 Transaction History</h3>
+        <h3 className="text-lg font-semibold text-gray-100">📊 Transaction History</h3>
         <button
           onClick={fetchUserHistory}
           disabled={isLoading}
@@ -126,26 +126,26 @@ export function TransactionHistory({ userAddress }: TransactionHistoryProps) {
       ) : orders.length === 0 ? (
         <div className="text-center py-8">
           <div className="text-gray-400 mb-2">📭</div>
-          <p className="text-gray-500">No transactions found</p>
-          <p className="text-gray-400 text-sm">Your completed transfers will appear here</p>
+          <p className="text-gray-400">No transactions found</p>
+          <p className="text-gray-500 text-sm">Your completed transfers will appear here</p>
         </div>
       ) : (
         <div className="space-y-3 max-h-96 overflow-y-auto">
           {orders.map((order) => (
             <div
               key={order.id}
-              className="border border-white/30 rounded-xl p-4 hover:bg-white/50 transition-all hover:shadow-md backdrop-blur-sm bg-white/20"
+              className="border border-gray-600/50 rounded-xl p-4 hover:bg-gray-700/50 transition-all hover:shadow-md backdrop-blur-sm bg-gray-700/20"
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-1">
                     <ChainLogo chain={order.source_chain} size={16} />
-                    <span className="text-sm font-medium text-gray-700">
+                    <span className="text-sm font-medium text-gray-200">
                       {order.source_chain.toUpperCase()}
                     </span>
                     <span className="text-gray-400">→</span>
                     <ChainLogo chain={order.target_chain} size={16} />
-                    <span className="text-sm font-medium text-gray-700">
+                    <span className="text-sm font-medium text-gray-200">
                       {order.target_chain.toUpperCase()}
                     </span>
                   </div>
@@ -153,15 +153,15 @@ export function TransactionHistory({ userAddress }: TransactionHistoryProps) {
                     {getStatusText(order.status)}
                   </span>
                 </div>
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-gray-400">
                   {order.created_at ? formatDate(order.created_at) : 'Unknown date'}
                 </span>
               </div>
 
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <p className="text-gray-600">Amount: <span className="font-medium">${order.target_amount_usd}</span></p>
-                  <p className="text-gray-600">Asset: <span className="font-medium">{order.source_asset} → ETH</span></p>
+                  <p className="text-gray-300">Amount: <span className="font-medium">${order.target_amount_usd}</span></p>
+                  <p className="text-gray-300">Asset: <span className="font-medium">{order.source_asset} → ETH</span></p>
                 </div>
                 <div className="text-right">
                   {order.source_tx && (

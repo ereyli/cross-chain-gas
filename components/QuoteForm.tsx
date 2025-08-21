@@ -192,7 +192,7 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
       </div>
       
       <div className="space-y-2">
-        <label className="block text-sm font-semibold text-gray-700">
+        <label className="block text-sm font-semibold text-gray-200">
           Target Recipient Address
         </label>
         <div className="relative">
@@ -206,16 +206,16 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
             value={targetRecipient}
             onChange={(e) => setTargetRecipient(e.target.value)}
             placeholder="Enter the wallet address you want to send to"
-            className="w-full pl-9 pr-3 py-2 bg-white/70 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm font-mono text-sm"
+            className="w-full pl-9 pr-3 py-2 bg-gray-700/70 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm font-mono text-sm text-gray-100"
             required
           />
         </div>
-        <p className="text-xs text-gray-500">ETH will be sent to this address on the target chain</p>
+        <p className="text-xs text-gray-400">ETH will be sent to this address on the target chain</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="space-y-1">
-          <label className="block text-xs font-semibold text-gray-700">
+          <label className="block text-xs font-semibold text-gray-200">
             Source Chain
           </label>
           <CustomSelect
@@ -227,11 +227,11 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
             }))}
             placeholder="Select source chain"
           />
-          <p className="text-xs text-gray-500">Where you have funds</p>
+          <p className="text-xs text-gray-400">Where you have funds</p>
         </div>
 
         <div className="space-y-1">
-          <label className="block text-xs font-semibold text-gray-700">
+          <label className="block text-xs font-semibold text-gray-200">
             Source Asset
           </label>
           <div className="relative">
@@ -252,11 +252,11 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
               </svg>
             </div>
           </div>
-          <p className="text-xs text-gray-500">What you want to pay with</p>
+          <p className="text-xs text-gray-400">What you want to pay with</p>
         </div>
 
         <div className="space-y-1">
-          <label className="block text-xs font-semibold text-gray-700">
+          <label className="block text-xs font-semibold text-gray-200">
             Target Chain
           </label>
           <CustomSelect
@@ -269,13 +269,13 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
             }))}
             placeholder="Select target chain"
           />
-          <p className="text-xs text-gray-500">Where you want ETH</p>
+          <p className="text-xs text-gray-400">Where you want ETH</p>
         </div>
       </div>
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <label className="block text-xs font-semibold text-gray-700">
+          <label className="block text-xs font-semibold text-gray-200">
             Target Amount
           </label>
           <div className="flex items-center space-x-1">
@@ -285,7 +285,7 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
               className={`px-2 py-1 rounded text-xs font-medium transition-all ${
                 useSlider 
                   ? 'bg-blue-100 text-blue-700 border border-blue-200' 
-                  : 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200'
+                  : 'bg-gray-700 text-gray-300 border border-gray-600 hover:bg-gray-600'
               }`}
             >
               Slider
@@ -296,7 +296,7 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
               className={`px-2 py-1 rounded text-xs font-medium transition-all ${
                 !useSlider 
                   ? 'bg-blue-100 text-blue-700 border border-blue-200' 
-                  : 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200'
+                  : 'bg-gray-700 text-gray-300 border border-gray-600 hover:bg-gray-600'
               }`}
             >
               Manual
@@ -319,7 +319,7 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
                   background: `linear-gradient(to right, #3b82f6 0%, #8b5cf6 ${((targetAmountUsd - 1) / 9) * 100}%, #e5e7eb ${((targetAmountUsd - 1) / 9) * 100}%, #e5e7eb 100%)`
                 }}
               />
-              <div className="flex justify-between text-sm text-gray-500 mt-2">
+              <div className="flex justify-between text-sm text-gray-400 mt-2">
                 <span>$1</span>
                 <span className="font-semibold text-lg text-blue-600">${targetAmountUsd}</span>
                 <span>$10</span>
@@ -330,7 +330,7 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
           <div className="space-y-2">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span className="text-gray-500 text-lg">$</span>
+                <span className="text-gray-400 text-lg">$</span>
               </div>
               <input
                 type="number"
@@ -340,10 +340,10 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
                 value={manualAmount}
                 onChange={(e) => handleManualAmountChange(e.target.value)}
                 placeholder="5.0"
-                className="w-full pl-8 pr-4 py-3 bg-white/70 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm text-lg font-semibold text-center"
+                className="w-full pl-8 pr-4 py-3 bg-gray-700/70 border border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all backdrop-blur-sm text-lg font-semibold text-center text-gray-100"
               />
             </div>
-            <p className="text-xs text-gray-500 text-center">Enter amount between $1 - $10</p>
+            <p className="text-xs text-gray-400 text-center">Enter amount between $1 - $10</p>
           </div>
         )}
       </div>
@@ -364,8 +364,8 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {/* Route Info */}
-            <div className="flex items-center justify-between p-2 bg-white/60 rounded-lg border border-white/30">
-              <span className="text-xs font-medium text-gray-600">Route</span>
+            <div className="flex items-center justify-between p-2 bg-gray-700/60 rounded-lg border border-gray-600/30">
+              <span className="text-xs font-medium text-gray-300">Route</span>
               <div className="flex items-center space-x-1">
                 <span className="px-1 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-medium">
                   {sourceChain.toUpperCase()}
@@ -379,13 +379,13 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
               </div>
             </div>
             
-            <div className="flex items-center justify-between p-2 bg-white/60 rounded-lg border border-white/30">
-              <span className="text-xs font-medium text-gray-600">Amount</span>
+            <div className="flex items-center justify-between p-2 bg-gray-700/60 rounded-lg border border-gray-600/30">
+              <span className="text-xs font-medium text-gray-300">Amount</span>
               <span className="text-xs font-bold text-green-600">${targetAmountUsd}</span>
             </div>
             
-            <div className="flex items-center justify-between p-2 bg-white/60 rounded-lg border border-white/30">
-              <span className="text-xs font-medium text-gray-600">Status</span>
+            <div className="flex items-center justify-between p-2 bg-gray-700/60 rounded-lg border border-gray-600/30">
+              <span className="text-xs font-medium text-gray-300">Status</span>
               <div className="flex items-center space-x-1">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 <span className="text-xs text-green-600 font-medium">Ready</span>

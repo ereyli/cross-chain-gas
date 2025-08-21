@@ -190,7 +190,7 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
 
   if (isLoading) {
     return (
-      <div className="p-6 bg-white rounded-lg shadow-lg">
+      <div className="p-6 bg-gray-800 rounded-lg shadow-lg">
         <div className="animate-pulse">
           <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
           <div className="h-8 bg-gray-200 rounded w-1/2"></div>
@@ -201,7 +201,7 @@ export function StatusTracker({ orderId, sourceTxHash, onCompleted }: StatusTrac
 
   if (error) {
     return (
-      <div className="p-6 bg-white rounded-lg shadow-lg">
+      <div className="p-6 bg-gray-800 rounded-lg shadow-lg">
         <div className="text-red-600 font-medium">Error: {error}</div>
       </div>
     );
