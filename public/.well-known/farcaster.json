@@ -1,10 +1,38 @@
 {
+  "id": "gasup-cross-chain-gas",
   "version": "1.0.0",
   "name": "GasUp",
+  "short_name": "GasUp",
   "description": "Cross-chain gas top-up service for Farcaster users. Bridge ETH and tokens seamlessly between 12+ blockchain networks.",
+  "themeColor": "#2563eb",
+  "backgroundColor": "#0f172a",
+  "startUrl": "/",
+  "display": "standalone",
+  "orientation": "portrait",
   "icon": "https://cross-chain-gas.vercel.app/logos/gasup-logo.png",
+  "icons": [
+    {
+      "src": "https://cross-chain-gas.vercel.app/logos/gasup-logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://cross-chain-gas.vercel.app/logos/gasup-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
   "homeUrl": "https://cross-chain-gas.vercel.app",
   "webhookUrl": "https://cross-chain-gas.vercel.app/api/webhook",
+  "splashImageUrl": "https://cross-chain-gas.vercel.app/logos/gasup-splash.svg",
+  "splashBackgroundColor": "#0f172a",
+  "heroImageUrl": "https://cross-chain-gas.vercel.app/logos/gasup-hero.svg",
+  "tagline": "Cross-chain gas made simple",
+  "screenshotUrls": [
+    "https://cross-chain-gas.vercel.app/logos/gasup-hero.svg"
+  ],
   "actions": [
     {
       "name": "Get Gas Quote",
@@ -37,6 +65,7 @@
   "verification": {
     "domain": "cross-chain-gas.vercel.app"
   },
+  "primaryCategory": "finance",
   "categories": ["finance", "utilities", "defi"],
   "tags": [
     "bridge",

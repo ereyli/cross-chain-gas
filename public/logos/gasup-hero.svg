@@ -1,0 +1,64 @@
+<svg width="800" height="400" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="400" fill="url(#backgroundGradient)"/>
+  
+  <!-- Bridge Icon -->
+  <g transform="translate(100, 80)">
+    <!-- Bridge Structure -->
+    <path d="M0 120 L200 0 L400 120 L400 160 L0 160 Z" fill="url(#bridgeGradient)" opacity="0.9"/>
+    
+    <!-- Bridge Pillars -->
+    <rect x="50" y="160" width="25" height="60" fill="#ffffff" opacity="0.8"/>
+    <rect x="150" y="160" width="25" height="60" fill="#ffffff" opacity="0.8"/>
+    <rect x="250" y="160" width="25" height="60" fill="#ffffff" opacity="0.8"/>
+    <rect x="350" y="160" width="25" height="60" fill="#ffffff" opacity="0.8"/>
+    
+    <!-- Chain Links -->
+    <circle cx="100" cy="90" r="12" fill="#ffffff" opacity="0.7"/>
+    <circle cx="150" cy="90" r="12" fill="#ffffff" opacity="0.7"/>
+    <circle cx="200" cy="90" r="12" fill="#ffffff" opacity="0.7"/>
+    <circle cx="250" cy="90" r="12" fill="#ffffff" opacity="0.7"/>
+    <circle cx="300" cy="90" r="12" fill="#ffffff" opacity="0.7"/>
+    
+    <!-- Connecting Lines -->
+    <line x1="88" y1="90" x2="138" y2="90" stroke="#ffffff" stroke-width="3" opacity="0.7"/>
+    <line x1="138" y1="90" x2="188" y2="90" stroke="#ffffff" stroke-width="3" opacity="0.7"/>
+    <line x1="188" y1="90" x2="238" y2="90" stroke="#ffffff" stroke-width="3" opacity="0.7"/>
+    <line x1="238" y1="90" x2="288" y2="90" stroke="#ffffff" stroke-width="3" opacity="0.7"/>
+  </g>
+  
+  <!-- GasUp Text -->
+  <text x="400" y="280" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="64" font-weight="bold">GasUp</text>
+  <text x="400" y="320" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" opacity="0.8">Cross-Chain Gas Made Simple</text>
+  
+  <!-- Chain Icons -->
+  <g transform="translate(400, 340)">
+    <!-- Ethereum -->
+    <circle cx="-60" cy="0" r="20" fill="none" stroke="white" stroke-width="2" opacity="0.6"/>
+    <path d="M-48,-12 L-32,-12 L-28,-4 L-32,4 L-48,4 L-44,-4 Z" fill="white" opacity="0.6"/>
+    
+    <!-- Base -->
+    <circle cx="-20" cy="0" r="20" fill="none" stroke="white" stroke-width="2" opacity="0.6"/>
+    <circle cx="-20" cy="0" r="12" fill="white" opacity="0.6"/>
+    
+    <!-- Arbitrum -->
+    <circle cx="20" cy="0" r="20" fill="none" stroke="white" stroke-width="2" opacity="0.6"/>
+    <path d="M8,-8 L32,-8 L28,0 L32,8 L8,8 L12,0 Z" fill="white" opacity="0.6"/>
+    
+    <!-- Optimism -->
+    <circle cx="60" cy="0" r="20" fill="none" stroke="white" stroke-width="2" opacity="0.6"/>
+    <path d="M48,-8 L72,-8 L68,0 L72,8 L48,8 L52,0 Z" fill="white" opacity="0.6"/>
+  </g>
+  
+  <defs>
+    <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1e293b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="bridgeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563eb;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>
