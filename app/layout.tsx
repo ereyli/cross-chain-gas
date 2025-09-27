@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { WagmiProviderWrapper } from '../components/WagmiProvider';
 import { WebWalletProvider } from '../components/WebWalletProvider';
 
 export const metadata: Metadata = {
@@ -51,11 +50,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <WagmiProviderWrapper>
-          <WebWalletProvider>
-            {children}
-          </WebWalletProvider>
-        </WagmiProviderWrapper>
+        <WebWalletProvider>
+          {children}
+        </WebWalletProvider>
       </body>
     </html>
   );

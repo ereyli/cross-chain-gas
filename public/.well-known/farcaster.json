@@ -3,7 +3,7 @@
     "version": "1",
     "name": "GasUp",
     "subtitle": "Cross-chain gas top-up service",
-    "description": "Cross-chain gas top-up service for Farcaster users. Bridge ETH and tokens seamlessly between 12+ blockchain networks.",
+    "description": "Cross-chain gas top-up service for Farcaster users.",
     "iconUrl": "https://cross-chain-gas.vercel.app/logos/gasup-logo.png",
     "homeUrl": "https://cross-chain-gas.vercel.app",
     "splashImageUrl": "https://cross-chain-gas.vercel.app/logos/gasup-splash.svg",
@@ -15,12 +15,7 @@
     ],
     "primaryCategory": "finance",
     "tags": [
-      "bridge",
-      "cross-chain",
-      "gas",
-      "ethereum",
-      "defi",
-      "multi-chain"
+      "bridge",cross-chain"
     ],
     "webhookUrl": "https://cross-chain-gas.vercel.app/api/webhook",
     "actions": [

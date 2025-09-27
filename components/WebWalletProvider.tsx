@@ -4,17 +4,25 @@ import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { rainbowkitConfig } from '../lib/rainbowkit-config';
+import { wagmiConfig } from '../lib/wagmi-config';
 import { isFarcasterEnvironment } from '../lib/farcaster';
 import { useState } from 'react';
 
 export function WebWalletProvider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
 
-  // Sadece web ortamında RainbowKit kullan (Farcaster'da değil)
+  // Farcaster ortamında sadece Wagmi (Farcaster wallet)
   if (isFarcasterEnvironment()) {
-    return <>{children}</>;
+    return (
+      <WagmiProvider config={wagmiConfig}>
+        <QueryClientProvider client={queryClient}>
+          {children}
+        </QueryClientProvider>
+      </WagmiProvider>
+    );
   }
 
+  // Web ortamında RainbowKit (web wallets)
   return (
     <WagmiProvider config={rainbowkitConfig}>
       <QueryClientProvider client={queryClient}>
