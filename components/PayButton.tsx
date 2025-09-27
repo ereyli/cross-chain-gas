@@ -5,9 +5,9 @@ import { ethers } from 'ethers';
 import { formatTokenAmount } from '../lib/prices';
 import { CHAINS } from '../lib/chains';
 import { ChainLogo } from './ChainLogo';
-import { getFarcasterWallet, connectFarcasterWallet, isFarcasterEnvironment } from '../lib/farcaster';
+import { isFarcasterEnvironment } from '../lib/farcaster';
 import { connectWallet, checkWalletConnection as checkWalletConnectionLib, getPreferredWallet } from '../lib/wallets';
-import { sdk } from '@farcaster/miniapp-sdk';
+import { useAccount, useConnect, useSendTransaction } from 'wagmi';
 import type { QuoteResponse, StatusResponse } from '../types';
 
 interface PayButtonProps {
@@ -22,23 +22,23 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
   const [account, setAccount] = useState<string | null>(null);
   const [chainId, setChainId] = useState<number | null>(null);
   const [timeLeft, setTimeLeft] = useState<number>(0);
-  const [isFarcasterMode, setIsFarcasterMode] = useState(false);
-  const [farcasterWallet, setFarcasterWallet] = useState<any>(null);
   const [walletProvider, setWalletProvider] = useState<string>('');
+  
+  // Wagmi hooks - sadece Farcaster ortamında kullanılır
+  const { isConnected, address: wagmiAddress, connector } = useAccount();
+  const { connect } = useConnect();
+  const { sendTransaction } = useSendTransaction();
 
   const checkWalletConnection = useCallback(async () => {
     if (isFarcasterEnvironment()) {
-      // Farcaster ortamında Farcaster wallet'ı kontrol et
-      try {
-        const farcasterWallet = await getFarcasterWallet();
-        if (farcasterWallet && farcasterWallet.address) {
-          setAccount(farcasterWallet.address);
-          setChainId(farcasterWallet.chainId);
-          setIsFarcasterMode(true);
-          setWalletProvider('Farcaster Wallet');
+      // Farcaster ortamında Wagmi hooks kullan
+      if (isConnected && wagmiAddress) {
+        setAccount(wagmiAddress);
+        setWalletProvider('Farcaster Wallet');
+        // Chain ID'yi Wagmi'dan al
+        if (connector) {
+          // Connector'dan chain ID al
         }
-      } catch (error) {
-        console.error('Error checking Farcaster wallet:', error);
       }
     } else {
       // Web ortamında mevcut wallet'ları kontrol et
@@ -59,11 +59,10 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
         console.error('Error checking wallet connection:', error);
       }
     }
-  }, []);
+  }, [isConnected, wagmiAddress, connector]);
 
   useEffect(() => {
     checkWalletConnection();
-    checkFarcasterWallet();
     
     const timer = setInterval(() => {
       const now = Math.floor(Date.now() / 1000);
@@ -74,21 +73,7 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
     return () => clearInterval(timer);
   }, [quote.expiresAt, checkWalletConnection]);
 
-  const checkFarcasterWallet = async () => {
-    if (isFarcasterEnvironment()) {
-      try {
-        const wallet = await getFarcasterWallet();
-        if (wallet && wallet.address) {
-          setFarcasterWallet(wallet);
-          setAccount(wallet.address);
-          setChainId(wallet.chainId);
-          setIsFarcasterMode(true);
-        }
-      } catch (error) {
-        console.error('Error checking Farcaster wallet:', error);
-      }
-    }
-  };
+  // Farcaster wallet kontrolü artık Wagmi hooks ile yapılıyor
 
   const handleConnectWallet = async () => {
     setIsConnecting(true);
@@ -98,13 +83,9 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
       let provider = '';
 
       if (isFarcasterEnvironment()) {
-        // Farcaster ortamında Farcaster wallet'ı kullan
-        const wallet = await connectFarcasterWallet();
-        if (wallet && wallet.address) {
-          setFarcasterWallet(wallet);
-          setAccount(wallet.address);
-          setChainId(wallet.chainId);
-          setIsFarcasterMode(true);
+        // Farcaster ortamında Wagmi connect kullan
+        if (connector) {
+          await connect({ connector });
           setWalletProvider('Farcaster Wallet');
         }
       } else {
@@ -165,27 +146,14 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
     try {
       let tx;
 
-      if (isFarcasterMode && farcasterWallet) {
-        // Use Farcaster wallet for transaction via ethProvider
-        if (quote.txTemplate.kind === 'ETH') {
-          tx = await sdk.wallet.ethProvider.request({
-            method: 'eth_sendTransaction',
-            params: [{
-              to: quote.txTemplate.to as `0x${string}`,
-              value: quote.txTemplate.value! as `0x${string}`,
-              from: farcasterWallet.address as `0x${string}`,
-            }],
-          });
-        } else {
-          tx = await sdk.wallet.ethProvider.request({
-            method: 'eth_sendTransaction',
-            params: [{
-              to: quote.txTemplate.to as `0x${string}`,
-              data: quote.txTemplate.data! as `0x${string}`,
-              from: farcasterWallet.address as `0x${string}`,
-            }],
-          });
-        }
+      if (isFarcasterEnvironment() && isConnected) {
+        // Use Wagmi sendTransaction for Farcaster wallet
+        const result = await sendTransaction({
+          to: quote.txTemplate.to as `0x${string}`,
+          value: quote.txTemplate.value ? BigInt(quote.txTemplate.value) : BigInt(0),
+          data: quote.txTemplate.data as `0x${string}`,
+        });
+        tx = result;
       } else if (typeof window.ethereum !== 'undefined') {
         // Use standard wallet
         const sourceChain = quote.sourceChain;
@@ -221,7 +189,7 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
         throw new Error('No wallet available');
       }
 
-      onPaymentSent(typeof tx === 'string' ? tx : tx.hash);
+      onPaymentSent(typeof tx === 'string' ? tx : (tx as any)?.hash || tx);
     } catch (error: any) {
       if (error.code === 4001) {
         onError('Transaction rejected by user');

@@ -11,6 +11,12 @@
       "path": "/",
       "description": "Get a cross-chain gas top-up quote",
       "icon": "https://cross-chain-gas.vercel.app/logos/gasup-logo.png"
+    },
+    {
+      "name": "View History",
+      "path": "/history",
+      "description": "View your transaction history",
+      "icon": "https://cross-chain-gas.vercel.app/logos/gasup-logo.png"
     }
   ],
   "supportedChains": [
@@ -30,5 +36,24 @@
   "minSdkVersion": "0.1.0",
   "verification": {
     "domain": "cross-chain-gas.vercel.app"
+  },
+  "categories": ["finance", "utilities", "defi"],
+  "tags": [
+    "bridge",
+    "cross-chain",
+    "gas",
+    "ethereum",
+    "defi",
+    "multi-chain"
+  ],
+  "author": {
+    "name": "GasUp Team",
+    "url": "https://cross-chain-gas.vercel.app"
+  },
+  "privacy": {
+    "policyUrl": "https://cross-chain-gas.vercel.app/privacy"
+  },
+  "terms": {
+    "termsUrl": "https://cross-chain-gas.vercel.app/terms"
   }
 }

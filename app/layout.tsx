@@ -37,6 +37,9 @@ export const metadata: Metadata = {
     'fc:miniapp:button:1': 'Get Gas Quote',
     'fc:miniapp:button:1:action': 'https://cross-chain-gas.vercel.app/',
     'fc:miniapp:button:1:target': 'frame',
+    'fc:miniapp:button:2': 'View History',
+    'fc:miniapp:button:2:action': 'https://cross-chain-gas.vercel.app/history',
+    'fc:miniapp:button:2:target': 'frame',
   },
 };
 

@@ -1,8 +1,6 @@
 'use client';
 
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
-import { useSendCalls } from 'wagmi';
-import { parseEther } from 'viem';
 import { isFarcasterEnvironment } from '../lib/farcaster';
 import { useState } from 'react';
 
@@ -15,7 +13,6 @@ export function FarcasterWallet({ onWalletConnected, onError }: FarcasterWalletP
   const { isConnected, address } = useAccount();
   const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
-  const { sendCalls } = useSendCalls();
   const [isConnecting, setIsConnecting] = useState(false);
 
   // Sadece Farcaster ortamında render et

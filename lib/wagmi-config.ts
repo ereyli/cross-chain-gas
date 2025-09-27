@@ -3,7 +3,7 @@ import { mainnet, base, arbitrum, optimism, polygon, linea } from 'wagmi/chains'
 import { farcasterMiniApp as miniAppConnector } from '@farcaster/miniapp-wagmi-connector';
 import { isFarcasterEnvironment } from './farcaster';
 
-// Wagmi konfigürasyonu
+// Wagmi konfigürasyonu - sadece Farcaster ortamında kullanılır
 export const wagmiConfig = createConfig({
   chains: [mainnet, base, arbitrum, optimism, polygon, linea],
   transports: {
@@ -15,8 +15,7 @@ export const wagmiConfig = createConfig({
     [linea.id]: http(),
   },
   connectors: [
-    // Sadece Farcaster ortamında Mini App connector'ı kullan
-    ...(isFarcasterEnvironment() ? [miniAppConnector()] : []),
+    miniAppConnector(), // Farcaster Mini App connector
   ],
 });
 
