@@ -8,6 +8,12 @@ import { TransactionHistory } from '../components/TransactionHistory';
 import { ChainLogo } from '../components/ChainLogo';
 import { formatTokenAmount } from '../lib/prices';
 import { CHAINS } from '../lib/chains';
+import { useFarcaster, isFarcasterEnvironment } from '../lib/farcaster';
+import { WalletConnector } from '../components/WalletConnector';
+import { FarcasterWallet } from '../components/FarcasterWallet';
+import { CustomRainbowConnectButton } from '../components/RainbowConnectButton';
+import { LoadingSpinner } from '../components/LoadingSpinner';
+import { useAppLoading } from '../lib/use-app-loading';
 import type { QuoteResponse } from '../types';
 
 export default function Home() {
@@ -16,6 +22,13 @@ export default function Home() {
   const [paymentTxHash, setPaymentTxHash] = useState<string | null>(null);
   const [connectedAccount, setConnectedAccount] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState<'quote' | 'payment' | 'tracking' | 'completed'>('quote');
+  const [walletProvider, setWalletProvider] = useState<string>('');
+  
+  // Farcaster integration
+  const { user: farcasterUser, isLoading: farcasterLoading, isReady: farcasterReady, error: farcasterError } = useFarcaster();
+  
+  // App loading management
+  const { isLoading: appLoading, isReady: appReady } = useAppLoading();
 
   // Check for connected wallet on page load
   useEffect(() => {
@@ -81,6 +94,11 @@ export default function Home() {
     setCurrentStep('completed');
   };
 
+  const handleWalletConnected = (address: string, provider: string) => {
+    setConnectedAccount(address);
+    setWalletProvider(provider);
+  };
+
   const getChainName = (chainKey: string) => {
     return chainKey.toUpperCase();
   };
@@ -129,6 +147,11 @@ export default function Home() {
     );
   };
 
+  // Show loading spinner while app is initializing
+  if (appLoading || !appReady) {
+    return <LoadingSpinner message="Initializing GasUp..." />;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-gray-900 py-4">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -143,6 +166,56 @@ export default function Home() {
           <p className="text-base text-gray-300 mb-4">
             Cross-chain gas top-up service
           </p>
+
+          {/* Farcaster User Info */}
+          {isFarcasterEnvironment() && farcasterReady && (
+            <div className="mb-4">
+              {farcasterUser ? (
+                <div className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 backdrop-blur-lg border border-purple-500/30 rounded-xl p-4 max-w-md mx-auto">
+                  <div className="flex items-center justify-center space-x-3">
+                    {farcasterUser.pfpUrl && (
+                      <img 
+                        src={farcasterUser.pfpUrl} 
+                        alt={farcasterUser.displayName}
+                        className="w-10 h-10 rounded-full border-2 border-purple-500/50"
+                      />
+                    )}
+                    <div className="text-left">
+                      <div className="text-sm font-semibold text-purple-200">
+                        {farcasterUser.displayName || farcasterUser.username}
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        @{farcasterUser.username} • FID: {farcasterUser.fid}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-gradient-to-r from-gray-800/50 to-blue-900/20 backdrop-blur-lg border border-gray-600/30 rounded-xl p-3 max-w-md mx-auto">
+                  <div className="text-sm text-gray-300">
+                    🌟 Welcome to GasUp! Connect your wallet to get started.
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Wallet Connection Status */}
+          {isFarcasterEnvironment() ? (
+            <div className="mb-4 max-w-md mx-auto">
+              <FarcasterWallet 
+                onWalletConnected={(address) => handleWalletConnected(address, 'Farcaster Wallet')}
+                onError={handleError}
+              />
+            </div>
+          ) : (
+            <div className="mb-4 max-w-md mx-auto">
+              <CustomRainbowConnectButton 
+                onWalletConnected={handleWalletConnected}
+                onError={handleError}
+              />
+            </div>
+          )}
 
           {/* Supported Networks - Compact */}
           <div className="bg-gray-800/80 backdrop-blur-lg p-4 rounded-xl border border-gray-700/50 shadow-lg mb-4 max-w-4xl mx-auto">

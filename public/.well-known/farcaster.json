@@ -1,0 +1,34 @@
+{
+  "version": "1.0.0",
+  "name": "GasUp",
+  "description": "Cross-chain gas top-up service for Farcaster users. Bridge ETH and tokens seamlessly between 12+ blockchain networks.",
+  "icon": "https://cross-chain-gas.vercel.app/logos/gasup-logo.png",
+  "homeUrl": "https://cross-chain-gas.vercel.app",
+  "webhookUrl": "https://cross-chain-gas.vercel.app/api/webhook",
+  "actions": [
+    {
+      "name": "Get Gas Quote",
+      "path": "/",
+      "description": "Get a cross-chain gas top-up quote",
+      "icon": "https://cross-chain-gas.vercel.app/logos/gasup-logo.png"
+    }
+  ],
+  "supportedChains": [
+    "ethereum",
+    "base", 
+    "arbitrum",
+    "optimism",
+    "polygon",
+    "linea",
+    "sonic",
+    "unichain",
+    "ink",
+    "hyperevm",
+    "abstract",
+    "zora"
+  ],
+  "minSdkVersion": "0.1.0",
+  "verification": {
+    "domain": "cross-chain-gas.vercel.app"
+  }
+}

@@ -10,6 +10,7 @@ const nextConfig = {
       'aws-sdk': false,
       '@aws-sdk/client-lambda': false,
       'aws-sdk/clients/lambda': false,
+      '@react-native-async-storage/async-storage': false,
     };
     
     // Exclude AWS SDK from client bundle

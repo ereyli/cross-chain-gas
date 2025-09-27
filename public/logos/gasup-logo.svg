@@ -1,0 +1,50 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8B5CF6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="bridgeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#F59E0B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#EF4444;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="url(#bgGradient)" stroke="#1E293B" stroke-width="8"/>
+  
+  <!-- Bridge structure -->
+  <!-- Left pillar -->
+  <rect x="80" y="180" width="20" height="200" fill="#64748B" rx="10"/>
+  <!-- Right pillar -->
+  <rect x="412" y="180" width="20" height="200" fill="#64748B" rx="10"/>
+  
+  <!-- Bridge deck -->
+  <rect x="70" y="320" width="372" height="24" fill="url(#bridgeGradient)" rx="12"/>
+  
+  <!-- Bridge cables -->
+  <path d="M100 200 Q256 280 412 200" stroke="#F59E0B" stroke-width="4" fill="none"/>
+  <path d="M100 220 Q256 300 412 220" stroke="#F59E0B" stroke-width="3" fill="none"/>
+  <path d="M100 240 Q256 320 412 240" stroke="#F59E0B" stroke-width="2" fill="none"/>
+  
+  <!-- Connection dots on bridge -->
+  <circle cx="140" cy="332" r="6" fill="#FFFFFF"/>
+  <circle cx="200" cy="332" r="6" fill="#FFFFFF"/>
+  <circle cx="256" cy="332" r="8" fill="#FFFFFF"/>
+  <circle cx="312" cy="332" r="6" fill="#FFFFFF"/>
+  <circle cx="372" cy="332" r="6" fill="#FFFFFF"/>
+  
+  <!-- GasUp text -->
+  <text x="256" y="140" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="32" font-weight="bold">GasUp</text>
+  
+  <!-- Subtitle -->
+  <text x="256" y="170" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" opacity="0.9">Cross-Chain Bridge</text>
+  
+  <!-- Decorative elements -->
+  <circle cx="120" cy="120" r="3" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="392" cy="120" r="3" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="120" cy="392" r="3" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="392" cy="392" r="3" fill="#FFFFFF" opacity="0.6"/>
+</svg>

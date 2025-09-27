@@ -1,10 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ethers } from 'ethers';
 import { formatTokenAmount } from '../lib/prices';
 import { CHAINS } from '../lib/chains';
 import { ChainLogo } from './ChainLogo';
+import { getFarcasterWallet, connectFarcasterWallet, isFarcasterEnvironment } from '../lib/farcaster';
+import { connectWallet, checkWalletConnection as checkWalletConnectionLib, getPreferredWallet } from '../lib/wallets';
+import { sdk } from '@farcaster/miniapp-sdk';
 import type { QuoteResponse, StatusResponse } from '../types';
 
 interface PayButtonProps {
@@ -19,9 +22,48 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
   const [account, setAccount] = useState<string | null>(null);
   const [chainId, setChainId] = useState<number | null>(null);
   const [timeLeft, setTimeLeft] = useState<number>(0);
+  const [isFarcasterMode, setIsFarcasterMode] = useState(false);
+  const [farcasterWallet, setFarcasterWallet] = useState<any>(null);
+  const [walletProvider, setWalletProvider] = useState<string>('');
+
+  const checkWalletConnection = useCallback(async () => {
+    if (isFarcasterEnvironment()) {
+      // Farcaster ortamında Farcaster wallet'ı kontrol et
+      try {
+        const farcasterWallet = await getFarcasterWallet();
+        if (farcasterWallet && farcasterWallet.address) {
+          setAccount(farcasterWallet.address);
+          setChainId(farcasterWallet.chainId);
+          setIsFarcasterMode(true);
+          setWalletProvider('Farcaster Wallet');
+        }
+      } catch (error) {
+        console.error('Error checking Farcaster wallet:', error);
+      }
+    } else {
+      // Web ortamında mevcut wallet'ları kontrol et
+      try {
+        const { address, provider } = await checkWalletConnectionLib();
+        if (address) {
+          setAccount(address);
+          setWalletProvider(provider || 'Unknown Wallet');
+          
+          // Chain ID'yi al
+          if (typeof window.ethereum !== 'undefined') {
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            const network = await provider.getNetwork();
+            setChainId(Number(network.chainId));
+          }
+        }
+      } catch (error) {
+        console.error('Error checking wallet connection:', error);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     checkWalletConnection();
+    checkFarcasterWallet();
     
     const timer = setInterval(() => {
       const now = Math.floor(Date.now() / 1000);
@@ -30,42 +72,61 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [quote.expiresAt]);
+  }, [quote.expiresAt, checkWalletConnection]);
 
-  const checkWalletConnection = async () => {
-    if (typeof window.ethereum !== 'undefined') {
+  const checkFarcasterWallet = async () => {
+    if (isFarcasterEnvironment()) {
       try {
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        const accounts = await provider.listAccounts();
-        if (accounts.length > 0) {
-          setAccount(accounts[0].address);
-          const network = await provider.getNetwork();
-          setChainId(Number(network.chainId));
+        const wallet = await getFarcasterWallet();
+        if (wallet && wallet.address) {
+          setFarcasterWallet(wallet);
+          setAccount(wallet.address);
+          setChainId(wallet.chainId);
+          setIsFarcasterMode(true);
         }
       } catch (error) {
-        console.error('Error checking wallet connection:', error);
+        console.error('Error checking Farcaster wallet:', error);
       }
     }
   };
 
-  const connectWallet = async () => {
-    if (typeof window.ethereum === 'undefined') {
-      onError('Please install MetaMask or another Ethereum wallet');
-      return;
-    }
-
+  const handleConnectWallet = async () => {
     setIsConnecting(true);
+    
     try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      await provider.send('eth_requestAccounts', []);
-      const signer = await provider.getSigner();
-      const address = await signer.getAddress();
-      const network = await provider.getNetwork();
-      
-      setAccount(address);
-      setChainId(Number(network.chainId));
+      let address: string | null = null;
+      let provider = '';
+
+      if (isFarcasterEnvironment()) {
+        // Farcaster ortamında Farcaster wallet'ı kullan
+        const wallet = await connectFarcasterWallet();
+        if (wallet && wallet.address) {
+          setFarcasterWallet(wallet);
+          setAccount(wallet.address);
+          setChainId(wallet.chainId);
+          setIsFarcasterMode(true);
+          setWalletProvider('Farcaster Wallet');
+        }
+      } else {
+        // Web ortamında öncelikli wallet'ı kullan
+        address = await connectWallet();
+        const preferredWallet = getPreferredWallet();
+        provider = preferredWallet?.name || 'Unknown Wallet';
+        
+        if (address) {
+          setAccount(address);
+          setWalletProvider(provider);
+          
+          // Chain ID'yi al
+          if (typeof window.ethereum !== 'undefined') {
+            const ethersProvider = new ethers.BrowserProvider(window.ethereum);
+            const network = await ethersProvider.getNetwork();
+            setChainId(Number(network.chainId));
+          }
+        }
+      }
     } catch (error) {
-      onError('Failed to connect wallet');
+      onError(error instanceof Error ? error.message : 'Failed to connect wallet');
     } finally {
       setIsConnecting(false);
     }
@@ -90,7 +151,7 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
   };
 
   const sendPayment = async () => {
-    if (!account || typeof window.ethereum === 'undefined') {
+    if (!account) {
       onError('Wallet not connected');
       return;
     }
@@ -102,41 +163,65 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
 
     setIsPaying(true);
     try {
-      // Disable ENS for non-Ethereum chains
-      const sourceChain = quote.sourceChain;
-      const ensSupported = sourceChain === 'eth'; // Only Ethereum mainnet supports ENS
-      
-      // For non-Ethereum chains, don't pass network config to avoid ENS issues
-      let provider;
-      try {
-        provider = ensSupported 
-          ? new ethers.BrowserProvider(window.ethereum, {
-              chainId: CHAINS[sourceChain].id,
-              name: sourceChain
-            })
-          : new ethers.BrowserProvider(window.ethereum); // No network config for non-ETH chains
-      } catch (error) {
-        // Fallback: create provider without any network config
-        console.warn('Failed to create provider with network config, using fallback:', error);
-        provider = new ethers.BrowserProvider(window.ethereum);
-      }
-      
-      const signer = await provider.getSigner();
-
       let tx;
-      if (quote.txTemplate.kind === 'ETH') {
-        tx = await signer.sendTransaction({
-          to: quote.txTemplate.to,
-          value: quote.txTemplate.value!,
-        });
+
+      if (isFarcasterMode && farcasterWallet) {
+        // Use Farcaster wallet for transaction via ethProvider
+        if (quote.txTemplate.kind === 'ETH') {
+          tx = await sdk.wallet.ethProvider.request({
+            method: 'eth_sendTransaction',
+            params: [{
+              to: quote.txTemplate.to as `0x${string}`,
+              value: quote.txTemplate.value! as `0x${string}`,
+              from: farcasterWallet.address as `0x${string}`,
+            }],
+          });
+        } else {
+          tx = await sdk.wallet.ethProvider.request({
+            method: 'eth_sendTransaction',
+            params: [{
+              to: quote.txTemplate.to as `0x${string}`,
+              data: quote.txTemplate.data! as `0x${string}`,
+              from: farcasterWallet.address as `0x${string}`,
+            }],
+          });
+        }
+      } else if (typeof window.ethereum !== 'undefined') {
+        // Use standard wallet
+        const sourceChain = quote.sourceChain;
+        const ensSupported = sourceChain === 'eth';
+        
+        let provider;
+        try {
+          provider = ensSupported 
+            ? new ethers.BrowserProvider(window.ethereum, {
+                chainId: CHAINS[sourceChain].id,
+                name: sourceChain
+              })
+            : new ethers.BrowserProvider(window.ethereum);
+        } catch (error) {
+          console.warn('Failed to create provider with network config, using fallback:', error);
+          provider = new ethers.BrowserProvider(window.ethereum);
+        }
+        
+        const signer = await provider.getSigner();
+
+        if (quote.txTemplate.kind === 'ETH') {
+          tx = await signer.sendTransaction({
+            to: quote.txTemplate.to,
+            value: quote.txTemplate.value!,
+          });
+        } else {
+          tx = await signer.sendTransaction({
+            to: quote.txTemplate.to,
+            data: quote.txTemplate.data!,
+          });
+        }
       } else {
-        tx = await signer.sendTransaction({
-          to: quote.txTemplate.to,
-          data: quote.txTemplate.data!,
-        });
+        throw new Error('No wallet available');
       }
 
-      onPaymentSent(tx.hash);
+      onPaymentSent(typeof tx === 'string' ? tx : tx.hash);
     } catch (error: any) {
       if (error.code === 4001) {
         onError('Transaction rejected by user');
@@ -161,7 +246,7 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
     return (
       <div className="text-center">
         <button
-          onClick={connectWallet}
+          onClick={handleConnectWallet}
           disabled={isConnecting}
           className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg text-base font-semibold hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
@@ -171,9 +256,28 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
               Connecting...
             </>
           ) : (
-            'Connect Wallet'
+            <>
+              {isFarcasterEnvironment() ? (
+                <>
+                  <span className="mr-2">🔗</span>
+                  Connect Farcaster Wallet
+                </>
+              ) : (
+                <>
+                  <span className="mr-2">🌈</span>
+                  Connect Wallet (Rainbow/MetaMask)
+                </>
+              )}
+            </>
           )}
         </button>
+        <div className="mt-2 text-sm text-gray-300">
+          {isFarcasterEnvironment() ? (
+            <>🌟 Use your Farcaster wallet for seamless transactions</>
+          ) : (
+            <>🌈 Supports Rainbow, MetaMask, Coinbase Wallet and more</>
+          )}
+        </div>
       </div>
     );
   }
