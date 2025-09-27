@@ -7,7 +7,7 @@ import { CHAINS } from '../lib/chains';
 import { ChainLogo } from './ChainLogo';
 import { isFarcasterEnvironment } from '../lib/farcaster';
 import { connectWallet, checkWalletConnection as checkWalletConnectionLib, getPreferredWallet } from '../lib/wallets';
-import { useAccount, useConnect, useSendTransaction } from 'wagmi';
+import { useAccount, useConnect, useSendTransaction, useChainId, useSwitchChain } from 'wagmi';
 import type { QuoteResponse, StatusResponse } from '../types';
 
 interface PayButtonProps {
@@ -28,6 +28,8 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
   const { isConnected, address: wagmiAddress, connector } = useAccount();
   const { connect } = useConnect();
   const { sendTransaction } = useSendTransaction();
+  const wagmiChainId = useChainId();
+  const { switchChain } = useSwitchChain();
 
   const checkWalletConnection = useCallback(async () => {
     if (isFarcasterEnvironment()) {
@@ -148,6 +150,19 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
 
       if (isFarcasterEnvironment() && isConnected) {
         // Use Wagmi sendTransaction for Farcaster wallet
+        const sourceChainId = CHAINS[quote.sourceChain]?.id;
+        
+        // Chain ID kontrolü ve otomatik switch
+        if (wagmiChainId !== sourceChainId) {
+          try {
+            await switchChain({ chainId: sourceChainId! });
+            // Switch işlemi sonrası kısa bekleme
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          } catch (switchError) {
+            throw new Error(`Failed to switch to ${quote.sourceChain} network. Please switch manually.`);
+          }
+        }
+        
         const result = await sendTransaction({
           to: quote.txTemplate.to as `0x${string}`,
           value: quote.txTemplate.value ? BigInt(quote.txTemplate.value) : BigInt(0),
@@ -191,8 +206,16 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
 
       onPaymentSent(typeof tx === 'string' ? tx : (tx as any)?.hash || tx);
     } catch (error: any) {
+      console.error('Transaction error:', error);
+      
       if (error.code === 4001) {
         onError('Transaction rejected by user');
+      } else if (error.message?.includes('insufficient funds')) {
+        onError('Insufficient funds for transaction');
+      } else if (error.message?.includes('network')) {
+        onError(error.message);
+      } else if (error.message?.includes('estimateGas')) {
+        onError('Transaction failed: Invalid contract or network. Please check your wallet is on the correct network.');
       } else {
         onError('Transaction failed: ' + (error.message || 'Unknown error'));
       }

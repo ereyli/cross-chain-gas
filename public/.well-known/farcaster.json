@@ -15,7 +15,7 @@
     ],
     "primaryCategory": "finance",
     "tags": [
-      "bridge",cross-chain"
+      "bridge","cross-chain"
     ],
     "webhookUrl": "https://cross-chain-gas.vercel.app/api/webhook",
     "actions": [
