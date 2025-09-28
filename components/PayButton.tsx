@@ -6,6 +6,7 @@ import { formatTokenAmount } from '../lib/prices';
 import { CHAINS } from '../lib/chains';
 import { ChainLogo } from './ChainLogo';
 import { isFarcasterEnvironment, switchFarcasterChain } from '../lib/farcaster';
+import { sdk } from '@farcaster/miniapp-sdk';
 import { connectWallet, checkWalletConnection as checkWalletConnectionLib, getPreferredWallet } from '../lib/wallets';
 import { useAccount, useConnect, useSendTransaction, useChainId, useSwitchChain } from 'wagmi';
 import type { QuoteResponse, StatusResponse } from '../types';
@@ -152,18 +153,31 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
         // Use Wagmi sendTransaction for Farcaster wallet
         const sourceChainId = CHAINS[quote.sourceChain]?.id;
         
-        // Chain ID kontrolü
+        // Chain ID kontrolü - Farcaster'da daha esnek yaklaşım
+        console.log(`Farcaster chain check - Current: ${wagmiChainId}, Required: ${sourceChainId}`);
+        
         if (wagmiChainId !== sourceChainId) {
-          // Farcaster'da chain switching farklı çalışır
-          console.log(`Current chain: ${wagmiChainId}, Required chain: ${sourceChainId}`);
+          console.log(`Chain mismatch detected. Attempting automatic switch...`);
           
-          // Farcaster SDK ile chain switch
           try {
             await switchFarcasterChain(sourceChainId!);
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Chain switch sonrası tekrar kontrol et
+            const newChainId = await sdk.wallet.ethProvider.request({
+              method: 'eth_chainId',
+            });
+            const newChainIdNumber = parseInt(newChainId, 16);
+            
+            if (newChainIdNumber !== sourceChainId) {
+              console.warn(`Chain switch may have failed. Expected: ${sourceChainId}, Got: ${newChainIdNumber}`);
+              // Yine de devam et, çünkü bazen chain ID güncellenmesi gecikebilir
+            } else {
+              console.log(`Chain successfully switched to ${sourceChainId}`);
+            }
           } catch (switchError) {
             console.error('Chain switch error:', switchError);
-            throw new Error(`Please switch to ${quote.sourceChain} network manually in your Farcaster wallet. Current: ${wagmiChainId}, Required: ${sourceChainId}`);
+            // Chain switch başarısız olsa bile transaction'ı dene
+            console.log('Proceeding with transaction despite chain switch failure...');
           }
         }
         

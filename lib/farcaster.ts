@@ -117,11 +117,47 @@ export const connectFarcasterWallet = async () => {
 export const switchFarcasterChain = async (chainId: number): Promise<void> => {
   try {
     if (isFarcasterEnvironment()) {
-      // Farcaster SDK ile chain switch
-      await sdk.wallet.ethProvider.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: `0x${chainId.toString(16)}` }],
+      console.log(`Attempting to switch to chain ${chainId} in Farcaster`);
+      
+      // Try multiple chain switching methods
+      try {
+        // Method 1: Standard wallet_switchEthereumChain
+        await sdk.wallet.ethProvider.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: `0x${chainId.toString(16)}` }],
+        });
+        console.log('Chain switched successfully with wallet_switchEthereumChain');
+      } catch (switchError) {
+        console.log('wallet_switchEthereumChain failed, trying wallet_addEthereumChain');
+        
+        // Method 2: Add chain if it doesn't exist
+        const chainConfig = getChainConfig(chainId);
+        if (chainConfig) {
+          await sdk.wallet.ethProvider.request({
+            method: 'wallet_addEthereumChain',
+            params: [chainConfig],
+          });
+          console.log('Chain added successfully');
+        } else {
+          throw new Error(`Chain configuration not found for chainId: ${chainId}`);
+        }
+      }
+      
+      // Wait for chain switch to complete
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
+      // Verify chain switch
+      const currentChainId = await sdk.wallet.ethProvider.request({
+        method: 'eth_chainId',
       });
+      const currentChainIdNumber = parseInt(currentChainId, 16);
+      
+      if (currentChainIdNumber !== chainId) {
+        console.warn(`Chain switch verification failed. Expected: ${chainId}, Got: ${currentChainIdNumber}`);
+        throw new Error(`Failed to switch to chain ${chainId}. Current chain: ${currentChainIdNumber}`);
+      }
+      
+      console.log(`Successfully switched to chain ${chainId}`);
     } else {
       throw new Error('Not in Farcaster environment');
     }
@@ -129,6 +165,56 @@ export const switchFarcasterChain = async (chainId: number): Promise<void> => {
     console.error('Farcaster chain switch error:', error);
     throw error;
   }
+};
+
+// Helper function to get chain configuration
+const getChainConfig = (chainId: number) => {
+  const chainConfigs = {
+    1: {
+      chainId: '0x1',
+      chainName: 'Ethereum Mainnet',
+      nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+      rpcUrls: ['https://eth.llamarpc.com'],
+      blockExplorerUrls: ['https://etherscan.io']
+    },
+    8453: {
+      chainId: '0x2105',
+      chainName: 'Base',
+      nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+      rpcUrls: ['https://mainnet.base.org'],
+      blockExplorerUrls: ['https://basescan.org']
+    },
+    42161: {
+      chainId: '0xa4b1',
+      chainName: 'Arbitrum One',
+      nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+      rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+      blockExplorerUrls: ['https://arbiscan.io']
+    },
+    10: {
+      chainId: '0xa',
+      chainName: 'Optimism',
+      nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+      rpcUrls: ['https://mainnet.optimism.io'],
+      blockExplorerUrls: ['https://optimistic.etherscan.io']
+    },
+    137: {
+      chainId: '0x89',
+      chainName: 'Polygon',
+      nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
+      rpcUrls: ['https://polygon-rpc.com'],
+      blockExplorerUrls: ['https://polygonscan.com']
+    },
+    59144: {
+      chainId: '0xe708',
+      chainName: 'Linea',
+      nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+      rpcUrls: ['https://rpc.linea.build'],
+      blockExplorerUrls: ['https://lineascan.build']
+    }
+  };
+  
+  return chainConfigs[chainId as keyof typeof chainConfigs];
 };
 
 // Extend Window interface for Farcaster
