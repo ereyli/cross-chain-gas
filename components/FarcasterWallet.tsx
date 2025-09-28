@@ -16,11 +16,6 @@ export function FarcasterWallet({ onWalletConnected, onError }: FarcasterWalletP
   const [isConnecting, setIsConnecting] = useState(false);
   const [hasAutoConnected, setHasAutoConnected] = useState(false);
 
-  // Sadece Farcaster ortamında render et
-  if (!isFarcasterEnvironment()) {
-    return null;
-  }
-
   // Otomatik bağlanma - Farcaster'da wallet zaten mevcut
   useEffect(() => {
     const autoConnect = async () => {
@@ -68,6 +63,11 @@ export function FarcasterWallet({ onWalletConnected, onError }: FarcasterWalletP
   const formatAddress = (address: string) => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
+
+  // Sadece Farcaster ortamında render et
+  if (!isFarcasterEnvironment()) {
+    return null;
+  }
 
   if (isConnected && address) {
     return (
