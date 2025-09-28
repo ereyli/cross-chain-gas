@@ -30,6 +30,23 @@ export default function Home() {
   // App loading management
   const { isLoading: appLoading, isReady: appReady } = useAppLoading();
 
+  // Ensure sdk.actions.ready() is called in Farcaster
+  useEffect(() => {
+    const ensureSdkReady = async () => {
+      if (isFarcasterEnvironment()) {
+        try {
+          const { sdk } = await import('@farcaster/miniapp-sdk');
+          await sdk.actions.ready();
+          console.log('✅ SDK ready() called from page component');
+        } catch (error) {
+          console.error('Failed to call sdk.actions.ready():', error);
+        }
+      }
+    };
+
+    ensureSdkReady();
+  }, []);
+
   // Check for connected wallet on page load
   useEffect(() => {
     const checkWalletConnection = async () => {

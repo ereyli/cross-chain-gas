@@ -15,11 +15,15 @@ export class AppLoadingManager {
 
   async initializeApp(): Promise<void> {
     try {
-      // Check if we're in Farcaster environment
-      if (typeof window !== 'undefined' && window.farcaster) {
-        // Initialize SDK and hide splash screen
-        await sdk.actions.ready();
-        console.log('Farcaster SDK initialized and splash screen hidden');
+      // Always try to call sdk.actions.ready() if SDK is available
+      if (typeof window !== 'undefined') {
+        try {
+          await sdk.actions.ready();
+          console.log('✅ Farcaster SDK initialized and splash screen hidden');
+        } catch (sdkError) {
+          console.log('⚠️ SDK ready() failed (probably not in Farcaster):', sdkError);
+          // This is normal when not in Farcaster environment
+        }
       }
       
       this.isReady = true;

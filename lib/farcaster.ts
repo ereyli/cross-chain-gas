@@ -71,7 +71,12 @@ export const useFarcaster = (): FarcasterContext => {
 
 // Utility function to check if running in Farcaster
 export const isFarcasterEnvironment = (): boolean => {
-  return typeof window !== 'undefined' && !!window.farcaster;
+  return typeof window !== 'undefined' && (
+    !!window.farcaster || 
+    !!window.location?.href?.includes('farcaster') ||
+    !!window.navigator?.userAgent?.includes('Farcaster') ||
+    !!document.referrer?.includes('farcaster')
+  );
 };
 
 // Utility function to get Farcaster wallet
