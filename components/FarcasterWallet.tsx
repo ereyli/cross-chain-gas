@@ -2,7 +2,7 @@
 
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { isFarcasterEnvironment } from '../lib/farcaster';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface FarcasterWalletProps {
   onWalletConnected?: (address: string) => void;
@@ -14,25 +14,52 @@ export function FarcasterWallet({ onWalletConnected, onError }: FarcasterWalletP
   const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
   const [isConnecting, setIsConnecting] = useState(false);
+  const [hasAutoConnected, setHasAutoConnected] = useState(false);
 
   // Sadece Farcaster ortamında render et
   if (!isFarcasterEnvironment()) {
     return null;
   }
 
+  // Otomatik bağlanma - Farcaster'da wallet zaten mevcut
+  useEffect(() => {
+    const autoConnect = async () => {
+      if (isFarcasterEnvironment() && !isConnected && !hasAutoConnected && connectors.length > 0) {
+        setHasAutoConnected(true);
+        setIsConnecting(true);
+        
+        try {
+          // Farcaster wallet otomatik olarak mevcut, sadece bağlantıyı kur
+          await connect({ connector: connectors[0] });
+          console.log('Farcaster wallet auto-connected');
+        } catch (error) {
+          console.error('Auto-connect failed:', error);
+          setIsConnecting(false);
+        }
+      }
+    };
+
+    autoConnect();
+  }, [isConnected, hasAutoConnected, connectors, connect]);
+
   const handleConnect = async () => {
     setIsConnecting(true);
     try {
       await connect({ connector: connectors[0] });
-      if (address) {
-        onWalletConnected?.(address);
-      }
     } catch (error) {
       onError?.(error instanceof Error ? error.message : 'Failed to connect wallet');
     } finally {
       setIsConnecting(false);
     }
   };
+
+  // Wallet bağlandığında callback'i çağır
+  useEffect(() => {
+    if (isConnected && address && onWalletConnected) {
+      onWalletConnected(address);
+      setIsConnecting(false);
+    }
+  }, [isConnected, address, onWalletConnected]);
 
   const handleDisconnect = () => {
     disconnect();
@@ -63,6 +90,21 @@ export function FarcasterWallet({ onWalletConnected, onError }: FarcasterWalletP
           >
             Disconnect
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (isConnecting) {
+    return (
+      <div className="text-center max-w-md mx-auto">
+        <div className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 backdrop-blur-lg border border-purple-500/30 rounded-xl p-4">
+          <div className="flex items-center justify-center space-x-3">
+            <div className="w-4 h-4 border-2 border-purple-300 border-t-transparent rounded-full animate-spin"></div>
+            <div className="text-sm font-semibold text-purple-200">
+              Connecting to Farcaster Wallet...
+            </div>
+          </div>
         </div>
       </div>
     );

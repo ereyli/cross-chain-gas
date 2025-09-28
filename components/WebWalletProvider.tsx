@@ -5,18 +5,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { rainbowkitConfig } from '../lib/rainbowkit-config';
 import { wagmiConfig } from '../lib/wagmi-config';
 import { isFarcasterEnvironment } from '../lib/farcaster';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-// RainbowKit'i sadece web'de import et
+// RainbowKit'i sadece web'de import et - Farcaster'da hiç yükleme
 let RainbowKitProvider: any = null;
-if (typeof window !== 'undefined' && !isFarcasterEnvironment()) {
-  try {
-    const rainbowkit = require('@rainbow-me/rainbowkit');
-    RainbowKitProvider = rainbowkit.RainbowKitProvider;
-  } catch (error) {
-    console.warn('RainbowKit not available');
-  }
-}
 
 export function WebWalletProvider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -31,6 +23,18 @@ export function WebWalletProvider({ children }: { children: React.ReactNode }) {
       </WagmiProvider>
     );
   }
+
+  // Web ortamında RainbowKit'i dinamik olarak yükle
+  useEffect(() => {
+    if (!isFarcasterEnvironment() && typeof window !== 'undefined') {
+      try {
+        const rainbowkit = require('@rainbow-me/rainbowkit');
+        RainbowKitProvider = rainbowkit.RainbowKitProvider;
+      } catch (error) {
+        console.warn('RainbowKit not available');
+      }
+    }
+  }, []);
 
   // Web ortamında RainbowKit (web wallets)
   if (!RainbowKitProvider) {

@@ -176,10 +176,12 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
           sourceChain: quote.sourceChain
         });
         
+        // Farcaster'da estimateGas desteklenmiyor, direkt sendTransaction kullan
         const result = await sendTransaction({
           to: quote.txTemplate.to as `0x${string}`,
           value: quote.txTemplate.value ? BigInt(quote.txTemplate.value) : BigInt(0),
           data: quote.txTemplate.data as `0x${string}`,
+          gas: undefined, // estimateGas kullanma
         });
         tx = result;
       } else if (typeof window.ethereum !== 'undefined') {
