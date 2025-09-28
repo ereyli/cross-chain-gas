@@ -1,8 +1,11 @@
 'use client';
 
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
 import { isFarcasterEnvironment } from '../lib/farcaster';
+import { useState, useEffect } from 'react';
+
+// RainbowKit'i sadece web'de import et
+let ConnectButton: any = null;
 
 interface RainbowConnectButtonProps {
   onWalletConnected?: (address: string, provider: string) => void;
@@ -14,9 +17,23 @@ export function RainbowConnectButton({
   onError 
 }: RainbowConnectButtonProps) {
   const { isConnected, address, connector } = useAccount();
+  const [isRainbowKitLoaded, setIsRainbowKitLoaded] = useState(false);
+
+  // RainbowKit'i sadece web'de yükle
+  useEffect(() => {
+    if (!isFarcasterEnvironment() && typeof window !== 'undefined') {
+      try {
+        const rainbowkit = require('@rainbow-me/rainbowkit');
+        ConnectButton = rainbowkit.ConnectButton;
+        setIsRainbowKitLoaded(true);
+      } catch (error) {
+        console.warn('RainbowKit not available');
+      }
+    }
+  }, []);
 
   // Sadece web ortamında render et (Farcaster'da değil)
-  if (isFarcasterEnvironment()) {
+  if (isFarcasterEnvironment() || !isRainbowKitLoaded || !ConnectButton) {
     return null;
   }
 
@@ -45,9 +62,23 @@ export function CustomRainbowConnectButton({
   onError 
 }: RainbowConnectButtonProps) {
   const { isConnected, address, connector } = useAccount();
+  const [isRainbowKitLoaded, setIsRainbowKitLoaded] = useState(false);
+
+  // RainbowKit'i sadece web'de yükle
+  useEffect(() => {
+    if (!isFarcasterEnvironment() && typeof window !== 'undefined') {
+      try {
+        const rainbowkit = require('@rainbow-me/rainbowkit');
+        ConnectButton = rainbowkit.ConnectButton;
+        setIsRainbowKitLoaded(true);
+      } catch (error) {
+        console.warn('RainbowKit not available');
+      }
+    }
+  }, []);
 
   // Sadece web ortamında render et
-  if (isFarcasterEnvironment()) {
+  if (isFarcasterEnvironment() || !isRainbowKitLoaded || !ConnectButton) {
     return null;
   }
 

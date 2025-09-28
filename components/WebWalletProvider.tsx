@@ -1,12 +1,22 @@
 'use client';
 
-import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { rainbowkitConfig } from '../lib/rainbowkit-config';
 import { wagmiConfig } from '../lib/wagmi-config';
 import { isFarcasterEnvironment } from '../lib/farcaster';
 import { useState } from 'react';
+
+// RainbowKit'i sadece web'de import et
+let RainbowKitProvider: any = null;
+if (typeof window !== 'undefined' && !isFarcasterEnvironment()) {
+  try {
+    const rainbowkit = require('@rainbow-me/rainbowkit');
+    RainbowKitProvider = rainbowkit.RainbowKitProvider;
+  } catch (error) {
+    console.warn('RainbowKit not available');
+  }
+}
 
 export function WebWalletProvider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -23,6 +33,17 @@ export function WebWalletProvider({ children }: { children: React.ReactNode }) {
   }
 
   // Web ortamında RainbowKit (web wallets)
+  if (!RainbowKitProvider) {
+    // RainbowKit yoksa sadece Wagmi kullan
+    return (
+      <WagmiProvider config={rainbowkitConfig}>
+        <QueryClientProvider client={queryClient}>
+          {children}
+        </QueryClientProvider>
+      </WagmiProvider>
+    );
+  }
+
   return (
     <WagmiProvider config={rainbowkitConfig}>
       <QueryClientProvider client={queryClient}>
@@ -30,7 +51,7 @@ export function WebWalletProvider({ children }: { children: React.ReactNode }) {
           appInfo={{
             appName: 'GasUp',
             learnMoreUrl: 'https://cross-chain-gas.vercel.app',
-            disclaimer: ({ Text, Link }) => (
+            disclaimer: ({ Text, Link }: { Text: any; Link: any }) => (
               <Text>
                 GasUp ile bağlantı kurarak&apos;{' '}
                 <Link href="https://cross-chain-gas.vercel.app/terms">Kullanım Şartları</Link> ve{' '}
