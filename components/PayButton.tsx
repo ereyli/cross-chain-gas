@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 import { formatTokenAmount } from '../lib/prices';
 import { CHAINS } from '../lib/chains';
 import { ChainLogo } from './ChainLogo';
-import { isFarcasterEnvironment } from '../lib/farcaster';
+import { isFarcasterEnvironment, switchFarcasterChain } from '../lib/farcaster';
 import { connectWallet, checkWalletConnection as checkWalletConnectionLib, getPreferredWallet } from '../lib/wallets';
 import { useAccount, useConnect, useSendTransaction, useChainId, useSwitchChain } from 'wagmi';
 import type { QuoteResponse, StatusResponse } from '../types';
@@ -152,16 +152,29 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
         // Use Wagmi sendTransaction for Farcaster wallet
         const sourceChainId = CHAINS[quote.sourceChain]?.id;
         
-        // Chain ID kontrolü ve otomatik switch
+        // Chain ID kontrolü
         if (wagmiChainId !== sourceChainId) {
+          // Farcaster'da chain switching farklı çalışır
+          console.log(`Current chain: ${wagmiChainId}, Required chain: ${sourceChainId}`);
+          
+          // Farcaster SDK ile chain switch
           try {
-            await switchChain({ chainId: sourceChainId! });
-            // Switch işlemi sonrası kısa bekleme
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await switchFarcasterChain(sourceChainId!);
+            await new Promise(resolve => setTimeout(resolve, 2000));
           } catch (switchError) {
-            throw new Error(`Failed to switch to ${quote.sourceChain} network. Please switch manually.`);
+            console.error('Chain switch error:', switchError);
+            throw new Error(`Please switch to ${quote.sourceChain} network manually in your Farcaster wallet. Current: ${wagmiChainId}, Required: ${sourceChainId}`);
           }
         }
+        
+        // Debug bilgileri
+        console.log('Farcaster transaction details:', {
+          to: quote.txTemplate.to,
+          value: quote.txTemplate.value,
+          data: quote.txTemplate.data,
+          chainId: wagmiChainId,
+          sourceChain: quote.sourceChain
+        });
         
         const result = await sendTransaction({
           to: quote.txTemplate.to as `0x${string}`,

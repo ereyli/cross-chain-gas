@@ -113,6 +113,24 @@ export const connectFarcasterWallet = async () => {
   }
 };
 
+// Utility function to switch chain in Farcaster
+export const switchFarcasterChain = async (chainId: number): Promise<void> => {
+  try {
+    if (isFarcasterEnvironment()) {
+      // Farcaster SDK ile chain switch
+      await sdk.wallet.ethProvider.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: `0x${chainId.toString(16)}` }],
+      });
+    } else {
+      throw new Error('Not in Farcaster environment');
+    }
+  } catch (error) {
+    console.error('Farcaster chain switch error:', error);
+    throw error;
+  }
+};
+
 // Extend Window interface for Farcaster
 declare global {
   interface Window {
