@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { CHAINS, getSupportedAssets } from '../lib/chains';
 import { ChainLogo } from './ChainLogo';
 import { CustomSelect } from './CustomSelect';
+import { isFarcasterEnvironment } from '../lib/farcaster';
 import type { ChainKey, Asset, QuoteResponse } from '../types';
  
 // All chains are now supported with webhook endpoints
@@ -164,32 +165,34 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">Get Started</h2>
       
-      {/* Wallet Connection */}
-      <div className="border-b pb-3">
-        {!connectedAccount ? (
-          <button
-            type="button"
-            onClick={connectWallet}
-            disabled={isConnecting}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] shadow-lg"
-          >
-            <div className="flex items-center justify-center space-x-2">
-              <span className="text-base">🔗</span>
-              <span className="font-semibold text-sm">{isConnecting ? 'Connecting...' : 'Connect Wallet'}</span>
-            </div>
-          </button>
-        ) : (
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-3">
-            <div className="flex items-center">
-              <div className="w-3 h-3 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-              <div>
-                <p className="text-xs font-medium text-green-800">Wallet Connected</p>
-                <p className="text-xs text-green-600 break-all">{connectedAccount}</p>
+      {/* Wallet Connection - Only show on web, not in Farcaster */}
+      {!isFarcasterEnvironment() && (
+        <div className="border-b pb-3">
+          {!connectedAccount ? (
+            <button
+              type="button"
+              onClick={connectWallet}
+              disabled={isConnecting}
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] shadow-lg"
+            >
+              <div className="flex items-center justify-center space-x-2">
+                <span className="text-base">🔗</span>
+                <span className="font-semibold text-sm">{isConnecting ? 'Connecting...' : 'Connect Wallet'}</span>
+              </div>
+            </button>
+          ) : (
+            <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-3">
+              <div className="flex items-center">
+                <div className="w-3 h-3 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                <div>
+                  <p className="text-xs font-medium text-green-800">Wallet Connected</p>
+                  <p className="text-xs text-green-600 break-all">{connectedAccount}</p>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
       
       <div className="space-y-2">
         <label className="block text-sm font-semibold text-gray-200">
@@ -397,10 +400,10 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
 
       <button
         type="submit"
-        disabled={isLoading || !connectedAccount}
+disabled={isLoading || (!isFarcasterEnvironment() && !connectedAccount)}
         className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] shadow-lg font-semibold text-sm"
       >
-        {!connectedAccount ? '🔗 Connect Wallet First' : isLoading ? '⏳ Generating Quote...' : '✨ Generate Quote & Continue'}
+{isFarcasterEnvironment() ? (isLoading ? '⏳ Generating Quote...' : '✨ Generate Quote & Continue') : (!connectedAccount ? '🔗 Connect Wallet First' : isLoading ? '⏳ Generating Quote...' : '✨ Generate Quote & Continue')}
       </button>
     </form>
   );
