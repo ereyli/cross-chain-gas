@@ -5,6 +5,7 @@ import { CHAINS, getSupportedAssets } from '../lib/chains';
 import { ChainLogo } from './ChainLogo';
 import { CustomSelect } from './CustomSelect';
 import { isFarcasterEnvironment } from '../lib/farcaster';
+import { useAccount } from 'wagmi';
 import type { ChainKey, Asset, QuoteResponse } from '../types';
  
 // All chains are now supported with webhook endpoints
@@ -26,6 +27,9 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
   const [useSlider, setUseSlider] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
+
+  // Wagmi hooks for Farcaster wallet detection
+  const { isConnected, address: wagmiAddress } = useAccount();
 
   const supportedAssets = getSupportedAssets(sourceChain);
 
@@ -76,10 +80,23 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
 
   useEffect(() => {
     checkWalletConnection();
-  }, []);
+  }, [isConnected, wagmiAddress]);
+
+  // Update connectedAccount when Wagmi address changes
+  useEffect(() => {
+    if (isFarcasterEnvironment() && isConnected && wagmiAddress) {
+      setConnectedAccount(wagmiAddress);
+    }
+  }, [isConnected, wagmiAddress]);
 
   const checkWalletConnection = async () => {
-    if (typeof window.ethereum !== 'undefined') {
+    if (isFarcasterEnvironment()) {
+      // In Farcaster, use Wagmi hooks
+      if (isConnected && wagmiAddress) {
+        setConnectedAccount(wagmiAddress);
+      }
+    } else if (typeof window.ethereum !== 'undefined') {
+      // In web, use standard ethereum provider
       try {
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
         if (accounts.length > 0) {
@@ -400,10 +417,10 @@ export function QuoteForm({ onQuoteGenerated, onError }: QuoteFormProps) {
 
       <button
         type="submit"
-disabled={isLoading || (!isFarcasterEnvironment() && !connectedAccount)}
+disabled={isLoading || (!connectedAccount)}
         className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] shadow-lg font-semibold text-sm"
       >
-{isFarcasterEnvironment() ? (isLoading ? '⏳ Generating Quote...' : '✨ Generate Quote & Continue') : (!connectedAccount ? '🔗 Connect Wallet First' : isLoading ? '⏳ Generating Quote...' : '✨ Generate Quote & Continue')}
+{!connectedAccount ? '🔗 Connect Wallet First' : isLoading ? '⏳ Generating Quote...' : '✨ Generate Quote & Continue'}
       </button>
     </form>
   );
