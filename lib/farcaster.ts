@@ -149,20 +149,41 @@ export const switchFarcasterChain = async (chainId: number): Promise<void> => {
       }
       
       // Wait for chain switch to complete
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // Verify chain switch
-      const currentChainId = await sdk.wallet.ethProvider.request({
-        method: 'eth_chainId',
-      });
-      const currentChainIdNumber = parseInt(currentChainId, 16);
+      // Verify chain switch with retry logic
+      let verificationAttempts = 0;
+      const maxAttempts = 3;
       
-      if (currentChainIdNumber !== chainId) {
-        console.warn(`Chain switch verification failed. Expected: ${chainId}, Got: ${currentChainIdNumber}`);
-        throw new Error(`Failed to switch to chain ${chainId}. Current chain: ${currentChainIdNumber}`);
+      while (verificationAttempts < maxAttempts) {
+        try {
+          const currentChainId = await sdk.wallet.ethProvider.request({
+            method: 'eth_chainId',
+          });
+          const currentChainIdNumber = parseInt(currentChainId, 16);
+          
+          if (currentChainIdNumber === chainId) {
+            console.log(`✅ Chain switch verified: ${chainId}`);
+            return;
+          }
+          
+          verificationAttempts++;
+          console.log(`Chain switch verification attempt ${verificationAttempts}/${maxAttempts}. Expected: ${chainId}, Got: ${currentChainIdNumber}`);
+          
+          if (verificationAttempts < maxAttempts) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+        } catch (verifyError) {
+          console.error('Chain verification error:', verifyError);
+          verificationAttempts++;
+          if (verificationAttempts < maxAttempts) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+        }
       }
       
-      console.log(`Successfully switched to chain ${chainId}`);
+      // If we get here, verification failed
+      throw new Error(`Failed to verify chain switch to ${chainId} after ${maxAttempts} attempts`);
     } else {
       throw new Error('Not in Farcaster environment');
     }

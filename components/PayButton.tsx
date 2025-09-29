@@ -163,21 +163,22 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
             await switchFarcasterChain(sourceChainId!);
             
             // Chain switch sonrası tekrar kontrol et
+            await new Promise(resolve => setTimeout(resolve, 2000)); // 2 saniye bekle
+            
             const newChainId = await sdk.wallet.ethProvider.request({
               method: 'eth_chainId',
             });
             const newChainIdNumber = parseInt(newChainId, 16);
             
             if (newChainIdNumber !== sourceChainId) {
-              console.warn(`Chain switch may have failed. Expected: ${sourceChainId}, Got: ${newChainIdNumber}`);
-              // Yine de devam et, çünkü bazen chain ID güncellenmesi gecikebilir
+              console.warn(`Chain switch verification failed. Expected: ${sourceChainId}, Got: ${newChainIdNumber}`);
+              throw new Error(`Failed to switch to ${quote.sourceChain} network. Please switch manually in your Farcaster wallet to ${quote.sourceChain} and try again.`);
             } else {
               console.log(`Chain successfully switched to ${sourceChainId}`);
             }
           } catch (switchError) {
             console.error('Chain switch error:', switchError);
-            // Chain switch başarısız olsa bile transaction'ı dene
-            console.log('Proceeding with transaction despite chain switch failure...');
+            throw new Error(`Network switch failed: ${switchError instanceof Error ? switchError.message : 'Unknown error'}. Please switch to ${quote.sourceChain} network manually in your Farcaster wallet.`);
           }
         }
         
@@ -234,21 +235,23 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
       }
 
       onPaymentSent(typeof tx === 'string' ? tx : (tx as any)?.hash || tx);
-    } catch (error: any) {
-      console.error('Transaction error:', error);
-      
-      if (error.code === 4001) {
-        onError('Transaction rejected by user');
-      } else if (error.message?.includes('insufficient funds')) {
-        onError('Insufficient funds for transaction');
-      } else if (error.message?.includes('network')) {
-        onError(error.message);
-      } else if (error.message?.includes('estimateGas')) {
-        onError('Transaction failed: Invalid contract or network. Please check your wallet is on the correct network.');
-      } else {
-        onError('Transaction failed: ' + (error.message || 'Unknown error'));
-      }
-    } finally {
+            } catch (error: any) {
+              console.error('Transaction error:', error);
+              
+              if (error.code === 4001) {
+                onError('Transaction rejected by user');
+              } else if (error.message?.includes('insufficient funds')) {
+                onError('Insufficient funds for transaction');
+              } else if (error.message?.includes('network') || error.message?.includes('switch')) {
+                onError(error.message);
+              } else if (error.message?.includes('estimateGas')) {
+                onError('Transaction failed: Invalid contract or network. Please check your wallet is on the correct network.');
+              } else if (error.message?.includes('Failed to switch') || error.message?.includes('Network switch failed')) {
+                onError(error.message);
+              } else {
+                onError('Transaction failed: ' + (error.message || 'Unknown error'));
+              }
+            } finally {
       setIsPaying(false);
     }
   };
