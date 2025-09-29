@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'GasUp - Cross-Chain Gas Top-Up',
   description: 'Bridge ETH and tokens seamlessly between 12+ blockchain networks',
   themeColor: '#2563eb',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',

@@ -128,16 +128,27 @@ export default function Home() {
       { key: 'completed', label: '4. Complete', icon: '✅' }
     ];
 
+    // Farcaster için responsive design
+    const isFarcaster = isFarcasterEnvironment();
+
     return (
       <div className="mb-8">
-        <div className="flex items-center justify-center space-x-4">
+        <div className={`flex items-center justify-center ${
+          isFarcaster 
+            ? 'flex-col space-y-2' 
+            : 'space-x-2 sm:space-x-4'
+        }`}>
           {steps.map((step, index) => {
             const isActive = currentStep === step.key;
             const isCompleted = steps.findIndex(s => s.key === currentStep) > index;
             
             return (
-              <div key={step.key} className="flex items-center">
-                <div className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all ${
+              <div key={step.key} className={`flex items-center ${
+                isFarcaster ? 'w-full justify-center' : ''
+              }`}>
+                <div className={`flex items-center justify-center ${
+                  isFarcaster ? 'w-10 h-10' : 'w-12 h-12'
+                } rounded-full border-2 transition-all ${
                   isActive 
                     ? 'bg-blue-600 border-blue-600 text-white' 
                     : isCompleted 
@@ -146,12 +157,14 @@ export default function Home() {
                 }`}>
                   {isCompleted ? '✓' : step.icon}
                 </div>
-                <span className={`ml-2 text-sm font-medium ${
+                <span className={`${
+                  isFarcaster ? 'ml-2' : 'ml-2'
+                } text-sm font-medium ${
                   isActive ? 'text-blue-600' : isCompleted ? 'text-green-600' : 'text-gray-500'
                 }`}>
                   {step.label}
                 </span>
-                {index < steps.length - 1 && (
+                {!isFarcaster && index < steps.length - 1 && (
                   <div className={`w-8 h-0.5 mx-4 ${
                     isCompleted ? 'bg-green-600' : 'bg-gray-300'
                   }`} />
@@ -170,7 +183,9 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-gray-900 py-4">
+    <div className={`min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-gray-900 py-4 ${
+      isFarcasterEnvironment() ? 'farcaster-container' : ''
+    }`}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-6">
