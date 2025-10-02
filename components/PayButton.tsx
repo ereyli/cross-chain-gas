@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 import { formatTokenAmount } from '../lib/prices';
 import { CHAINS } from '../lib/chains';
 import { ChainLogo } from './ChainLogo';
-import { isFarcasterEnvironment, switchFarcasterChain } from '../lib/farcaster';
+import { isFarcasterEnvironment } from '../lib/farcaster';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { connectWallet, checkWalletConnection as checkWalletConnectionLib, getPreferredWallet } from '../lib/wallets';
 import { useAccount, useConnect, useSendTransaction, useChainId, useSwitchChain } from 'wagmi';
@@ -153,34 +153,12 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
         // Use Wagmi sendTransaction for Farcaster wallet
         const sourceChainId = CHAINS[quote.sourceChain]?.id;
         
-        // Chain ID kontrolü - Farcaster'da daha esnek yaklaşım
-        console.log(`Farcaster chain check - Current: ${wagmiChainId}, Required: ${sourceChainId}`);
+        // Farcaster wallet multi-chain destekliyor, network değiştirmeye gerek yok
+        console.log(`Farcaster transaction - Source chain: ${quote.sourceChain}, Chain ID: ${sourceChainId}`);
+        console.log(`Current wallet chain: ${wagmiChainId}, Required: ${sourceChainId}`);
         
-        if (wagmiChainId !== sourceChainId) {
-          console.log(`Chain mismatch detected. Attempting automatic switch...`);
-          
-          try {
-            await switchFarcasterChain(sourceChainId!);
-            
-            // Chain switch sonrası tekrar kontrol et
-            await new Promise(resolve => setTimeout(resolve, 2000)); // 2 saniye bekle
-            
-            const newChainId = await sdk.wallet.ethProvider.request({
-              method: 'eth_chainId',
-            });
-            const newChainIdNumber = parseInt(newChainId, 16);
-            
-            if (newChainIdNumber !== sourceChainId) {
-              console.warn(`Chain switch verification failed. Expected: ${sourceChainId}, Got: ${newChainIdNumber}`);
-              throw new Error(`Failed to switch to ${quote.sourceChain} network. Please switch manually in your Farcaster wallet to ${quote.sourceChain} and try again.`);
-            } else {
-              console.log(`Chain successfully switched to ${sourceChainId}`);
-            }
-          } catch (switchError) {
-            console.error('Chain switch error:', switchError);
-            throw new Error(`Network switch failed: ${switchError instanceof Error ? switchError.message : 'Unknown error'}. Please switch to ${quote.sourceChain} network manually in your Farcaster wallet.`);
-          }
-        }
+        // Farcaster wallet otomatik olarak doğru ağda transaction gönderir
+        // Network switching gerekmez
         
         // Debug bilgileri
         console.log('Farcaster transaction details:', {
@@ -192,11 +170,13 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
         });
         
         // Farcaster'da estimateGas desteklenmiyor, direkt sendTransaction kullan
+        // Chain ID ile birlikte transaction gönder
         const result = await sendTransaction({
           to: quote.txTemplate.to as `0x${string}`,
           value: quote.txTemplate.value ? BigInt(quote.txTemplate.value) : BigInt(0),
           data: quote.txTemplate.data as `0x${string}`,
           gas: undefined, // estimateGas kullanma
+          chainId: sourceChainId, // Doğru chain ID'yi belirt
         });
         tx = result;
       } else if (typeof window.ethereum !== 'undefined') {
@@ -242,12 +222,10 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
                 onError('Transaction rejected by user');
               } else if (error.message?.includes('insufficient funds')) {
                 onError('Insufficient funds for transaction');
-              } else if (error.message?.includes('network') || error.message?.includes('switch')) {
-                onError(error.message);
+              } else if (error.message?.includes('network')) {
+                onError('Transaction failed: Network error. Please try again.');
               } else if (error.message?.includes('estimateGas')) {
                 onError('Transaction failed: Invalid contract or network. Please check your wallet is on the correct network.');
-              } else if (error.message?.includes('Failed to switch') || error.message?.includes('Network switch failed')) {
-                onError(error.message);
               } else {
                 onError('Transaction failed: ' + (error.message || 'Unknown error'));
               }
@@ -305,7 +283,8 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
     );
   }
 
-  if (chainId !== sourceChainId) {
+  // Farcaster'da network switching gerekmez, multi-chain wallet
+  if (!isFarcasterEnvironment() && chainId !== sourceChainId) {
     return (
       <div className="text-center">
         <button
