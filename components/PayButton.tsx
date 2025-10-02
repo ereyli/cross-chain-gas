@@ -169,16 +169,23 @@ export function PayButton({ quote, onPaymentSent, onError }: PayButtonProps) {
           sourceChain: quote.sourceChain
         });
         
-        // Farcaster'da estimateGas desteklenmiyor, direkt sendTransaction kullan
-        // Chain ID ile birlikte transaction gönder
-        const result = await sendTransaction({
-          to: quote.txTemplate.to as `0x${string}`,
-          value: quote.txTemplate.value ? BigInt(quote.txTemplate.value) : BigInt(0),
-          data: quote.txTemplate.data as `0x${string}`,
-          gas: undefined, // estimateGas kullanma
-          chainId: sourceChainId, // Doğru chain ID'yi belirt
+        // Farcaster SDK'yı direkt kullanarak transaction gönder
+        console.log('Sending transaction via Farcaster SDK...');
+        
+        // SDK ile transaction gönder
+        const txHash = await sdk.wallet.ethProvider.request({
+          method: 'eth_sendTransaction',
+          params: [{
+            from: account as `0x${string}`,
+            to: quote.txTemplate.to as `0x${string}`,
+            value: (quote.txTemplate.value || '0x0') as `0x${string}`,
+            data: (quote.txTemplate.data || '0x') as `0x${string}`,
+            gas: '0x5208', // 21000 gas limit
+          }]
         });
-        tx = result;
+        
+        console.log('Transaction sent via SDK:', txHash);
+        tx = txHash;
       } else if (typeof window.ethereum !== 'undefined') {
         // Use standard wallet
         const sourceChain = quote.sourceChain;

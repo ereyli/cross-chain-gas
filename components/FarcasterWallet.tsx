@@ -1,7 +1,7 @@
 'use client';
 
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
-import { isFarcasterEnvironment } from '../lib/farcaster';
+import { isFarcasterEnvironment, connectFarcasterWallet } from '../lib/farcaster';
 import { useState, useEffect } from 'react';
 
 interface FarcasterWalletProps {
@@ -40,8 +40,19 @@ export function FarcasterWallet({ onWalletConnected, onError }: FarcasterWalletP
   const handleConnect = async () => {
     setIsConnecting(true);
     try {
-      await connect({ connector: connectors[0] });
+      // Farcaster SDK'yı direkt kullan
+      const walletResult = await connectFarcasterWallet();
+      if (walletResult) {
+        console.log('Farcaster wallet connected via SDK:', walletResult.address);
+        // Wagmi'yi de güncelle
+        if (connectors.length > 0) {
+          await connect({ connector: connectors[0] });
+        }
+      } else {
+        throw new Error('Failed to connect Farcaster wallet');
+      }
     } catch (error) {
+      console.error('Farcaster wallet connection error:', error);
       onError?.(error instanceof Error ? error.message : 'Failed to connect wallet');
     } finally {
       setIsConnecting(false);

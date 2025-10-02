@@ -48,7 +48,11 @@
     ],
     "minSdkVersion": "0.1.0",
     "verification": {
-      "domain": "cross-chain-gas.vercel.app"
+      "domain": "cross-chain-gas.vercel.app",
+      "allowedOrigins": [
+        "https://cross-chain-gas.vercel.app",
+        "https://farcaster.xyz"
+      ]
     },
     "author": {
       "name": "GasUp Team",
